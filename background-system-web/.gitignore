@@ -1,3 +1,5 @@
+#用于忽略git提交的文件
+
 .DS_Store
 node_modules
 /dist
