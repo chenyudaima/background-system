@@ -2,12 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.chenyudaima</groupId>
     <artifactId>background-system-server</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>background-system-server</name>
-    <description>background-system-server</description>
+
+    <!--子模块-->
+    <modules>
+        <module>mapper</module>
+        <module>common</module>
+        <module>web</module>
+    </modules>
 
     <!--springboot版本-->
     <parent>
@@ -17,34 +23,21 @@
         <relativePath/>
     </parent>
 
-    <!--子模块-->
-    <modules>
-        <module>mapper</module>
-        <module>common</module>
-        <module>web</module>
-    </modules>
-
-    <!--maven仓库配置-->
-    <repositories>
-        <repository>
-            <id>aliyun</id>
-            <name>aliyun</name>
-            <url>https://maven.aliyun.com/repository/public</url>
-        </repository>
-        <repository>
-            <id>spring.io</id>
-            <name>spring.io</name>
-            <url>http://repo.spring.io/release</url>
-        </repository>
-    </repositories>
-
+    <!--指定版本-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
+
+        <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
+        <mysql-connector-java-version>5.1.8</mysql-connector-java-version>
+        <mapper.version>1.0.0</mapper.version>
+        <common.version>1.0.0</common.version>
     </properties>
 
+    <!--依赖-->
     <dependencies>
 
         <dependency>
@@ -54,5 +47,37 @@
         </dependency>
 
     </dependencies>
+
+
+    <!--依赖版本管理-->
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>com.chenyudaima</groupId>
+                <artifactId>mapper</artifactId>
+                <version>${mapper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chenyudaima</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-connector-java-version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
 
 </project>
