@@ -1,4 +1,4 @@
-#用于忽略git提交的文件
+#用于忽略git提交的文件 比如 .vscode, node_modules
 
 .DS_Store
 node_modules
