@@ -1,4 +1,4 @@
-package com.chenyudaima.controller;
+package com.chenyudaima.web.controller;
 
 import com.chenyudaima.model.Result;
 import org.springframework.stereotype.Controller;
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 登录
  * @author 沉鱼代码
  * @date 2022/12/20
  */
@@ -19,7 +20,6 @@ public class LoginController {
     public void login(HttpServletResponse resource) throws IOException {
 
         //鉴权 调用sso接口，鉴权失败 响应
-        System.out.println("进来了");
         resource.setContentType("text/html");
         //resource.addHeader("");
         //响应到sso登录中心
