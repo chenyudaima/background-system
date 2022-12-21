@@ -1,4 +1,4 @@
-package com.chenyudaima.exception.handler;
+package com.chenyudaima.web;
 
 import com.chenyudaima.model.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,13 +16,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=Exception.class)
     public Result<?> Exception(HttpServletRequest request, Exception e) {
-        System.out.println("Exception");
         return Result.error(e.getMessage());
     }
 
     @ExceptionHandler(value=RuntimeException.class)
     public Result<?> RuntimeException(HttpServletRequest request, Exception e) {
-        System.out.println("RuntimeException");
         return Result.error(e.getMessage());
     }
 }
