@@ -1,4 +1,4 @@
-package com.chenyudaima.config;
+package com.chenyudaima.web.config;
 
 import com.chenyudaima.web.interceptor.SecurityInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;

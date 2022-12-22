@@ -1,4 +1,4 @@
-package com.chenyudaima.web;
+package com.chenyudaima.web.advice;
 
 import com.chenyudaima.model.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;

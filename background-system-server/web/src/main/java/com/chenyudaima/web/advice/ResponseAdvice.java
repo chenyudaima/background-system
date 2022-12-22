@@ -1,4 +1,4 @@
-package com.chenyudaima.web;
+package com.chenyudaima.web.advice;
 
 import com.chenyudaima.model.Result;
 import org.springframework.core.MethodParameter;
@@ -19,8 +19,6 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter methodParameter,
                             Class<? extends HttpMessageConverter<?>> aClass) {
-
-        //是否拦截执行beforeBodyWrite方法
         return true;
     }
 
