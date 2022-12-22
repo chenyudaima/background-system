@@ -46,11 +46,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
-        <mybatis-plus-boot-starter.version>3.4.0</mybatis-plus-boot-starter.version>
-        <mysql-connector-java-version>5.1.8</mysql-connector-java-version>
         <mapper.version>1.0.0</mapper.version>
         <common.version>1.0.0</common.version>
+        <mybatis-plus-boot-starter.version>3.4.0</mybatis-plus-boot-starter.version>
+        <mysql-connector-java-version>5.1.8</mysql-connector-java-version>
         <fastjson.version>1.2.75</fastjson.version>
+        <swingx.version>1.6.1</swingx.version>
+        <jai-imageio-core.version>1.4.0</jai-imageio-core.version>
     </properties>
 
     <!--依赖-->
@@ -75,15 +77,15 @@
         <dependencies>
 
             <dependency>
-                <groupId>com.chenyudaima</groupId>
-                <artifactId>mapper</artifactId>
-                <version>${mapper.version}</version>
+                <groupId>org.swinglabs</groupId>
+                <artifactId>swingx</artifactId>
+                <version>${swingx.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>com.chenyudaima</groupId>
-                <artifactId>common</artifactId>
-                <version>${common.version}</version>
+                <groupId>com.github.jai-imageio</groupId>
+                <artifactId>jai-imageio-core</artifactId>
+                <version>${jai-imageio-core.version}</version>
             </dependency>
 
             <dependency>
@@ -102,6 +104,18 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chenyudaima</groupId>
+                <artifactId>mapper</artifactId>
+                <version>${mapper.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.chenyudaima</groupId>
+                <artifactId>common</artifactId>
+                <version>${common.version}</version>
             </dependency>
 
         </dependencies>
