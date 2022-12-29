@@ -53,6 +53,9 @@
         <fastjson.version>1.2.75</fastjson.version>
         <swingx.version>1.6.1</swingx.version>
         <jai-imageio-core.version>1.4.0</jai-imageio-core.version>
+        <redisson-spring-boot-starter.version>3.12.5</redisson-spring-boot-starter.version>
+        <httpclient.version>4.5.3</httpclient.version>
+        <httpmime.version>4.5</httpmime.version>
     </properties>
 
     <!--依赖-->
@@ -75,6 +78,24 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpmime.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson-spring-boot-starter.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.swinglabs</groupId>

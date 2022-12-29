@@ -16,14 +16,27 @@ import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 
 /**
- * @author 沉鱼代码
- * @date 2022/12/22
+ * 图片文字识别工具类
  */
-public class OCRUtil {
-    private static final String LANG_OPTION = "-l"; // 英文字母小写l，并非数字1
+public class OcrUtil {
+
+
     private static final String EOL = System.getProperty("line.separator");
-    private static final String tessPath = "D:/dev/Tesseract-OCR";// OCR安装路径
-    private static final String transname = "chi_sim";// 默认中文语言包，识别中文
+
+    /**
+     * OCR安装路径
+     */
+    private static final String OCR_PATH = "D:/dev/Tesseract-OCR";
+
+    /**
+     * 默认chi_sim语言包，识别中文
+     */
+    private static final String LANGUAGE = "chi_sim";
+
+    /**
+     * 选择语言命令参数
+     */
+    private static final String LANG_OPTION = "-l";
 
     /**
      * 从图片中识别文字
@@ -39,24 +52,25 @@ public class OCRUtil {
      */
     private static String ocrImages(File tempImage, File imageFile) throws IOException, InterruptedException {
         File outputFile = new File(imageFile.getParentFile(), "output");
-        Runtime.getRuntime().exec("attrib " + "\"" + outputFile.getAbsolutePath() + "\"" + " +H"); // 设置文件隐藏
+        // 设置文件隐藏
+        Runtime.getRuntime().exec("attrib " + "\"" + outputFile.getAbsolutePath() + "\"" + " +H");
         StringBuffer strB = new StringBuffer();
-        List<String> cmd = new ArrayList<String>();
+        List<String> cmd = new ArrayList<>();
         if (OS.isWindowsXP()) {
-            cmd.add(tessPath + "//tesseract");
+            cmd.add(OCR_PATH + "/tesseract");
         } else if (OS.isLinux()) {
             cmd.add("tesseract");
         } else {
-            cmd.add(tessPath + "//tesseract");
+            cmd.add(OCR_PATH + "/tesseract");
         }
         cmd.add("");
         cmd.add(outputFile.getName());
         cmd.add(LANG_OPTION);
-        cmd.add(transname);
+        cmd.add(LANGUAGE);
 
         ProcessBuilder pb = new ProcessBuilder();
         Map<String, String> env = pb.environment();
-        env.put("TESSDATA_PREFIX", "D:\\dev\\Tesseract-OCR\\tessdata");
+        env.put("TESSDATA_PREFIX", OCR_PATH + "/tessdata");
         pb.directory(imageFile.getParentFile());
         cmd.set(1, tempImage.getName());
         pb.command(cmd);

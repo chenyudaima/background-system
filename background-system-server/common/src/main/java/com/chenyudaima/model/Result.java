@@ -3,6 +3,10 @@ package com.chenyudaima.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+/**
+ * 接口响应结果
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

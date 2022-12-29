@@ -14,8 +14,8 @@ public class AuthController {
      * 验证token
      */
     @PostMapping("/")
-    public Result<Boolean> (String token) {
-
+    public Result<Boolean> s(String token) {
+        return Result.error("");
     }
 
 }
