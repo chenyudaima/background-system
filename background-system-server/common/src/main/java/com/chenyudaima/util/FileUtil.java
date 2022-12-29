@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.security.MessageDigest;
 
 /**
  * 文件操作工具类
@@ -17,14 +16,14 @@ public class FileUtil{
      * @param source 源文件 D:/w/a.txt
      * @param dest 需要复制到哪个路径下 D:/img
      */
-    public static void copyFileUsingFileChannels(File source, String dest) {
+    public static void copyFile(File source, String dest) {
         File destFile = new File(dest);
 
         //如果目录不存在则创建
         if(!destFile.exists()) destFile.mkdirs();
 
 
-        dest = dest+"/"+source.getName();
+        dest = dest + "/" + source.getName();
         destFile = new File(dest);
 
         try(FileChannel inputChannel = new FileInputStream(source).getChannel();

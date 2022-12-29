@@ -46,6 +46,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
+        <!--指定依赖版本-->
         <mapper.version>1.0.0</mapper.version>
         <common.version>1.0.0</common.version>
         <mybatis-plus-boot-starter.version>3.4.0</mybatis-plus-boot-starter.version>
@@ -56,6 +57,8 @@
         <redisson-spring-boot-starter.version>3.12.5</redisson-spring-boot-starter.version>
         <httpclient.version>4.5.3</httpclient.version>
         <httpmime.version>4.5</httpmime.version>
+        <sdk.verion>0.6.3</sdk.verion>
+        <jjwt.version>0.9.0</jjwt.version>
     </properties>
 
     <!--依赖-->
@@ -78,6 +81,24 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.milo</groupId>
+                <artifactId>sdk-client</artifactId>
+                <version>${sdk.verion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.eclipse.milo</groupId>
+                <artifactId>sdk-server</artifactId>
+                <version>${sdk.verion}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
