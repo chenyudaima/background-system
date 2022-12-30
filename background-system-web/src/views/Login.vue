@@ -1,19 +1,122 @@
 <template>
-  <div>11</div>
-</template>
+  <div class="login_div">
+    <img
+      :src="require('/public/img/1.jpg')"
+      style="width: 100%; height: 100%; z-index: -1"
+    />
 
+    <div class="login_context">
+      <el-form ref="loginFormRef" class="login_box">
+        <el-form-item>
+          <h2>后台系统</h2>
+        </el-form-item>
+        <el-form-item prop="usercode">
+          <el-input
+            prefix-icon="el-icon-user"
+            v-model="account"
+            placeholder="账号"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            prefix-icon="el-icon-lock"
+            type="password"
+            placeholder="密码"
+            v-model="password"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item prop="message">
+          <span style="color: red">{{ message }}</span>
+        </el-form-item>
+
+        <el-form-item class="btns">
+          <el-button type="primary" class="Button" @click="login"
+            >登 录</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
+</template>
 <script>
-import axios from "axios";
+import http from '@/utils/http'
 export default {
+  data() {
+    return {
+      account: "",
+      password: "",
+      message: "",
+    };
+  },
+
   methods: {
-    cc() {
-      console.log("发起请求");
-      //请求任意一个资源 后端过滤器进行鉴权
-      axios.get("http://localhost:8081/login").then((resp) => {});
+    login() {
+      this.message = "";
+      if (this.account.length == 0) {
+        this.message = "请输入用户名";
+        return;
+      }
+
+      if (this.account.password == 0) {
+        this.message = "请输入密码";
+        return;
+      }
+      let params = new URLSearchParams();
+      params.append("account", this.account);
+      params.append("password", this.password);
+      http.post("/login",params).then((resp) => {
+        if (resp.code == 200) {
+          localStorage.setItem("token", resp.data);
+          this.$router.push("/index")
+        } else {
+          this.message = resp.message;
+        }
+      });
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+.login_div {
+  height: 100%;
+  background: rgb(43, 75, 107);
+  position: relative;
+}
+
+.login_context {
+  width: 500px;
+  height: 380px;
+  background: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 0 0 5px 2px #ddd;
+}
+
+.login_box {
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  padding: 0 70px;
+  box-sizing: border-box;
+}
+
+.Button {
+  padding: 10px 160px;
+  font-size: 17px;
+  width: 100%;
+}
+
+.btns {
+  display: flex;
+  justify-content: center;
+}
+
+.checkbox {
+  float: left;
+}
 </style>

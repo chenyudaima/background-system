@@ -1,5 +1,9 @@
 package com.chenyudaima.web.interceptor;
 
+import com.chenyudaima.exception.PermissionException;
+import com.chenyudaima.util.JwtUtil;
+import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -13,12 +17,22 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 public class SecurityInterceptor implements HandlerInterceptor {
+    @Autowired
+    private JwtUtil jwtUtil;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //如果用户没有token或者验证token失败则抛异常
+        String header = request.getHeader("Authorization");
+        if(header == null) {
+            throw new PermissionException("未登录");
+        }
+        Claims claims = jwtUtil.parseToken(header.substring(6));
 
-        //throw new RuntimeException("拦截");
+        if(claims == null) {
+            throw new PermissionException("该token不可用");
+        }
+
         return true;
     }
 }

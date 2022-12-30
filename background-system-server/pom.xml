@@ -13,7 +13,6 @@
         <module>mapper</module>
         <module>common</module>
         <module>web</module>
-        <module>sso</module>
     </modules>
 
     <!--springboot版本-->

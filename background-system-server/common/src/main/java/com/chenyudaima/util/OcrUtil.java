@@ -54,6 +54,7 @@ public class OcrUtil {
         File outputFile = new File(imageFile.getParentFile(), "output");
         // 设置文件隐藏
         Runtime.getRuntime().exec("attrib " + "\"" + outputFile.getAbsolutePath() + "\"" + " +H");
+
         StringBuffer strB = new StringBuffer();
         List<String> cmd = new ArrayList<>();
         if (OS.isWindowsXP()) {

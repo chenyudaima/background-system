@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * 用户表
+ * @TableName sys_user
  */
 @Data
 public class SysUser implements Serializable {
@@ -21,7 +22,7 @@ public class SysUser implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private String account;
 
     /**
      * 密码

@@ -4,7 +4,14 @@ module.exports = defineConfig({
   transpileDependencies: true,
   lintOnSave: false,
   devServer: {
-    port:8077
+    port: 3000,
+    proxy: {
+      '/system': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        ws: false,
+      }
+    },
   }
 
 })
