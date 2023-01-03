@@ -1,6 +1,6 @@
 package com.chenyudaima.exception.handler;
 
-import com.chenyudaima.exception.PermissionException;
+import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.model.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         return new Result<>(500,e.getMessage(),null);
     }
 
-    @ExceptionHandler(value=PermissionException.class)
+    @ExceptionHandler(value= SecurityException.class)
     public Result<?> PermissionException(HttpServletRequest request, Exception e) {
         return new Result<>(403,e.getMessage(),null);
     }

@@ -1,11 +1,11 @@
 package com.chenyudaima.service.impl;
 
-import com.chenyudaima.exception.PermissionException;
 import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
-import com.chenyudaima.service.SysUserService;
+import com.chenyudaima.service.LoginService;
 import com.chenyudaima.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service;
  * @date 2022/12/30
  */
 @Service
-public class SysUserServiceImpl implements SysUserService {
+public class LoginServiceImpl implements LoginService {
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
     @Override
     public Result<?> login(String account, String password) {
         SysUser sysUser = sysUserMapper.selectUserByAccountAndPassword(account,password);
@@ -31,8 +32,13 @@ public class SysUserServiceImpl implements SysUserService {
             throw new RuntimeException("账号被冻结");
         }
 
-        String token = jwtUtil.createToken(sysUser.getAccount(), sysUser.getAccount(), null);
+        return Result.success(jwtUtil.createToken(sysUser.getAccount(), sysUser.getAccount(), null));
+    }
 
-        return Result.success(token);
+    @Override
+    public Result<?> updateToken(String token) {
+        Claims claims = jwtUtil.parseToken(token);
+        String sub = claims.get("sub").toString();
+        return Result.success(jwtUtil.createToken(sub, sub, null));
     }
 }

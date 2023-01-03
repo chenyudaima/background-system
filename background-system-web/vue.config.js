@@ -8,8 +8,7 @@ module.exports = defineConfig({
     proxy: {
       '/system': {
         target: 'http://localhost:8080',
-        changeOrigin: true,
-        ws: false,
+        changeOrigin: true
       }
     },
   }

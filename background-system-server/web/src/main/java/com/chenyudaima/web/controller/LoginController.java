@@ -1,12 +1,11 @@
 package com.chenyudaima.web.controller;
 
 import com.chenyudaima.model.Result;
-import com.chenyudaima.model.SysUser;
-import com.chenyudaima.service.SysUserService;
-import com.chenyudaima.util.JwtUtil;
+import com.chenyudaima.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -16,11 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
     @Autowired
-    private SysUserService sysUserService;
+    private LoginService loginService;
 
     @PostMapping("/login")
     public Result<?> login(String account,String password) {
-        return sysUserService.login(account,password);
+        return loginService.login(account,password);
+    }
+
+    @GetMapping("/updateToken")
+    public Result<?> updateToken(@RequestHeader("Authorization") String token) {
+        return loginService.updateToken(token.substring(6));
     }
 
 }

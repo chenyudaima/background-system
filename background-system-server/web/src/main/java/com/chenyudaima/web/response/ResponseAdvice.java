@@ -1,4 +1,4 @@
-package com.chenyudaima.web.advice;
+package com.chenyudaima.web.response;
 
 import com.chenyudaima.model.Result;
 import org.springframework.core.MethodParameter;

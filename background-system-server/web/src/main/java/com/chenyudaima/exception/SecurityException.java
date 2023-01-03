@@ -5,11 +5,11 @@ package com.chenyudaima.exception;
  * @author 沉鱼代码
  * @date 2022/12/30
  */
-public class PermissionException extends RuntimeException{
-    public PermissionException() {
+public class SecurityException extends RuntimeException{
+    public SecurityException() {
         super();
     }
-    public PermissionException(String message) {
+    public SecurityException(String message) {
         super(message);
     }
 }

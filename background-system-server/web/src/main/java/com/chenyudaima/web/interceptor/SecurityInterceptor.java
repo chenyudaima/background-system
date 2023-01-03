@@ -1,6 +1,6 @@
 package com.chenyudaima.web.interceptor;
 
-import com.chenyudaima.exception.PermissionException;
+import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,12 @@ public class SecurityInterceptor implements HandlerInterceptor {
         //如果用户没有token或者验证token失败则抛异常
         String header = request.getHeader("Authorization");
         if(header == null) {
-            throw new PermissionException("未登录");
+            throw new SecurityException("未登录");
         }
         Claims claims = jwtUtil.parseToken(header.substring(6));
 
         if(claims == null) {
-            throw new PermissionException("该token不可用");
+            throw new SecurityException("该token不可用");
         }
 
         return true;

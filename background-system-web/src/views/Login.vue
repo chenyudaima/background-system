@@ -1,29 +1,24 @@
 <template>
   <div class="login_div">
-    <img
-      :src="require('/public/img/1.jpg')"
-      style="width: 100%; height: 100%; z-index: -1"
-    />
+
+    <!-- 背景 -->
+    <img :src="require('/public/img/1.jpg')" style="width: 100%; height: 100%; z-index: -1" />
 
     <div class="login_context">
+
+      <!-- 登录表单 -->
       <el-form ref="loginFormRef" class="login_box">
+
         <el-form-item>
           <h2>后台系统</h2>
         </el-form-item>
+
         <el-form-item prop="usercode">
-          <el-input
-            prefix-icon="el-icon-user"
-            v-model="account"
-            placeholder="账号"
-          ></el-input>
+          <el-input prefix-icon="el-icon-user" v-model="account" placeholder="账号"></el-input>
         </el-form-item>
+
         <el-form-item prop="password">
-          <el-input
-            prefix-icon="el-icon-lock"
-            type="password"
-            placeholder="密码"
-            v-model="password"
-          ></el-input>
+          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="password"></el-input>
         </el-form-item>
 
         <el-form-item prop="message">
@@ -31,10 +26,9 @@
         </el-form-item>
 
         <el-form-item class="btns">
-          <el-button type="primary" class="Button" @click="login"
-            >登 录</el-button
-          >
+          <el-button type="primary" class="Button" @click="login">登 录</el-button>
         </el-form-item>
+        
       </el-form>
     </div>
   </div>
@@ -65,10 +59,10 @@ export default {
       let params = new URLSearchParams();
       params.append("account", this.account);
       params.append("password", this.password);
-      http.post("/login",params).then((resp) => {
+      http.post("/login", params).then((resp) => {
         if (resp.code == 200) {
           localStorage.setItem("token", resp.data);
-          this.$router.push("/index")
+          this.$router.push("/home")
         } else {
           this.message = resp.message;
         }
