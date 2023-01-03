@@ -2,6 +2,7 @@ package com.chenyudaima.util;
 
 
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,7 @@ import java.util.Map;
  * Jwt工具类
  */
 @Component
+@Slf4j
 public class JwtUtil {
     @Value("${jwt.config.signKey}")
     private String signWith;
@@ -50,7 +52,7 @@ public class JwtUtil {
         try {
             claims = Jwts.parser().setSigningKey(signWith).parseClaimsJws(token).getBody();
         }catch (Exception e) {
-            e.printStackTrace();
+            log.error("token不可用!");
         }
         return claims;
     }

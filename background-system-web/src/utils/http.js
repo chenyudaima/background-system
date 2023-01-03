@@ -17,7 +17,7 @@ let isRefreshing = false
 //请求拦截
 http.interceptors.request.use(
   (config) => {
-    config.headers["Authorization"] = `Basic ${localStorage.getItem("token")}`;
+    config.headers.Authorization = localStorage.getItem("token");
     return config;
   },
   (error) => {
@@ -38,7 +38,7 @@ http.interceptors.response.use(
     //每次请求都会刷新token
     if(!isRefreshing && window.location.pathname != "/login") {
       isRefreshing = true
-      http.get("/updateToken").then(resp => {
+      http.get("/system/updateToken").then(resp => {
         localStorage.setItem("token", resp.data);
         isRefreshing = false;
       })

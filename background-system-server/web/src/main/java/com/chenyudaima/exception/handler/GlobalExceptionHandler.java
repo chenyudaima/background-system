@@ -17,12 +17,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=Exception.class)
     public Result<?> Exception(HttpServletRequest request, Exception e) {
-        return new Result<>(500,e.getMessage(),null);
+        return Result.error(e.getMessage());
     }
 
     @ExceptionHandler(value=RuntimeException.class)
     public Result<?> RuntimeException(HttpServletRequest request, Exception e) {
-        return new Result<>(500,e.getMessage(),null);
+        return Result.error(e.getMessage());
     }
 
     @ExceptionHandler(value= SecurityException.class)

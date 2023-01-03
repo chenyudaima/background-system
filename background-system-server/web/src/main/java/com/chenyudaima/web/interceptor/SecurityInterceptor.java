@@ -23,15 +23,17 @@ public class SecurityInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //如果用户没有token或者验证token失败则抛异常
-        String header = request.getHeader("Authorization");
-        if(header == null) {
+        String token = request.getHeader("Authorization");
+        if(token == null) {
             throw new SecurityException("未登录");
         }
-        Claims claims = jwtUtil.parseToken(header.substring(6));
+        Claims claims = jwtUtil.parseToken(token);
 
         if(claims == null) {
             throw new SecurityException("该token不可用");
         }
+
+        request.setAttribute("claims",claims);
 
         return true;
     }

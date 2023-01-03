@@ -24,11 +24,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
          * 所以请求先执行loginInterceptor，再执行securityInterceptor
          */
         //registry.addInterceptor(loginInterceptor)
-        //        .addPathPatterns("/*")
+        //        .addPathPatterns("/**")
         //        .excludePathPatterns("/login");
 
         registry.addInterceptor(securityInterceptor)
-                .addPathPatterns("/*")
+                .addPathPatterns("/**")
                 .excludePathPatterns("/login");
     }
 

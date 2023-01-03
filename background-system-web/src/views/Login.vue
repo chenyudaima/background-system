@@ -18,7 +18,8 @@
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="password"></el-input>
+          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="password"
+            @keyup.enter.native="login"></el-input>
         </el-form-item>
 
         <el-form-item prop="message">
@@ -26,9 +27,9 @@
         </el-form-item>
 
         <el-form-item class="btns">
-          <el-button type="primary" class="Button" @click="login">登 录</el-button>
+          <el-button type="primary" class="Button" @click="login()">登 录</el-button>
         </el-form-item>
-        
+
       </el-form>
     </div>
   </div>
@@ -44,6 +45,17 @@ export default {
     };
   },
 
+  created() {
+    let my = this
+    document.onkeyup = function (e) {
+       //取出按键信息中的按键代码(大部分浏览器通过keyCode属性获取按键代码，但少部分浏览器使用的却是charCode)
+      var code = e.charCode || e.keyCode; 
+      if (code == 13) {
+        my.login()
+      }
+    }
+  },
+
   methods: {
     login() {
       this.message = "";
@@ -52,17 +64,18 @@ export default {
         return;
       }
 
-      if (this.account.password == 0) {
+      if (this.password == 0) {
         this.message = "请输入密码";
         return;
       }
+
       let params = new URLSearchParams();
       params.append("account", this.account);
       params.append("password", this.password);
       http.post("/login", params).then((resp) => {
         if (resp.code == 200) {
           localStorage.setItem("token", resp.data);
-          this.$router.push("/home")
+          this.$router.push("/")
         } else {
           this.message = resp.message;
         }

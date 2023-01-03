@@ -32,13 +32,7 @@ public class LoginServiceImpl implements LoginService {
             throw new RuntimeException("账号被冻结");
         }
 
-        return Result.success(jwtUtil.createToken(sysUser.getAccount(), sysUser.getAccount(), null));
+        return Result.success(jwtUtil.createToken(String.valueOf(sysUser.getId()), sysUser.getAccount(), null));
     }
 
-    @Override
-    public Result<?> updateToken(String token) {
-        Claims claims = jwtUtil.parseToken(token);
-        String sub = claims.get("sub").toString();
-        return Result.success(jwtUtil.createToken(sub, sub, null));
-    }
 }

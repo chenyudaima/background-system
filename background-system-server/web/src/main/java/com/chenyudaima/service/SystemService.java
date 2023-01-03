@@ -4,9 +4,8 @@ import com.chenyudaima.model.Result;
 
 /**
  * @author 沉鱼代码
- * @date 2022/12/30
+ * @date 2023/1/3
  */
-public interface LoginService {
-    Result<?> login(String account,String password);
-
+public interface SystemService {
+    Result<?> updateToken(String token);
 }
