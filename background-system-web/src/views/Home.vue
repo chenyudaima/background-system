@@ -2,23 +2,29 @@
   <el-container height="100%">
 
     <!-- 头部 -->
-    <el-header style="background: rgb(34, 160, 231);display: flex;justify-content: space-between;">
+    <el-header height="60px" style="background: rgb(34, 160, 231); display: flex; justify-content: space-between;">
       <div style="display: flex; align-items: center;">
         <img :src="require('/public/img/1.jpg')" width="60" height="60" />
         <div style="margin-left: 10px;">后台系统</div>
       </div>
 
       <div>
-        <span icon="el-icon-coordinate">{{ sysUser!=null ? sysUser.name :'' }}</span>
+        <span icon="el-icon-coordinate">{{ name }}</span>
         <el-button type="text" icon="el-icon-coordinate" @click="loginOut" style="color: #fbfffd;">注销</el-button>
       </div>
     </el-header>
 
-    <el-container>
+    <el-container height="800px">
       <!-- 左边目录 -->
       <el-aside style="background-color: rgb(55, 61, 68);" width="220px">
-        
+        <div style="height:770px;">
 
+          <el-tree :data="opcNodeList" node-key="nodename" :props="defaultProps" default-expand-all
+            @node-click="handleNodeClick">
+
+          </el-tree>
+
+        </div>
       </el-aside>
 
       <!-- 页面 -->
@@ -34,17 +40,17 @@ import http from '@/utils/http'
 export default {
   data() {
     return {
-      sysUser:null
+      name: null,
+      catalogue: null
     }
   },
 
   created() {
-      //获取该用户目录
-      http.get("/home/userInfo").then(resp => {
-        this.sysUser = resp.sysUser
-        
-      })
-      //获取该用户名称
+    http.get("/home/userInfo").then(resp => {
+      this.name = resp.data.sysUser.name
+      this.catalogue = resp.data.catalogue
+
+    })
   },
 
   methods: {

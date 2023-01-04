@@ -17,8 +17,9 @@ const routes = [
       {
         path: '/',
         name: 'index',
-        component: () => import('@/views/Home.vue')
-      }
+        component: () => import('@/views/home/Index.vue')
+      },
+   
     ]
 
   },
