@@ -1,4 +1,4 @@
-package com.chenyudaima.util;
+package com.chenyudaima.util.file;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

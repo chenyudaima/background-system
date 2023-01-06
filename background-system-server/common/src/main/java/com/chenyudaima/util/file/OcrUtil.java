@@ -1,4 +1,4 @@
-package com.chenyudaima.util;
+package com.chenyudaima.util.file;
 
 import com.chenyudaima.config.OcrConfig;
 import com.chenyudaima.enumeration.OcrEnum;
@@ -17,12 +17,18 @@ public class OcrUtil {
     static {
         for (OcrEnum value : OcrEnum.values()) {
             Tesseract tesseract = new Tesseract();
-            tesseract.setDatapath(OcrConfig.DATAPATH);
+            tesseract.setDatapath(OcrConfig.DATA_PATH);
             tesseract.setLanguage(value.getLanguage());
             map.put(value, tesseract);
         }
     }
 
+    /**
+     *
+     * @param img 图片
+     * @param language 语言库
+     * @return
+     */
     public static String doOCR(File img, OcrEnum language) {
         try {
             return map.get(language).doOCR(img);

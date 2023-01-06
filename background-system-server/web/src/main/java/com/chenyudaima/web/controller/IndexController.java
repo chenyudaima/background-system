@@ -2,8 +2,8 @@ package com.chenyudaima.web.controller;
 
 import com.chenyudaima.enumeration.OcrEnum;
 import com.chenyudaima.model.Result;
-import com.chenyudaima.util.FileUtil;
-import com.chenyudaima.util.OcrUtil;
+import com.chenyudaima.util.file.FileUtil;
+import com.chenyudaima.util.file.OcrUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

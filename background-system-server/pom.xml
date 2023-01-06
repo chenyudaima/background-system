@@ -59,6 +59,8 @@
         <tess4j.version>3.2.1</tess4j.version>
         <hutool-all.version>5.7.10</hutool-all.version>
         <commons-lang3.version>3.9</commons-lang3.version>
+        <pdfbox.version>2.0.12</pdfbox.version>
+        <poi.version>5.2.2</poi.version>
     </properties>
 
     <!--依赖-->
@@ -81,6 +83,23 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>${poi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+                <version>${pdfbox.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>

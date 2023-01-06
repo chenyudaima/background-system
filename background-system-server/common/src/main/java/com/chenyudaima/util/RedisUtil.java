@@ -33,4 +33,8 @@ public class RedisUtil {
             return false;
         }
     }
+
+    public Long increment(String key) {
+        return stringRedisTemplate.opsForValue().increment(key);
+    }
 }
