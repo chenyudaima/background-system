@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 /**
  * 文件操作工具类
  */
-public class FileUtil{
+public class FileUtil {
 
 
     /**

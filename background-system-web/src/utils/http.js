@@ -4,7 +4,7 @@ import router from '@/router/index.js'
 
 const http = Axios.create({
   baseURL: "http://localhost:8080/", // 请求地址
-  timeout: 10000, // 请求超时
+  timeout: 100000, // 请求超时
   withCredentials: true, // 跨域请求是否需要携带 cookie
 })
 

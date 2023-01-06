@@ -51,13 +51,14 @@
         <mybatis-plus-boot-starter.version>3.4.0</mybatis-plus-boot-starter.version>
         <mysql-connector-java-version>5.1.8</mysql-connector-java-version>
         <fastjson.version>1.2.75</fastjson.version>
-        <swingx.version>1.6.1</swingx.version>
-        <jai-imageio-core.version>1.4.0</jai-imageio-core.version>
         <redisson-spring-boot-starter.version>3.12.5</redisson-spring-boot-starter.version>
         <httpclient.version>4.5.3</httpclient.version>
         <httpmime.version>4.5</httpmime.version>
         <sdk.verion>0.6.3</sdk.verion>
         <jjwt.version>0.9.0</jjwt.version>
+        <tess4j.version>3.2.1</tess4j.version>
+        <hutool-all.version>5.7.10</hutool-all.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
     </properties>
 
     <!--依赖-->
@@ -80,6 +81,24 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-all.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.sourceforge.tess4j</groupId>
+                <artifactId>tess4j</artifactId>
+                <version>${tess4j.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
@@ -115,18 +134,6 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
                 <version>${redisson-spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.swinglabs</groupId>
-                <artifactId>swingx</artifactId>
-                <version>${swingx.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.jai-imageio</groupId>
-                <artifactId>jai-imageio-core</artifactId>
-                <version>${jai-imageio-core.version}</version>
             </dependency>
 
             <dependency>

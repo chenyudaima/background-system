@@ -19,7 +19,6 @@ const routes = [
         name: 'index',
         component: () => import('@/views/home/Index.vue')
       },
-   
     ]
 
   },

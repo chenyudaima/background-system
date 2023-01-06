@@ -1,5 +1,6 @@
-package com.chenyudaima.util.http;
+package com.chenyudaima.util;
 
+import com.chenyudaima.model.HttpResult;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
