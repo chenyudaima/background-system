@@ -12,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 
-/**
- * @author 沉鱼代码
- * @date 2023/1/4
- */
+
 @RestController
 @RequestMapping("/index")
 public class IndexController {

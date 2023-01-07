@@ -1,24 +1,21 @@
-# background-system-web
+# background-system
 
-## Project setup
-```
-yarn install
-```
+优点：干净，清晰，整洁
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+background-system-server为后端服务
 
-### Compiles and minifies for production
-```
-yarn build
-```
+background-system-web为前端页面
 
-### Lints and fixes files
-```
-yarn lint
+## background-system-server
+
+服务统一响应格式
+
+```json
+{
+    "code": 200,
+    "message": "成功",
+    "data": null
+}
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+状态码有200(处理成功)，403(权限异常)，404(路径错误)，500(处理失败)

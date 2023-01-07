@@ -1,7 +1,7 @@
 package com.chenyudaima.util.file;
 
-import com.chenyudaima.config.OcrConfig;
 import com.chenyudaima.enumeration.OcrEnum;
+import com.chenyudaima.config.OcrConfig;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import java.io.File;

@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author 沉鱼代码
- * @date 2023/1/3
- */
 @RestController
 @RequestMapping("/system")
 public class SystemController {

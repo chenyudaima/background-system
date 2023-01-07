@@ -1,5 +1,6 @@
 package com.chenyudaima.util;
 
+import com.chenyudaima.config.HttpConfig;
 import com.chenyudaima.model.HttpResult;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -16,7 +17,6 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import java.io.*;
@@ -27,23 +27,14 @@ import java.util.*;
  * http请求工具
  */
 public class HttpUtil {
-    private static final String ENCODING = "UTF-8";
-    private static final PoolingHttpClientConnectionManager cm;
-    /**
-     * 初始化连接池
-     */
-    static {
-        cm = new PoolingHttpClientConnectionManager();
-        cm.setMaxTotal(50);//整个连接池最大连接数
-        cm.setDefaultMaxPerRoute(5);//每路由最大连接数，默认值是2
-    }
 
     /**
      * 通过连接池获取HttpClient
      */
     private static CloseableHttpClient getHttpClient() {
-        return HttpClients.custom().setConnectionManager(cm).build();
+        return HttpClients.custom().setConnectionManager(HttpConfig.HTTP_CLIENT_CONNECTION_MANAGER).build();
     }
+
 
     /**
      * 路径字符串转URL字符串
@@ -52,7 +43,7 @@ public class HttpUtil {
         String[] split = url.split("/");
 
         for (int i = 0; i < split.length; i++) {
-            split[i] = URLEncoder.encode(split[i], ENCODING).replaceAll("\\+", "%20");
+            split[i] = URLEncoder.encode(split[i], HttpConfig.ENCODING).replaceAll("\\+", "%20");
         }
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -86,7 +77,7 @@ public class HttpUtil {
             params.forEach((k, v) -> {
                 nvps.add(new BasicNameValuePair(k, v));
             });
-            httpMethod.setEntity(new UrlEncodedFormEntity(nvps, ENCODING));
+            httpMethod.setEntity(new UrlEncodedFormEntity(nvps, HttpConfig.ENCODING));
         }
     }
 
@@ -99,7 +90,7 @@ public class HttpUtil {
         HttpResult httpResult = new HttpResult();
         if (httpResponse != null && httpResponse.getStatusLine() != null) {
             if (httpResponse.getEntity() != null) {
-                httpResult.setData(EntityUtils.toString(httpResponse.getEntity(), ENCODING));
+                httpResult.setData(EntityUtils.toString(httpResponse.getEntity(), HttpConfig.ENCODING));
                 httpResult.setHeaders(httpResponse.getAllHeaders());
                 httpResult.setCode(httpResponse.getStatusLine().getStatusCode());
             }
@@ -107,9 +98,6 @@ public class HttpUtil {
         return httpResult;
     }
 
-    /**
-     * 释放资源
-     */
     private static void close(Closeable... resources) {
         try {
             for (Closeable resource : resources) {
@@ -122,18 +110,7 @@ public class HttpUtil {
         }
     }
 
-
-    /**
-     * @param url
-     * @param headers
-     * @param params
-     * @param connectionTimeout 连接超时时间(单位毫秒)
-     * @param responseTimeout 响应超时时间(单位毫秒) 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用
-     * @return
-     * @throws Exception
-     */
     public static HttpResult get(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
-        // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
         // 创建访问的地址
@@ -165,23 +142,13 @@ public class HttpUtil {
         CloseableHttpResponse httpResponse = null;
 
         try {
-            return getHttpResult(httpResponse,httpClient,httpGet);
+            return getHttpResult(httpResponse, httpClient, httpGet);
         } finally {
             close(httpResponse);
         }
     }
 
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param params
-     * @param connectionTimeout 连接超时时间(单位毫秒)
-     * @param responseTimeout 响应超时时间(单位毫秒) 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用
-     * @return
-     * @throws Exception
-     */
     public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -213,16 +180,6 @@ public class HttpUtil {
     }
 
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param jsonParams
-     * @param connectionTimeout 连接超时时间(单位毫秒)
-     * @param responseTimeout 响应超时时间(单位毫秒) 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用
-     * @return
-     * @throws Exception
-     */
     public static HttpResult postJson(String url, Map<String, String> headers, String jsonParams, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -241,7 +198,7 @@ public class HttpUtil {
         packageHeader(headers, httpPost);
 
         //设置参数
-        httpPost.setEntity(new StringEntity(jsonParams,ENCODING));
+        httpPost.setEntity(new StringEntity(jsonParams,HttpConfig.ENCODING));
 
         //创建httpResponse对象
         CloseableHttpResponse httpResponse = null;
@@ -253,16 +210,6 @@ public class HttpUtil {
         }
     }
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param xmlParams
-     * @param connectionTimeout 连接超时时间(单位毫秒)
-     * @param responseTimeout 响应超时时间(单位毫秒) 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用
-     * @return
-     * @throws Exception
-     */
     public static HttpResult postXml(String url, Map<String, String> headers, String xmlParams, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -281,7 +228,7 @@ public class HttpUtil {
         packageHeader(headers, httpPost);
 
         //设置参数
-        httpPost.setEntity(new StringEntity(xmlParams, ENCODING));
+        httpPost.setEntity(new StringEntity(xmlParams, HttpConfig.ENCODING));
 
         //创建httpResponse对象
         CloseableHttpResponse httpResponse = null;
@@ -293,15 +240,6 @@ public class HttpUtil {
     }
 
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param connectionTimeout
-     * @param responseTimeout
-     * @return
-     * @throws Exception
-     */
     public static HttpResult delete(String url, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -329,16 +267,7 @@ public class HttpUtil {
         }
     }
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param params
-     * @param connectionTimeout
-     * @param responseTimeout
-     * @return
-     * @throws Exception
-     */
+
     public static HttpResult put(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -370,16 +299,6 @@ public class HttpUtil {
     }
 
 
-    /**
-     *
-     * @param url
-     * @param headers
-     * @param params
-     * @param connectionTimeout
-     * @param responseTimeout
-     * @return
-     * @throws Exception
-     */
     public static HttpResult patch(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -410,10 +329,18 @@ public class HttpUtil {
         }
     }
 
+    public static File download(String url, File storagePath) throws Exception {
+        return download(url,storagePath,null);
+    }
 
-    /**
-     * 文件下载
-     */
+    public static File download(String url, File storagePath, Map<String, String> headers) throws Exception {
+        return download(url,storagePath,headers,null);
+    }
+
+    public static File download(String url, File storagePath, Map<String, String> headers, Map<String, String> params) throws Exception {
+        return download(url,storagePath,headers,params,HttpConfig.CONNECTION_TIMEOUT,HttpConfig.RESPONSE_TIMEOUT);
+    }
+
     public static File download(String url, File storagePath, Map<String, String> headers, Map<String, String> params , int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
@@ -455,22 +382,21 @@ public class HttpUtil {
 
             HttpEntity entity = httpResponse.getEntity();
 
-            if (entity.getContentLength() <= 0) {
-                return null;
-            }
-
-
-
             String fileName = null;
-            Header firstHeader = httpResponse.getFirstHeader("content-disposition");
 
-            for (HeaderElement element : firstHeader.getElements()) {
-                fileName = element.getParameterByName("filename").getValue();
-                if (null != fileName) {
-                    break;
+            if (entity.getContentLength() <= 0) {
+                fileName = url.substring(url.lastIndexOf("/") + 1);
+
+            }else {
+                Header firstHeader = httpResponse.getFirstHeader("content-disposition");
+
+                for (HeaderElement element : firstHeader.getElements()) {
+                    fileName = element.getParameterByName("filename").getValue();
+                    if (null != fileName) {
+                        break;
+                    }
                 }
             }
-
             storagePath.mkdirs();
 
             out = new FileOutputStream(storagePath.getCanonicalPath() + "/" + fileName);
@@ -492,9 +418,6 @@ public class HttpUtil {
         }
     }
 
-    /**
-     * 本地文件上传
-     */
     public static HttpResult upload(String url, File file, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
@@ -514,7 +437,7 @@ public class HttpUtil {
 
         params.forEach((k, v) -> {
             // 相当于<input type="text" name="k" value=v>
-            multipartEntityBuilder.addPart(k,new StringBody(v, ContentType.create("text/plain", ENCODING)));
+            multipartEntityBuilder.addPart(k,new StringBody(v, ContentType.create("text/plain", HttpConfig.ENCODING)));
         });
         HttpEntity httpEntity = multipartEntityBuilder.build();
         httpPost.setEntity(httpEntity);
@@ -525,4 +448,7 @@ public class HttpUtil {
             close(response);
         }
     }
+
+
+
 }

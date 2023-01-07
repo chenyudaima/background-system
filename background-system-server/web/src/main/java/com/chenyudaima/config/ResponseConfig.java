@@ -1,4 +1,4 @@
-package com.chenyudaima.web.response;
+package com.chenyudaima.config;
 
 import com.chenyudaima.model.Result;
 import org.springframework.core.MethodParameter;
@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
- * 统一响应包装处理
- * @author 沉鱼代码
- * @date 2022/12/20
+ * 统一响应处理
  */
 @RestControllerAdvice
-public class ResponseAdvice implements ResponseBodyAdvice<Object> {
+public class ResponseConfig implements ResponseBodyAdvice<Object> {
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         return true;

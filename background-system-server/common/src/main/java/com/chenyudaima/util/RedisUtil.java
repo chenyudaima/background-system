@@ -1,12 +1,14 @@
 package com.chenyudaima.util;
 
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 /**
- * Redis操作工具类
+ * Redis操作工具类（包含分布式锁）
  */
 @Component
 public class RedisUtil {
@@ -16,6 +18,9 @@ public class RedisUtil {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     public Object get(String key) {
         try {
@@ -36,5 +41,9 @@ public class RedisUtil {
 
     public Long increment(String key) {
         return stringRedisTemplate.opsForValue().increment(key);
+    }
+
+    public RLock getLock(String key) {
+        return redissonClient.getLock(key);
     }
 }

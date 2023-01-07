@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-/**
- * @author 沉鱼代码
- * @date 2023/1/3
- */
 @RestController
 @RequestMapping("/home")
 public class HomeController {

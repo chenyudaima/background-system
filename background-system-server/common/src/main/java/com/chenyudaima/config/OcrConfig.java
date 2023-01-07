@@ -1,7 +1,7 @@
 package com.chenyudaima.config;
 
 /**
- * Ocr配置
+ * OcrUtil配置
  */
 public class OcrConfig {
     /**

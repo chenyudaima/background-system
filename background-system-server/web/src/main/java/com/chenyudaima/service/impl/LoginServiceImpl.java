@@ -5,7 +5,6 @@ import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
 import com.chenyudaima.service.LoginService;
 import com.chenyudaima.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
