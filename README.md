@@ -1,14 +1,28 @@
 # background-system
 
-优点：干净，清晰，整洁
+**这是一个前后端分离的后台系统，拥有完整的体系，主要用于二次开发，相比于低代码开发，该系统的作用就是让程序员感受到自己敲代码的快乐**
 
-background-system-server为后端服务
 
-background-system-web为前端页面
+
+**优点：干净，清晰，整洁**
+
+
+
+**在该系统开发一个页面有多简单?**
+
+**像数123一样简单**
+
+
 
 ## background-system-server
 
-服务统一响应格式
+环境：jdk8 + Maven + Mysql + Redis
+
+
+
+
+
+### 统一响应格式
 
 ```json
 {
@@ -18,4 +32,41 @@ background-system-web为前端页面
 }
 ```
 
-状态码有200(处理成功)，403(权限异常)，404(路径错误)，500(处理失败)
+code：响应状态码（严格遵循规范）
+
+message：服务器附带的一些消息
+
+data：响应的数据
+
+
+
+### 启动
+
+```bash
+运行WebApplication
+```
+
+
+
+## background-system-web
+
+环境：node.js + vue2
+
+
+
+### 下载依赖
+
+```bash
+yarn
+```
+
+
+
+### 启动
+
+```bash
+yarn serve
+```
+
+
+

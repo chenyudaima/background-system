@@ -7,5 +7,6 @@ logs
 .vscode
 node_modules
 dist
+yarn.lock
 
 
