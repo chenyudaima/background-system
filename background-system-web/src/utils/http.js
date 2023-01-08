@@ -11,9 +11,6 @@ const http = Axios.create({
 //配置
 http.defaults.baseURL = '/system'
 
-//标识现在是否正在刷新token
-let isRefreshing = false
-
 //请求拦截
 http.interceptors.request.use(
   (config) => {
@@ -23,6 +20,10 @@ http.interceptors.request.use(
   (error) => {
     Promise.reject(error);
   })
+
+
+//标识现在是否正在刷新token
+let isRefreshing = false
 
 //响应拦截
 http.interceptors.response.use(
@@ -34,9 +35,9 @@ http.interceptors.response.use(
       router.push("/login")
       return response;
     }
-    
+
     //每次请求都会刷新token
-    if(!isRefreshing && window.location.pathname != "/login") {
+    if (!isRefreshing && window.location.pathname != "/login") {
       isRefreshing = true
       http.get("/system/updateToken").then(resp => {
         localStorage.setItem("token", resp.data);

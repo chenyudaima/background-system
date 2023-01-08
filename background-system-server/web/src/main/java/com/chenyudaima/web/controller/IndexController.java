@@ -19,7 +19,7 @@ public class IndexController {
 
     @PostMapping("/ocr")
     public Result<?> ocr(MultipartFile file) {
-        if(file.isEmpty()) {
+        if (file.isEmpty()) {
             return Result.error("文件为空");
         }
 
@@ -31,7 +31,7 @@ public class IndexController {
             return new Result<>(200, "11", OcrUtil.doOCR(fileTemp, OcrEnum.CHI_SIM));
         } catch (Exception e) {
             return Result.error("失败," + e.getMessage());
-        }finally {
+        } finally {
             FileUtil.deleteFile(fileTemp);
         }
     }

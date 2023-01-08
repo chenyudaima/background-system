@@ -1,4 +1,4 @@
-package com.chenyudaima.web.interceptor.impl;
+package com.chenyudaima.web.interceptor;
 
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;

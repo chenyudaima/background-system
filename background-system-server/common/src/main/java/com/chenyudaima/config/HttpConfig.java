@@ -15,8 +15,11 @@ public class HttpConfig {
      * 初始化连接池
      */
     static {
-        HTTP_CLIENT_CONNECTION_MANAGER.setMaxTotal(50);//整个连接池最大连接数
-        HTTP_CLIENT_CONNECTION_MANAGER.setDefaultMaxPerRoute(5);//每路由最大连接数，默认值是2
+        //整个连接池最大连接数
+        HTTP_CLIENT_CONNECTION_MANAGER.setMaxTotal(50);
+
+        //每路由最大连接数，默认值是2
+        HTTP_CLIENT_CONNECTION_MANAGER.setDefaultMaxPerRoute(5);
     }
 
     /**

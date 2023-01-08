@@ -5,6 +5,7 @@ import com.chenyudaima.model.Result;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=Exception.class)
     public Result<?> Exception(HttpServletRequest request, Exception e) {
-        e.printStackTrace();
         return new Result<>(500, e.getMessage(), null);
     }
 
@@ -33,7 +33,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value= SecurityException.class)
     public Result<?> PermissionException(HttpServletRequest request, Exception e) {
-        return new Result<>(403,e.getMessage(),null);
+        return new Result<>(403, "没有权限访问",null);
+    }
+
+    @ExceptionHandler(value= {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
+
+    public Result<?> IllegalArgumentException(HttpServletRequest request, Exception e) {
+        return new Result<>(401,"不合法的参数",null);
     }
 
 }

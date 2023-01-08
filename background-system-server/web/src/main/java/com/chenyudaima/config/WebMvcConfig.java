@@ -3,9 +3,8 @@ package com.chenyudaima.config;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.SpringBeanUtil;
 import com.chenyudaima.web.interceptor.Interceptor;
-import com.chenyudaima.web.interceptor.impl.SecurityInterceptor;
+import com.chenyudaima.web.interceptor.SecurityInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import java.util.*;
 
 /**
@@ -33,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private static final String PATH = "/system";
 
     /**
-     * 配置拦截器
+     * 配置拦截器 （会自动查找实现Interceptor接口的类进行配置）
      */
     public void addInterceptors(InterceptorRegistry registry) {
         Set<Interceptor> set = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
@@ -65,7 +63,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
      * Controller统一前缀
      * 不过在拦截需要加上这个前端
      * 比如 "/login" 需要改成“/system/login”
-     * application.properties的 server.servlet.context-path 和这个方法二选一
      */
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -74,7 +71,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 
-    public List<String> processingPath(String... paths) {
+    private List<String> processingPath(String... paths) {
         List<String> list = new ArrayList<>();
         for (String path : paths) {
             list.add(PATH + path);

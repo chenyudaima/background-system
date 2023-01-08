@@ -58,7 +58,7 @@
       <el-main style="background-color: rgb(234, 237, 241);">
         <router-view></router-view>
       </el-main>
-      
+
     </el-container>
   </el-container>
 </template>
