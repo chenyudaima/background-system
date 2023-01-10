@@ -1,6 +1,7 @@
 package com.chenyudaima.util.file;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,10 +10,14 @@ import java.io.FileInputStream;
  * 图片操作工具
  */
 public class ImageUtil {
+
+    //public static void detection(File file) {
+    //}
     /**
      * 将图片颜色反转
      */
     public static void inverse(File img) {
+
         try {
             FileInputStream fileInputStream = new FileInputStream(img);
             BufferedImage image = ImageIO.read(fileInputStream);
@@ -24,22 +29,21 @@ public class ImageUtil {
 
             // 绘制字符
             for (int y = 0; y < h; y++) {
-                for (int x = 0; x< w; x++) {
+                for (int x = 0; x < w; x++) {
                     int rgb = image.getRGB(x, y);
                     int R = (rgb & 0xff0000) >> 16;
                     int G = (rgb & 0x00ff00) >> 8;
                     int B = rgb & 0x0000ff;
 
                     //颜色转rgb值
-                    int newPixel=0;
-                    newPixel=newPixel << 8;
-                    newPixel+=255-R;
-                    newPixel=newPixel << 8;
-                    newPixel+=255-G;
-                    newPixel=newPixel << 8;
-                    newPixel+=255-B;
+                    int newPixel = 0;
+                    newPixel += 255 - R;
+                    newPixel = newPixel << 8;
+                    newPixel += 255 - G;
+                    newPixel = newPixel << 8;
+                    newPixel += 255 - B;
 
-                    imageBuffer.setRGB(x,y,newPixel);
+                    imageBuffer.setRGB(x, y, newPixel);
                 }
             }
             ImageIO.write(imageBuffer, img.getName().substring(img.getName().lastIndexOf(".") + 1), img); //输出图片
@@ -62,10 +66,10 @@ public class ImageUtil {
             ImageIO.write(read, suffix, new File(canonicalPath + suffix));
 
             //删除原图片
-            while(!img.delete()) {
+            while (!img.delete()) {
                 System.gc();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

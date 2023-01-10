@@ -6,6 +6,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import javax.imageio.IIOImage;
+
 /**
  * Spring容器工具类
  */

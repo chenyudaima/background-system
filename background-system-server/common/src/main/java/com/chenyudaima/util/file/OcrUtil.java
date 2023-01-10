@@ -12,26 +12,25 @@ import java.util.concurrent.ConcurrentHashMap;
  * 图片文字识别工具类
  */
 public class OcrUtil {
-    private static final Map<OcrEnum, ITesseract> map = new ConcurrentHashMap<>();
+    private static final Map<OcrEnum, ITesseract> TESSERACT_MAP = new ConcurrentHashMap<>();
 
     static {
         for (OcrEnum value : OcrEnum.values()) {
             Tesseract tesseract = new Tesseract();
             tesseract.setDatapath(OcrConfig.DATA_PATH);
             tesseract.setLanguage(value.getLanguage());
-            map.put(value, tesseract);
+            TESSERACT_MAP.put(value, tesseract);
         }
     }
 
     /**
-     *
      * @param img 图片
      * @param language 语言库
-     * @return
+     * @return 识别的内容
      */
     public static String doOCR(File img, OcrEnum language) {
         try {
-            return map.get(language).doOCR(img);
+            return TESSERACT_MAP.get(language).doOCR(img);
         }catch (Exception e) {
             return null;
         }
