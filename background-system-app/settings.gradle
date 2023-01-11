@@ -1,0 +1,21 @@
+//指定插件下载库
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+//指定依赖下载库
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+//项目名字
+rootProject.name = "My Application"
+//需要编译的模块
+include ':app'

@@ -1,12 +1,24 @@
+#后端
 target
 .idea
 test
 *.iml
 
+#前端
 logs
 .vscode
 node_modules
 dist
 yarn.lock
+
+
+#app
+.gradle
+.DS_Store
+build
+captures
+.externalNativeBuild
+.cxx
+local.properties
 
 
