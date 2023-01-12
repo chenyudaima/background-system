@@ -65,6 +65,7 @@
         <commons-lang3.version>3.9</commons-lang3.version>
         <pdfbox.version>2.0.12</pdfbox.version>
         <poi.version>5.2.2</poi.version>
+        <dom4j.version>1.6.1</dom4j.version>
     </properties>
 
     <!--依赖-->
@@ -87,6 +88,12 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>dom4j</groupId>
+                <artifactId>dom4j</artifactId>
+                <version>${dom4j.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.poi</groupId>

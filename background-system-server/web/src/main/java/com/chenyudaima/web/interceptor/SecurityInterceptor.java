@@ -45,7 +45,7 @@ public class SecurityInterceptor implements Interceptor {
             throw new SecurityException("该token不可用");
         }
 
-        request.setAttribute("claims",claims);
+        request.setAttribute("claims", claims);
 
         return true;
     }
