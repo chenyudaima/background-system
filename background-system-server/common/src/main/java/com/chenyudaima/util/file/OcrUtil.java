@@ -17,7 +17,7 @@ public class OcrUtil {
     static {
         for (OcrEnum value : OcrEnum.values()) {
             Tesseract tesseract = new Tesseract();
-            tesseract.setDatapath(OcrConfig.DATA_PATH);
+            tesseract.setDatapath(OcrConfig.DATA_PATH + "/tessdata");
             tesseract.setLanguage(value.getLanguage());
             TESSERACT_MAP.put(value, tesseract);
         }

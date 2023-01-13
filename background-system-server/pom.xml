@@ -60,7 +60,7 @@
         <httpmime.version>4.5</httpmime.version>
         <sdk.verion>0.6.3</sdk.verion>
         <jjwt.version>0.9.0</jjwt.version>
-        <tess4j.version>3.2.1</tess4j.version>
+        <tess4j.version>5.5.0</tess4j.version>
         <hutool-all.version>5.7.10</hutool-all.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <pdfbox.version>2.0.12</pdfbox.version>
