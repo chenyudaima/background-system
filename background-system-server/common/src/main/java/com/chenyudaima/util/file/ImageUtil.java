@@ -1,5 +1,9 @@
 package com.chenyudaima.util.file;
 
+import org.opencv.core.*;
+import org.opencv.*;
+
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,8 +14,6 @@ import java.io.FileInputStream;
  */
 public class ImageUtil {
 
-    //public static void detection(File file) {
-    //}
     /**
      * 将图片颜色反转
      */
@@ -51,6 +53,8 @@ public class ImageUtil {
         }
     }
 
+
+
     /**
      * 图片转tif
      */
@@ -72,4 +76,8 @@ public class ImageUtil {
             e.printStackTrace();
         }
     }
+
+
+
+
 }

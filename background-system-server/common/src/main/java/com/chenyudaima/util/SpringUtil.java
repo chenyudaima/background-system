@@ -1,18 +1,17 @@
 package com.chenyudaima.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContextAware;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.imageio.IIOImage;
-
 /**
  * Spring容器工具类
  */
 @Component
-public class SpringBeanUtil implements ApplicationContextAware {
+public class SpringUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext = null;
 
     public static ApplicationContext getApplicationContext() {
@@ -29,7 +28,7 @@ public class SpringBeanUtil implements ApplicationContextAware {
     }
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        SpringBeanUtil.applicationContext = applicationContext;
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
+        SpringUtil.applicationContext = applicationContext;
     }
 }

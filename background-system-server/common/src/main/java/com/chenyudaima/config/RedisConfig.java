@@ -1,5 +1,6 @@
 package com.chenyudaima.config;
 
+import com.chenyudaima.util.file.OcrUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,6 +15,7 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        System.out.println(OcrUtil.class);
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(RedisSerializer.string());

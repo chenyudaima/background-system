@@ -8,6 +8,7 @@
 // * xml文件工具类
 // */
 //public class XMLUtil {
+//private static final Logger log = LoggerFactory.getLogger(OcrUtil.class);
 //    private static final URL RESOURCE = XMLUtil.class.getClassLoader().getResource("xConfig.xml");
 //    private static final String APP_NAME = "xConfig";
 //    private static Document document = null;

@@ -16,6 +16,16 @@
     <dependencies>
 
         <dependency>
+            <groupId>org</groupId>
+            <artifactId>opencv</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
         </dependency>
@@ -81,5 +91,57 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <!--<plugin>-->
+            <!--    <artifactId>maven-assembly-plugin</artifactId>-->
+            <!--    <configuration>-->
+            <!--        <archive>-->
+            <!--            <manifest>-->
+            <!--                <addClasspath>true</addClasspath>-->
+            <!--            </manifest>-->
+            <!--        </archive>-->
+            <!--        <descriptorRefs>-->
+            <!--            <descriptorRef>jar-with-dependencies</descriptorRef>-->
+            <!--        </descriptorRefs>-->
+            <!--    </configuration>-->
+            <!--    <executions>-->
+            <!--        <execution>-->
+            <!--            <id>make-my-jar-with-dependencies</id>-->
+            <!--            <phase>package</phase>-->
+            <!--            <goals>-->
+            <!--                <goal>single</goal>-->
+            <!--            </goals>-->
+            <!--        </execution>-->
+            <!--    </executions>-->
+            <!--</plugin>-->
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${maven-install-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org</groupId>
+                            <artifactId>opencv</artifactId>
+                            <version>${opencv.version}</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/opencv-3413.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

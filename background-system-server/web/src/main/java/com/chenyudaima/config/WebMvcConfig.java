@@ -1,7 +1,7 @@
 package com.chenyudaima.config;
 
 import com.chenyudaima.util.JwtUtil;
-import com.chenyudaima.util.SpringBeanUtil;
+import com.chenyudaima.util.SpringUtil;
 import com.chenyudaima.web.interceptor.Interceptor;
 import com.chenyudaima.web.interceptor.SecurityInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         Set<Interceptor> set = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
 
-        SpringBeanUtil.getApplicationContext().getBeansOfType(Interceptor.class)
+        SpringUtil.getApplicationContext().getBeansOfType(Interceptor.class)
                 .forEach((k,v) -> set.add(v));
 
         /**

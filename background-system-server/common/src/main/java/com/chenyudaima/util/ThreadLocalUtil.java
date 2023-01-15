@@ -4,7 +4,7 @@ package com.chenyudaima.util;
  * 本地线程工具类
  */
 public class ThreadLocalUtil {
-    private static final ThreadLocal THREAD_LOCAL = new ThreadLocal();
+    private static final ThreadLocal<Object> THREAD_LOCAL = new ThreadLocal<>();
 
     /**
      * 从当前线程副本变量拿
