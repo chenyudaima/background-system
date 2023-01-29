@@ -37,7 +37,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value= {IllegalArgumentException.class, MethodArgumentTypeMismatchException.class})
-
     public Result<?> IllegalArgumentException(HttpServletRequest request, Exception e) {
         return new Result<>(401,"不合法的参数",null);
     }

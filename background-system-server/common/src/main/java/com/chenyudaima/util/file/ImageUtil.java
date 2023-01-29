@@ -1,13 +1,15 @@
 package com.chenyudaima.util.file;
 
-import org.opencv.core.*;
-import org.opencv.*;
+
 
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.util.Base64;
 
 /**
  * 图片操作工具
@@ -15,9 +17,40 @@ import java.io.FileInputStream;
 public class ImageUtil {
 
     /**
+     * 图片转base64字符串
+     */
+    public static String imageTranBase64(File file) {
+        Base64.Encoder encoder = Base64.getEncoder();
+        try {
+            return encoder.encodeToString(Files.readAllBytes(file.toPath()));
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static File base64TranImage(String base64) {
+        return base64TranImage(base64, new File(System.getProperty("java.io.tmpdir") + System.currentTimeMillis()  + ".png"));
+    }
+
+    /**
+     * base64字符串转图片
+     */
+    public static File base64TranImage(String base64, File file) {
+        Base64.Decoder decoder = Base64.getDecoder();
+        byte[] decode = decoder.decode(base64);
+        try(FileOutputStream os = new FileOutputStream(file)) {
+            os.write(decode);
+            os.flush();
+            return file;
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * 将图片颜色反转
      */
-    public static void inverse(File img) {
+    public static void imageColorInverse(File img) {
 
         try {
             FileInputStream fileInputStream = new FileInputStream(img);
@@ -58,7 +91,7 @@ public class ImageUtil {
     /**
      * 图片转tif
      */
-    public static void turnTif(File img) {
+    public static void imageTranTif(File img) {
         try {
             String suffix = "tif";
 
@@ -72,6 +105,7 @@ public class ImageUtil {
             while (!img.delete()) {
                 System.gc();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

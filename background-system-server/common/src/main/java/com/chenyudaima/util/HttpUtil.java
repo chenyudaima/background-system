@@ -74,9 +74,11 @@ public class HttpUtil {
     private static void packageParam(Map<String, String> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
         if (null != params && params.size() > 0) {
             List<NameValuePair> nvps = new ArrayList<>();
+
             params.forEach((k, v) -> {
                 nvps.add(new BasicNameValuePair(k, v));
             });
+
             httpMethod.setEntity(new UrlEncodedFormEntity(nvps, HttpConfig.ENCODING));
         }
     }
@@ -92,7 +94,7 @@ public class HttpUtil {
             if (httpResponse.getEntity() != null) {
                 httpResult.setData(EntityUtils.toString(httpResponse.getEntity(), HttpConfig.ENCODING));
                 httpResult.setHeaders(httpResponse.getAllHeaders());
-                httpResult.setCode(httpResponse.getStatusLine().getStatusCode());
+                httpResult  .setCode(httpResponse.getStatusLine().getStatusCode());
             }
         }
         return httpResult;
@@ -148,8 +150,17 @@ public class HttpUtil {
         }
     }
 
+    public static HttpResult post(String url) throws UnsupportedEncodingException {
+        return post(url,null);
+    }
+    public static HttpResult post(String url, Map<String, String> params) throws UnsupportedEncodingException {
+        return post(url, params,null);
+    }
+    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params) throws UnsupportedEncodingException {
+        return post(url, headers, params, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
 
-    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws UnsupportedEncodingException {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -173,7 +184,9 @@ public class HttpUtil {
 
         try {
             return getHttpResult(httpResponse,httpClient,httpPost);
-        } finally {
+        }catch (Exception e) {
+            return null;
+        }finally {
             //释放资源
             close(httpResponse);
         }

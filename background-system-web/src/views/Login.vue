@@ -75,6 +75,11 @@ export default {
       http.post("/login", params).then((resp) => {
         if (resp.code == 200) {
           localStorage.setItem("token", resp.data);
+
+
+          
+
+
           this.$router.push("/")
         } else {
           this.message = resp.message;

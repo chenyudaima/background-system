@@ -1,10 +1,17 @@
 package com.chenyudaima.enumeration;
 
 /**
- * Ocr语言枚举
+ * OcrUtil语言枚举
  */
 public enum OcrEnum {
+    /**
+     * 英文
+     */
     ENG("eng"),
+
+    /**
+     * 中文
+     */
     CHI_SIM("chi_sim");
 
     private final String language;

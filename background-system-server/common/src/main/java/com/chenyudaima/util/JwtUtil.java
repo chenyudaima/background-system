@@ -25,17 +25,25 @@ public class JwtUtil {
      */
     public String createToken(String id, String subject, Map<String,Object> map){
         JwtBuilder jwtBuilder = Jwts.builder()
-                .setId(id) //id (用户id)
-                .setSubject(subject) //主体 (用户名)
-                .setIssuedAt(new Date()) //签名时间
-                .signWith(SignatureAlgorithm.HS512,signWith); //加密方式和key
+                //id (用户id)
+                .setId(id)
 
+                //主体 (用户名)
+                .setSubject(subject)
 
-        if(expiration > 0) {//设置过期时间
+                //签名时间
+                .setIssuedAt(new Date())
+
+                //加密方式和key
+                .signWith(SignatureAlgorithm.HS512,signWith);
+
+        if(expiration > 0) {
+            //设置过期时间
             jwtBuilder.setExpiration(new Date(System.currentTimeMillis() + expiration));
         }
 
-        if(map != null && map.size() > 0) {//自定义claim信息
+        if(map != null && map.size() > 0) {
+            //自定义claim信息
             map.forEach(jwtBuilder::claim);
         }
 

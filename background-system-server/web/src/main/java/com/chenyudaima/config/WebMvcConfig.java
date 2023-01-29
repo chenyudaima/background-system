@@ -19,8 +19,6 @@ import java.util.*;
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-    @Autowired
-    private SecurityInterceptor securityInterceptor;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -43,9 +41,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
          * 拦截器的添加顺序就是执行顺序
          */
         set.forEach((interceptor -> {
-            registry.addInterceptor(securityInterceptor)
-                    .addPathPatterns(securityInterceptor.getAddPathPatterns())
-                    .excludePathPatterns(processingPath(securityInterceptor.getExcludePathPatterns()));
+            registry.addInterceptor(interceptor)
+                    .addPathPatterns(interceptor.getAddPathPatterns())
+                    .excludePathPatterns(processingPath(interceptor.getExcludePathPatterns()));
         }));
     }
 
@@ -72,6 +70,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 
     private List<String> processingPath(String... paths) {
+        if(paths == null || paths.length == 0) {
+            return null;
+        }
         List<String> list = new ArrayList<>();
         for (String path : paths) {
             list.add(PATH + path);

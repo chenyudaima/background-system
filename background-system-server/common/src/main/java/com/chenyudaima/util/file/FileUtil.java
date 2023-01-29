@@ -1,9 +1,6 @@
 package com.chenyudaima.util.file;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 
@@ -12,42 +9,55 @@ import java.nio.file.Files;
  */
 public class FileUtil {
 
+    /**
+     * 获取文件字节
+     * @param file 文件
+     * @return 文件的字节
+     * @throws IOException
+     */
+    public static byte[] getByte(File file) throws IOException {
+        return Files.readAllBytes(file.toPath());
+    }
+
 
     /**
      * 复制文件
-     * @param source 源文件 D:/w/a.txt
-     * @param dest 需要复制到哪个路径下 D:/img
+     * @param source 文件
+     * @param dest 复制的路径 (D:/e)
+     * @return 是否复制成功
      */
-    public static void copyFile(File source, String dest) {
+    public static boolean copyFile(File source, String dest) {
         File destFile = new File(dest);
 
         //如果目录不存在则创建
         if(!destFile.exists()) destFile.mkdirs();
 
-
-        dest = dest + "/" + source.getName();
+        dest = destFile.getPath()  + "/" + source.getName();
         destFile = new File(dest);
 
         try(FileChannel inputChannel = new FileInputStream(source).getChannel();
             FileChannel outputChannel = new FileOutputStream(destFile).getChannel()
         ) {
             outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
-        } catch (Exception e){
-            e.printStackTrace();
+
+            return true;
+        }catch (Exception e) {
+            return false;
         }
     }
 
     /**
      * 移动文件
-     * @param source 源文件
-     * @param dest 需要移动到哪个路径下
+     * @param source 文件
+     * @param dest 移动的路径 (D:/e)
+     * @return 是否移动成功
      */
-    public static void moveFile(File source, String dest) {
+    public static boolean moveFile(File source, String dest) {
         File destFile = new File(dest);
         destFile.mkdirs();
-        dest = dest + "/" + source.getName();
+        dest = destFile.getPath() + "/" + source.getName();
         destFile = new File(dest);
-        source.renameTo(destFile);
+        return source.renameTo(destFile);
     }
 
     /**

@@ -93,9 +93,9 @@
     </dependencies>
 
     <build>
-
         <plugins>
 
+            <!--打包时生成包含依赖的jar包-->
             <!--<plugin>-->
             <!--    <artifactId>maven-assembly-plugin</artifactId>-->
             <!--    <configuration>-->
@@ -120,6 +120,7 @@
             <!--</plugin>-->
 
 
+            <!--将指定jar放到maven仓库-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>

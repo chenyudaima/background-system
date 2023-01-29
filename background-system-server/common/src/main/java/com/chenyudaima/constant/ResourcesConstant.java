@@ -13,4 +13,8 @@ public class ResourcesConstant {
 
     public static final String BANNER_TXT = "banner.txt";
 
+    public static final String OPENCV = "opencv";
+
+    public static final String OPENCV_JAVA3413_DLL = "opencv_java3413.dll";
+
 }
