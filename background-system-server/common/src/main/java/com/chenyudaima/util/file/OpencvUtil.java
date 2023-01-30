@@ -1,8 +1,6 @@
 package com.chenyudaima.util.file;
 
-
-import com.chenyudaima.constant.EnvConstant;
-import com.chenyudaima.constant.ResourcesConstant;
+import com.chenyudaima.config.OpencvConfig;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -10,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * 图片处理工具类
@@ -20,42 +19,121 @@ public class OpencvUtil {
 
     private static final Logger log = LoggerFactory.getLogger(OpencvUtil.class);
 
+    private final Mat mat;
+
+    private final File file;
+
     static {
-        File file = new File(System.getenv(EnvConstant.JAVA_HOME) + "/bin/" + ResourcesConstant.OPENCV_JAVA3413_DLL);
-
-        if(!file.exists()) {
-            try(InputStream is = OpencvUtil.class.getResourceAsStream("/opencv/" + ResourcesConstant.OPENCV_JAVA3413_DLL);
-                OutputStream os = new FileOutputStream(file)
-            ) {
-
-                byte[] buffer = new byte[1024];
-
-                while(is.read(buffer) != -1) {
-                    os.write(buffer);
-                }
-                os.flush();
-
-            }catch (Exception e) {
-
-            }
-        }
-
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        OpencvConfig.init();
     }
 
     /**
-     * 图片二值化
-     * @param file 图片
+     * 初始化，将图片载入内存
+     * @param file 图片文件
+     * @param flags 0灰度图像 3彩色图像
+     * @throws IOException
      */
-    public static void threshold(File file) throws IOException {
-        Mat src = Imgcodecs.imread(file.getCanonicalPath(), 3);
+    public OpencvUtil(File file, int flags) throws IOException {
+        this.file = file;
+        mat = Imgcodecs.imread(file.getCanonicalPath(), flags);
+    }
 
-        Mat mat = new Mat();
 
-        //使用颜色空间转换函数    第三个参数为具体颜色转化操作
-        //意思将RGB颜色的图像转化为灰度图
-        Imgproc.cvtColor(src, mat, Imgproc.COLOR_BGR2GRAY);
+    /**
+     * 初始化，将图片载入内存
+     * @param file 图片文件
+     * @throws IOException
+     */
+    public OpencvUtil(File file) throws IOException {
+        this.file = file;
+        mat = Imgcodecs.imread(file.getCanonicalPath());
+    }
 
+    /**
+     * 转换图像颜色
+     * @param imgproc Imgproc.COLOR_XXX
+     * @return this
+     */
+    public OpencvUtil cvtColor(int imgproc) {
+        Imgproc.cvtColor(mat, mat, imgproc);
+        return this;
+    }
+
+    /**
+     * 二值化
+     * @param thresh
+     * @param maxval
+     * @param type
+     * @return this
+     */
+    public OpencvUtil threshold(double thresh, double maxval, int type) {
+        Imgproc.threshold(mat, mat, thresh, maxval, type);
+        return this;
+    }
+
+
+    /**
+     * 轮廓查找
+     * @param contours
+     * @param mode
+     * @param method
+     * @return this
+     */
+    public OpencvUtil findContours(List<MatOfPoint> contours, int mode, int method) {
+        Imgproc.findContours(mat, contours, mat, mode, method);
+        return this;
+    }
+
+
+    /**
+     * 查找边缘
+     * @param threshold1
+     * @param threshold2
+     * @param apertureSize
+     * @return this
+     */
+    public OpencvUtil canny(double threshold1, double threshold2, int apertureSize) {
+        Imgproc.Canny(mat, mat, threshold1, threshold2, apertureSize);
+        return this;
+    }
+
+    /**
+     * 查找直线
+     * @param rho
+     * @param theta
+     * @param threshold
+     * @param srn
+     * @param stn
+     * @param min_theta
+     * @param max_theta
+     * @return this
+     */
+    public OpencvUtil houghLines(double rho, double theta, int threshold, double srn, double stn, double min_theta, double max_theta) {
+        Imgproc.HoughLines(mat, mat, rho, theta, threshold, srn, stn, min_theta, max_theta);
+        return this;
+    }
+
+    /**
+     * 保存处理的图片
+     * @param path 保存的路径
+     */
+    public void save(String path) {
+        File save = new File(new File(path).getPath() + "/" + file.getName());
+        try {
+            Imgcodecs.imwrite(save.getCanonicalPath(), mat);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 保存处理的图片 (覆盖原来的文件)
+     */
+    public void save() {
+        try {
+            Imgcodecs.imwrite(file.getCanonicalPath(), mat);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

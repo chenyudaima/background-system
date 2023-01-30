@@ -6,8 +6,7 @@ import java.io.Serializable;
 /**
  * http请求响应结果
  */
-public class HttpResult implements Serializable {
-    private static final long serialVersionUID = 2168152194164783950L;
+public class HttpResult {
 
     /**
      * 响应状态码

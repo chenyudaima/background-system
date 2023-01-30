@@ -5,7 +5,7 @@ package com.chenyudaima.exception;
  * @author 沉鱼代码
  * @date 2022/12/30
  */
-public class SecurityException extends RuntimeException{
+public class SecurityException extends RuntimeException {
     public SecurityException() {
         super();
     }

@@ -13,4 +13,5 @@ public class OcrConfig {
      * tessdata语言库位置
      */
     public static final String DATA_PATH = System.getenv(EnvConstant.TESSDATA_PREFIX);
+
 }
