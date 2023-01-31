@@ -92,8 +92,8 @@ public class OpencvUtil {
      * @param apertureSize
      * @return this
      */
-    public OpencvUtil canny(double threshold1, double threshold2, int apertureSize) {
-        Imgproc.Canny(mat, mat, threshold1, threshold2, apertureSize);
+    public OpencvUtil canny(Mat mat, double threshold1, double threshold2, int apertureSize) {
+        Imgproc.Canny(this.mat, mat, threshold1, threshold2, apertureSize);
         return this;
     }
 
@@ -110,6 +110,22 @@ public class OpencvUtil {
      */
     public OpencvUtil houghLines(double rho, double theta, int threshold, double srn, double stn, double min_theta, double max_theta) {
         Imgproc.HoughLines(mat, mat, rho, theta, threshold, srn, stn, min_theta, max_theta);
+        return this;
+    }
+
+
+    /**
+     * 绘制连接两点的线段
+     * @param pt1
+     * @param pt2
+     * @param color
+     * @param thickness
+     * @param lineType
+     * @param shift
+     * @return
+     */
+    public OpencvUtil line(Point pt1, Point pt2, Scalar color, int thickness, int lineType, int shift) {
+        Imgproc.line(mat, pt1, pt2, color, thickness, lineType, shift);
         return this;
     }
 
@@ -135,5 +151,9 @@ public class OpencvUtil {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Mat getMat() {
+        return mat;
     }
 }

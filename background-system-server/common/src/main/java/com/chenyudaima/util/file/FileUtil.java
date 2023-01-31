@@ -3,6 +3,7 @@ package com.chenyudaima.util.file;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.util.function.Consumer;
 
 /**
  * 文件操作工具类
@@ -67,6 +68,27 @@ public class FileUtil {
         //删除失败继续循环
         while(!file.delete()) {
             System.gc();
+        }
+    }
+
+    /**
+     * 如果是文件不会执行查找过滤
+     * @param file 目录或文件
+     * @param consumer 执行策略
+     * @param fileFilter 查找过滤
+     */
+    public static void searchOut(File file, Consumer<File> consumer, FileFilter fileFilter) {
+
+        //如果是文件就直接执行
+        if(file.isFile()) {
+
+            consumer.accept(file);
+            return;
+        }
+
+        //如果是目录就递归查找 并且过滤
+        for(File fn: file.listFiles(fileFilter)) {
+            searchOut(fn, consumer, fileFilter);
         }
     }
 
