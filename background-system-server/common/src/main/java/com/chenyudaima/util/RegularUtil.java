@@ -15,8 +15,6 @@ public class RegularUtil {
 
     public static final Pattern LAST_INTEGER = Pattern.compile("(\\d+)$");
 
-
-
     public static final Pattern PHONE = Pattern.compile("(1[3-9]\\d{9})");
 
     public static final Pattern ID_ENTITY_CARD = Pattern.compile("\\d{17}[\\d|x|X]|\\d{15}");
@@ -63,7 +61,7 @@ public class RegularUtil {
      * 示例:String s = getBeginNumber("QQ323.22EE5.6666"); //5.6666
      */
     public static String getLastNumber(String text) {
-        Matcher m = LAST_NUMBER.matcher(text);
+        Matcher m = LAST_NUMBER.matcher(text.trim());
         while (m.find()) {
             return m.group();
         }

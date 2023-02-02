@@ -1,7 +1,7 @@
 package com.chenyudaima.util;
 
 import com.chenyudaima.config.HttpConfig;
-import com.chenyudaima.model.HttpResult;
+import com.chenyudaima.constant.HttpHeaderConstant;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -19,6 +19,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
@@ -27,6 +30,8 @@ import java.util.*;
  * http请求工具
  */
 public class HttpUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
 
     /**
      * 通过连接池获取HttpClient
@@ -73,33 +78,33 @@ public class HttpUtil {
      */
     private static void packageParam(Map<String, String> params, HttpEntityEnclosingRequestBase httpMethod) throws UnsupportedEncodingException {
         if (null != params && params.size() > 0) {
-            List<NameValuePair> nvps = new ArrayList<>();
+            List<NameValuePair> list = new ArrayList<>();
 
             params.forEach((k, v) -> {
-                nvps.add(new BasicNameValuePair(k, v));
+                list.add(new BasicNameValuePair(k, v));
             });
 
-            httpMethod.setEntity(new UrlEncodedFormEntity(nvps, HttpConfig.ENCODING));
+            httpMethod.setEntity(new UrlEncodedFormEntity(list, HttpConfig.ENCODING));
         }
     }
 
     /**
      * 统一返回结果
      */
-    private static HttpResult getHttpResult(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient, HttpRequestBase httpMethod) throws Exception {
+    private static String getHttpResult(CloseableHttpResponse httpResponse, CloseableHttpClient httpClient, HttpRequestBase httpMethod) throws Exception {
         // 执行请求
         httpResponse = httpClient.execute(httpMethod);
-        HttpResult httpResult = new HttpResult();
         if (httpResponse != null && httpResponse.getStatusLine() != null) {
             if (httpResponse.getEntity() != null) {
-                httpResult.setData(EntityUtils.toString(httpResponse.getEntity(), HttpConfig.ENCODING));
-                httpResult.setHeaders(httpResponse.getAllHeaders());
-                httpResult  .setCode(httpResponse.getStatusLine().getStatusCode());
+                return EntityUtils.toString(httpResponse.getEntity(), HttpConfig.ENCODING);
             }
         }
-        return httpResult;
+        return null;
     }
 
+    /**
+     * 关闭资源
+     */
     private static void close(Closeable... resources) {
         try {
             for (Closeable resource : resources) {
@@ -112,7 +117,19 @@ public class HttpUtil {
         }
     }
 
-    public static HttpResult get(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String get(String url) throws Exception {
+        return get(url,null);
+    }
+
+    public static String get(String url, Map<String, String> params) throws Exception {
+        return get(url, params, null);
+    }
+
+    public static String get(String url, Map<String, String> params, Map<String, String> headers) throws Exception {
+        return get(url, params, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
+
+    public static String get(String url, Map<String, String> params, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         CloseableHttpClient httpClient = getHttpClient();
 
         // 创建访问的地址
@@ -134,7 +151,8 @@ public class HttpUtil {
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(connectionTimeout)
                 .setSocketTimeout(responseTimeout).build();
-
+        
+        //设置http对象
         httpGet.setConfig(requestConfig);
 
         // 设置请求头
@@ -150,17 +168,17 @@ public class HttpUtil {
         }
     }
 
-    public static HttpResult post(String url) throws UnsupportedEncodingException {
+    public static String post(String url) throws Exception {
         return post(url,null);
     }
-    public static HttpResult post(String url, Map<String, String> params) throws UnsupportedEncodingException {
+    public static String post(String url, Map<String, String> params) throws Exception {
         return post(url, params,null);
     }
-    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params) throws UnsupportedEncodingException {
+    public static String post(String url, Map<String, String> params, Map<String, String> headers) throws Exception {
         return post(url, headers, params, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
     }
 
-    public static HttpResult post(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws UnsupportedEncodingException {
+    public static String post(String url, Map<String, String> params, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -184,8 +202,6 @@ public class HttpUtil {
 
         try {
             return getHttpResult(httpResponse,httpClient,httpPost);
-        }catch (Exception e) {
-            return null;
         }finally {
             //释放资源
             close(httpResponse);
@@ -193,7 +209,7 @@ public class HttpUtil {
     }
 
 
-    public static HttpResult postJson(String url, Map<String, String> headers, String jsonParams, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String postJson(String url, String jsonParams, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -207,7 +223,7 @@ public class HttpUtil {
         httpPost.setConfig(requestConfig);
 
         //设置请求头
-        headers.put("content-type", "application/json");
+        headers.put(HttpHeaderConstant.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeaderConstant.V_CONTENT_TYPE_APPLICATION_JSON);
         packageHeader(headers, httpPost);
 
         //设置参数
@@ -217,13 +233,13 @@ public class HttpUtil {
         CloseableHttpResponse httpResponse = null;
 
         try {
-            return getHttpResult(httpResponse,httpClient,httpPost);
+            return getHttpResult(httpResponse, httpClient, httpPost);
         } finally {
             close(httpResponse);
         }
     }
 
-    public static HttpResult postXml(String url, Map<String, String> headers, String xmlParams, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String postXml(String url, String xmlParams, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -237,7 +253,7 @@ public class HttpUtil {
         httpPost.setConfig(requestConfig);
 
         //设置请求头
-        httpPost.addHeader("Content-Type", "text/xml");
+        httpPost.addHeader(HttpHeaderConstant.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeaderConstant.V_CONTENT_TYPE_TEXT_XML);
         packageHeader(headers, httpPost);
 
         //设置参数
@@ -253,7 +269,15 @@ public class HttpUtil {
     }
 
 
-    public static HttpResult delete(String url, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String delete(String url) throws Exception {
+        return delete(url, null);
+    }
+
+    public static String delete(String url, Map<String, String> headers) throws Exception {
+        return delete(url, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
+
+    public static String delete(String url, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -273,15 +297,26 @@ public class HttpUtil {
         CloseableHttpResponse httpResponse = null;
 
         try {
-            return getHttpResult(httpResponse,httpClient,httpDelete);
+            return getHttpResult(httpResponse, httpClient, httpDelete);
         } finally {
             //释放资源
             close(httpResponse);
         }
     }
 
+    public static String put(String url) throws Exception {
+        return put(url,  null);
+    }
 
-    public static HttpResult put(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String put(String url, Map<String, String> params) throws Exception {
+        return put(url, params, null);
+    }
+
+    public static String put(String url, Map<String, String> params, Map<String, String> headers) throws Exception {
+        return put(url, params, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
+
+    public static String put(String url, Map<String, String> params, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -311,8 +346,19 @@ public class HttpUtil {
         }
     }
 
+    public static String patch(String url) throws Exception {
+        return patch(url,  null);
+    }
 
-    public static HttpResult patch(String url, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String patch(String url, Map<String, String> params) throws Exception {
+        return patch(url, params, null);
+    }
+
+    public static String patch(String url, Map<String, String> params, Map<String, String> headers) throws Exception {
+        return patch(url, params, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
+
+    public static String patch(String url, Map<String, String> params, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象
         CloseableHttpClient httpClient = getHttpClient();
 
@@ -401,7 +447,7 @@ public class HttpUtil {
                 fileName = url.substring(url.lastIndexOf("/") + 1);
 
             }else {
-                Header firstHeader = httpResponse.getFirstHeader("content-disposition");
+                Header firstHeader = httpResponse.getFirstHeader(HttpHeaderConstant.K_RESPONSE_HEADER_CONTENT_DISPOSITION);
 
                 for (HeaderElement element : firstHeader.getElements()) {
                     fileName = element.getParameterByName("filename").getValue();
@@ -431,7 +477,7 @@ public class HttpUtil {
         }
     }
 
-    public static HttpResult upload(String url, File file, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String upload(String url, File file, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         CloseableHttpResponse response = null;

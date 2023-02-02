@@ -14,10 +14,13 @@ public class FileUtil {
      * 获取文件字节
      * @param file 文件
      * @return 文件的字节
-     * @throws IOException
      */
-    public static byte[] getByte(File file) throws IOException {
-        return Files.readAllBytes(file.toPath());
+    public static byte[] getByte(File file) {
+        try {
+            return Files.readAllBytes(file.toPath());
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 
@@ -81,7 +84,6 @@ public class FileUtil {
 
         //如果是文件就直接执行
         if(file.isFile()) {
-
             consumer.accept(file);
             return;
         }
@@ -137,7 +139,7 @@ public class FileUtil {
     }
 
     /**
-     * 判断文件字符集是否是utf-8
+     * 判断文件字符集是不是UTF-8
      */
     public static boolean isUtf8(File file) throws IOException {
         boolean isUtf8 = true;

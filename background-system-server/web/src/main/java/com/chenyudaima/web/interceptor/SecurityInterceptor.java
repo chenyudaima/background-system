@@ -23,7 +23,7 @@ public class SecurityInterceptor implements Interceptor {
 
     @Override
     public String[] getExcludePathPatterns() {
-        return new String[]{"/login"};
+        return new String[]{"/login/**"};
     }
 
     @Override

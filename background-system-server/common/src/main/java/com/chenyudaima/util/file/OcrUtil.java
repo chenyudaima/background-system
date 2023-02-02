@@ -27,14 +27,14 @@ public class OcrUtil {
     }
 
     /**
-     * @param img 图片
+     * @param image 图片
      * @param language 语言库
      * @return 识别的内容
      */
-    public static String doOCR(File img, OcrEnum language) {
+    public static String doOCR(File image, OcrEnum language) {
         try {
-            return TESSERACT_MAP.get(language).doOCR(img);
-        }catch (Exception e) {
+            return TESSERACT_MAP.get(language).doOCR(image);
+        }catch(Exception e) {
             return null;
         }
     }

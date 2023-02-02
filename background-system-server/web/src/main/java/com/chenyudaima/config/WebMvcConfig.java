@@ -1,10 +1,8 @@
 package com.chenyudaima.config;
 
-import com.chenyudaima.util.JwtUtil;
+
 import com.chenyudaima.util.SpringUtil;
 import com.chenyudaima.web.interceptor.Interceptor;
-import com.chenyudaima.web.interceptor.SecurityInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -12,16 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * web配置
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     /**
      * 给Controller加上前缀 （当作项目部署路径）
@@ -40,16 +39,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
         /**
          * 拦截器的添加顺序就是执行顺序
          */
-        set.forEach((interceptor -> {
+        set.forEach((interceptor ->
             registry.addInterceptor(interceptor)
                     .addPathPatterns(interceptor.getAddPathPatterns())
-                    .excludePathPatterns(processingPath(interceptor.getExcludePathPatterns()));
-        }));
+                    .excludePathPatterns(processingPath(interceptor.getExcludePathPatterns()))
+        ));
     }
 
 
     /**
-     * 转换器优先级提升
+     * 转换器优先级提升（解决统一响应格式，响应字符串出现错误的问题）
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -64,7 +63,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
+        //给有RestController注解的控制器加上PATH前缀
         configurer.addPathPrefix(PATH, c -> c.isAnnotationPresent(RestController.class));
+
         WebMvcConfigurer.super.configurePathMatch(configurer);
     }
 

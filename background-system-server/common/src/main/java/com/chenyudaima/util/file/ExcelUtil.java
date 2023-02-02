@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ExcelUtil {
 
-    public static List<List<List<String>>> parse(File file) throws IOException {
+    public static List<List<List<String>>> parse(File file) throws Exception {
         Workbook workbook = WorkbookFactory.create(file);
 
         //整个文件数据
@@ -24,7 +24,7 @@ public class ExcelUtil {
             //第i张表格数据
             List<List<String>> lists = new ArrayList<>();
 
-            for(int j = 0;j <= sheet.getLastRowNum(); j++) {
+            for(int j = 0; j <= sheet.getLastRowNum(); j++) {
                 //获取表格第j行数据
                 Row row = sheet.getRow(j);
 

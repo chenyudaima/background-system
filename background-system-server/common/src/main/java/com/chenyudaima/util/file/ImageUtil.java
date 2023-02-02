@@ -32,6 +32,9 @@ public class ImageUtil {
         }
     }
 
+    /**
+     * base64字符串转图片
+     */
     public static File base64TranImage(String base64) {
         return base64TranImage(base64, new File(System.getProperty(PropertyConstant.JAVA_IO_TMPDIR) + UUID.randomUUID() + FileTypeConstant.PNG));
     }

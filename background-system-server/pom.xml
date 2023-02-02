@@ -67,7 +67,7 @@
         <tess4j.version>5.5.0</tess4j.version>
         <hutool-all.version>5.7.10</hutool-all.version>
         <commons-lang3.version>3.9</commons-lang3.version>
-        <pdfbox.version>2.0.12</pdfbox.version>
+        <pdfbox.version>2.0.27</pdfbox.version>
         <poi.version>5.2.2</poi.version>
         <dom4j.version>1.6.1</dom4j.version>
         <opencv.version>3.4.13</opencv.version>
@@ -93,6 +93,12 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org</groupId>
+                <artifactId>opencv</artifactId>
+                <version>${opencv.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>dom4j</groupId>
@@ -194,12 +200,6 @@
                 <groupId>com.chenyudaima</groupId>
                 <artifactId>mapper</artifactId>
                 <version>${mapper.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org</groupId>
-                <artifactId>opencv</artifactId>
-                <version>${opencv.version}</version>
             </dependency>
 
         </dependencies>
