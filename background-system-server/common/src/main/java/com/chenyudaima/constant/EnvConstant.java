@@ -2,6 +2,7 @@ package com.chenyudaima.constant;
 
 /**
  * 环境变量常量
+ * System.getenv(xxx)
  * @author 沉鱼代码
  * @date 2023/1/16
  */

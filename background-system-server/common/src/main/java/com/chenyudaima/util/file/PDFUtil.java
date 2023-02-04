@@ -2,6 +2,7 @@ package com.chenyudaima.util.file;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+
 import java.io.File;
 
 /**
@@ -11,13 +12,13 @@ public class PDFUtil {
     /**
      * 读取pdf文件总页数
      */
-    public static int readPageSize(File file) {
+    public static Integer readPageSize(File file) {
         //创建文档对象
         try (PDDocument doc = PDDocument.load(file)) {
             //获取文字内容
             return doc.getNumberOfPages();
-        }catch(Exception e) {
-            return 0;
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -32,10 +33,10 @@ public class PDFUtil {
             //获取PDF文字剥离对象
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
 
-            for(int i=0;i<doc.getNumberOfPages();i++) {
+            for (int i = 0; i < doc.getNumberOfPages(); i++) {
 
-                pdfTextStripper.setStartPage(i);
-                pdfTextStripper.setEndPage(i+1);
+                pdfTextStripper.setStartPage(i + 1);
+                pdfTextStripper.setEndPage(i + 1);
 
                 //一次输出多个页时，按顺序输出
                 pdfTextStripper.setSortByPosition(true);
@@ -52,8 +53,8 @@ public class PDFUtil {
     /**
      * 分页读取pdf文字内容 下标0开始
      */
-    public static String[] readPageTextArray(File file) {
-        String[] content= null;
+    public static String[] readTextPageArray(File file) {
+        String[] content = null;
 
         //创建文档对象
         try (PDDocument doc = PDDocument.load(file)) {
@@ -64,16 +65,16 @@ public class PDFUtil {
             //获取PDF文字剥离对象
             PDFTextStripper pdfTextStripper = new PDFTextStripper();
 
-            for(int i=0;i<doc.getNumberOfPages();i++) {
+            for (int i = 0; i < doc.getNumberOfPages(); i++) {
 
-                pdfTextStripper.setStartPage(i);
-                pdfTextStripper.setEndPage(i+1);
+                pdfTextStripper.setStartPage(i + 1);
+                pdfTextStripper.setEndPage(i + 1);
 
                 //一次输出多个页时，按顺序输出
                 pdfTextStripper.setSortByPosition(true);
 
                 //获取第i页文字内容
-                content[i]=pdfTextStripper.getText(doc);
+                content[i] = pdfTextStripper.getText(doc);
             }
             return content;
         } catch (Exception e) {
@@ -81,10 +82,4 @@ public class PDFUtil {
         }
     }
 
-    /**
-     * 分行读取pdf文字内容
-     */
-    public static String[] readTextLines(File file) {
-        return readTest(file).split("\n");
-    }
 }

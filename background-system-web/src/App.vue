@@ -7,7 +7,9 @@
 import http from '@/utils/http.js'
 export default {
   name: "App",
+
   created() {
+    
     //定时刷新token
     setInterval(() => {
       http.get("/system/updateToken").then(resp => {
@@ -15,6 +17,7 @@ export default {
       })
     }, 60000)
   }
+
 };
 </script>
 <style>

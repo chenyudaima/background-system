@@ -37,6 +37,7 @@ router.push()
 
 
 router.beforeEach((to, from, next) => {
+  
   //如果未匹配到路由则跳转到首页 (也可以跳转到404页面)
 	if (to.matched.length === 0) {  
 	   router.push("/")

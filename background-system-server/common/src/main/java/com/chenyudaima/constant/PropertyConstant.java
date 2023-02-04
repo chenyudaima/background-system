@@ -2,6 +2,7 @@ package com.chenyudaima.constant;
 
 /**
  * 系统属性常量
+ * System.getProperty(xxx)
  * @author 沉鱼代码
  * @date 2023/1/29
  */

@@ -26,7 +26,6 @@ public class OpencvConfig {
      */
     private static final String DLL_PATH = System.getProperty(PropertyConstant.JAVA_HOME) + "/bin/" + ResourcesConstant.OPENCV_JAVA3413_DLL;
 
-
     /**
      * 加载动态库 Linux环境需要更换Linux的动态库
      */

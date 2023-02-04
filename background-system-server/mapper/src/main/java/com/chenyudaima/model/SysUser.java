@@ -1,5 +1,6 @@
 package com.chenyudaima.model;
 
+
 import java.io.Serializable;
 
 /**

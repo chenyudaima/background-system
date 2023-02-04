@@ -2,28 +2,31 @@ package com.chenyudaima.web.interceptor;
 
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
-import com.chenyudaima.web.interceptor.Interceptor;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
 @Component
-public class SecurityInterceptor implements Interceptor {
+public class SecurityInterceptor extends Interceptor {
     @Autowired
     private JwtUtil jwtUtil;
 
     @Override
     public String[] getAddPathPatterns() {
-        return new String[]{"/**"};
+        return new String[]{
+                "/**"
+        };
     }
 
     @Override
     public String[] getExcludePathPatterns() {
-        return new String[]{"/login/**"};
+        return new String[]{
+                "/login/**",
+                "/test/**"
+        };
     }
 
     @Override
@@ -39,6 +42,7 @@ public class SecurityInterceptor implements Interceptor {
         if(token == null) {
             throw new SecurityException("未登录");
         }
+
         Claims claims = jwtUtil.parseToken(token);
 
         if(claims == null) {

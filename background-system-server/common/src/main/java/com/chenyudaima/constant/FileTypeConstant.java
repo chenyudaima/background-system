@@ -7,4 +7,7 @@ package com.chenyudaima.constant;
  */
 public class FileTypeConstant {
     public static final String PNG = ".png";
+    public static final String PDF = ".pdf";
+
+    public static final String TXT = ".txt";
 }

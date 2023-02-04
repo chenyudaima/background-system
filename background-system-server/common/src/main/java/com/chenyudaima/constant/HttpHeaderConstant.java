@@ -15,6 +15,12 @@ public class HttpHeaderConstant {
     public static final String V_CONTENT_TYPE_APPLICATION_JSON = "application/json";
 
 
+    /**
+     * key 请求头 Authorization
+     */
+    public static final String K_REQUEST_HEADER_AUTHORIZATION = "Authorization";
+
+
 
 
     /**
