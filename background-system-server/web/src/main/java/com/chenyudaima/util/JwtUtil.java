@@ -23,7 +23,7 @@ public class JwtUtil {
     /**
      * 创建token
      */
-    public String createToken(String id, String subject, Map<String,Object> map){
+    public String createToken(String id, String subject, Map<String,Object> map) {
         JwtBuilder jwtBuilder = Jwts.builder()
                 //id (用户id)
                 .setId(id)
@@ -54,12 +54,6 @@ public class JwtUtil {
      * 解析token
      */
     public Claims parseToken(String token) {
-        Claims claims = null;
-        try {
-            claims = Jwts.parser().setSigningKey(signWith).parseClaimsJws(token).getBody();
-        }catch (Exception e) {
-            log.error("token不可用!");
-        }
-        return claims;
+        return Jwts.parser().setSigningKey(signWith).parseClaimsJws(token).getBody();
     }
 }

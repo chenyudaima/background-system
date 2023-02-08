@@ -44,6 +44,9 @@ public class ImageUtil {
      */
     public static File base64TranImage(String base64, File file) {
         Base64.Decoder decoder = Base64.getDecoder();
+        if(base64.contains("data:")) {
+            base64 = base64.substring(base64.indexOf(",") + 1);
+        }
         byte[] decode = decoder.decode(base64);
         try(FileOutputStream os = new FileOutputStream(file)) {
             os.write(decode);

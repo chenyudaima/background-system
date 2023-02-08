@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -27,11 +25,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     private static final String PATH = "/system";
 
+
     /**
      * 配置拦截器 （会自动查找实现Interceptor接口的类进行配置）
      */
     public void addInterceptors(InterceptorRegistry registry) {
-        Set<Interceptor> set = new TreeSet<>((o1, o2) -> o2.priority() - o1.priority());
+        Set<Interceptor> set = new TreeSet<>((o1, o2) -> o1.priority() - o2.priority());
 
         SpringUtil.getApplicationContext().getBeansOfType(Interceptor.class)
                 .forEach((k,v) -> set.add(v));
@@ -41,9 +40,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
          */
         set.forEach((interceptor ->
             registry.addInterceptor(interceptor)
-                    .addPathPatterns(interceptor.getAddPathPatterns())
+                    .addPathPatterns(processingPath(interceptor.getAddPathPatterns()))
                     .excludePathPatterns(processingPath(interceptor.getExcludePathPatterns()))
         ));
+
+
     }
 
 
@@ -70,14 +71,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 
-    private List<String> processingPath(String... paths) {
+    private String[] processingPath(String[] paths) {
         if(paths == null || paths.length == 0) {
-            return null;
+            return paths;
         }
-        List<String> list = new ArrayList<>();
-        for (String path : paths) {
-            list.add(PATH + path);
+        String[] pathsAdd = new String[paths.length];
+
+        for (int i = 0; i < paths.length; i++) {
+            pathsAdd[i] = PATH + paths[i];
         }
-        return list;
+
+        return pathsAdd;
     }
 }

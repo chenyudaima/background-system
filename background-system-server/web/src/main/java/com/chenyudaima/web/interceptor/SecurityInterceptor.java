@@ -1,5 +1,6 @@
 package com.chenyudaima.web.interceptor;
 
+import com.chenyudaima.constant.HttpHeaderConstant;
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
+/**
+ * 权限拦截器
+ */
 @Component
 public class SecurityInterceptor extends Interceptor {
     @Autowired
@@ -31,21 +35,25 @@ public class SecurityInterceptor extends Interceptor {
 
     @Override
     public int priority() {
-        return 0;
+        return 1;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //如果用户没有token或者验证token失败则抛异常
-        String token = request.getHeader("Authorization");
-        if(token == null) {
+        String authorization = request.getHeader(HttpHeaderConstant.K_REQUEST_HEADER_AUTHORIZATION);
+        if(authorization == null) {
             throw new SecurityException("未登录");
         }
 
-        Claims claims = jwtUtil.parseToken(token);
+        Claims claims;
 
-        if(claims == null) {
+        try {
+            claims = jwtUtil.parseToken(authorization);
+
+            if(claims == null) throw new SecurityException();
+        }catch (Exception e) {
             throw new SecurityException("该token不可用");
         }
 

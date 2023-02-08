@@ -27,11 +27,11 @@ import java.net.URLEncoder;
 import java.util.*;
 
 /**
- * http请求工具
+ * http client工具
  */
-public class HttpUtil {
+public class HttpClientUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
 
     /**
      * 通过连接池获取HttpClient

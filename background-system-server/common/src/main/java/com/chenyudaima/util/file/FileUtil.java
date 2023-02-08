@@ -1,14 +1,33 @@
 package com.chenyudaima.util.file;
 
+import com.chenyudaima.constant.FileTypeConstant;
+import com.chenyudaima.constant.PropertyConstant;
+
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
  * 文件操作工具类
  */
 public class FileUtil {
+
+    /**
+     * 根据文件名和字节创建临时文件
+     */
+    public static File createFile(String fileName, byte[] bytes) {
+        File file = new File(System.getProperty(PropertyConstant.JAVA_IO_TMPDIR) + fileName);
+
+        try(OutputStream os = Files.newOutputStream(file.toPath())) {
+            os.write(bytes);
+            os.flush();
+            return file;
+        }catch (Exception e) {
+            return null;
+        }
+    }
 
     /**
      * 获取文件字节

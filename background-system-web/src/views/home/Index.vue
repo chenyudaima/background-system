@@ -20,11 +20,15 @@ export default {
     upload(e) {
       let file = e.target.files[0]
       let param = new FormData()
-      param.append('file', file)
-      http.post("/index/ocr", param).then(resp => {
-        document.getElementById("message").innerText = resp.data
-      })
-
+      let reader = new FileReader()
+      reader.onload = e => {
+        param.append('file', file)
+        param.append('name', e.target.result)
+        http.post("/index/ocr", param).then(resp => {
+          document.getElementById("message").innerText = resp.data
+        })
+      }
+      reader.readAsDataURL(file)
     }
   }
 }

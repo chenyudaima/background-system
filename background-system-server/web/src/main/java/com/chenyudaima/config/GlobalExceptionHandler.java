@@ -2,6 +2,7 @@ package com.chenyudaima.config;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.chenyudaima.exception.SecurityException;
+import com.chenyudaima.exception.SignatureException;
 import com.chenyudaima.model.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -49,6 +50,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value= {IllegalArgumentException.class,
             MethodArgumentTypeMismatchException.class,
 
+            SignatureException.class,
             /**
              * 注解参数校验器异常
              */
@@ -58,7 +60,7 @@ public class GlobalExceptionHandler {
             ConstraintViolationException.class})
     public Result<?> ValidationException(HttpServletRequest request, Exception e) {
         String message;
-
+        e.printStackTrace();
         Result<?> result = new Result<>();
         result.setCode(401);
 
@@ -79,6 +81,8 @@ public class GlobalExceptionHandler {
             message = ex.getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
                     .collect(Collectors.joining("; "));
+        }else if(e instanceof SignatureException) {
+            message = e.getMessage();
         }else {
             message = "不合法的参数";
         }

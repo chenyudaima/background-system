@@ -27,7 +27,7 @@
         </el-form-item>
 
         <el-form-item class="btns">
-          <el-button type="primary" class="Button" @click="login()">登 录</el-button>
+          <el-button type="primary" class="Button" @click="login">登 录</el-button>
         </el-form-item>
 
       </el-form>
@@ -72,6 +72,7 @@ export default {
       let params = new URLSearchParams();
       params.append("account", this.account);
       params.append("password", this.password);
+
       http.post("/login", params).then((resp) => {
         if (resp.code == 200) {
           localStorage.setItem("token", resp.data);
