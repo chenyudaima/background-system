@@ -1,7 +1,7 @@
 package com.chenyudaima.util;
 
 import com.chenyudaima.config.HttpConfig;
-import com.chenyudaima.constant.HttpHeaderConstant;
+import com.chenyudaima.constant.HttpHeader;
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
 import org.apache.http.HttpEntity;
@@ -223,7 +223,7 @@ public class HttpClientUtil {
         httpPost.setConfig(requestConfig);
 
         //设置请求头
-        headers.put(HttpHeaderConstant.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeaderConstant.V_CONTENT_TYPE_APPLICATION_JSON);
+        headers.put(HttpHeader.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeader.V_CONTENT_TYPE_APPLICATION_JSON);
         packageHeader(headers, httpPost);
 
         //设置参数
@@ -253,7 +253,7 @@ public class HttpClientUtil {
         httpPost.setConfig(requestConfig);
 
         //设置请求头
-        httpPost.addHeader(HttpHeaderConstant.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeaderConstant.V_CONTENT_TYPE_TEXT_XML);
+        httpPost.addHeader(HttpHeader.K_REQUEST_HEADER_CONTENT_TYPE, HttpHeader.V_CONTENT_TYPE_TEXT_XML);
         packageHeader(headers, httpPost);
 
         //设置参数
@@ -447,7 +447,7 @@ public class HttpClientUtil {
                 fileName = url.substring(url.lastIndexOf("/") + 1);
 
             }else {
-                Header firstHeader = httpResponse.getFirstHeader(HttpHeaderConstant.K_RESPONSE_HEADER_CONTENT_DISPOSITION);
+                Header firstHeader = httpResponse.getFirstHeader(HttpHeader.K_RESPONSE_HEADER_CONTENT_DISPOSITION);
 
                 for (HeaderElement element : firstHeader.getElements()) {
                     fileName = element.getParameterByName("filename").getValue();

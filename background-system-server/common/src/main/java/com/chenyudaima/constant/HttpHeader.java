@@ -5,7 +5,7 @@ package com.chenyudaima.constant;
  * @author 沉鱼代码
  * @date 2023/2/1
  */
-public class HttpHeaderConstant {
+public class HttpHeader {
 
     /**
      * key 请求头 content-type
@@ -29,6 +29,11 @@ public class HttpHeaderConstant {
      * 指定传输数据为二进制类型 （文件传输格式）
      */
     public static final String V_CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
+
+    /**
+     *
+     */
+    public static final String V_CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
 
 

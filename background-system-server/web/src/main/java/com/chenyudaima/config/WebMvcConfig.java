@@ -75,12 +75,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
         if(paths == null || paths.length == 0) {
             return paths;
         }
-        String[] pathsAdd = new String[paths.length];
 
         for (int i = 0; i < paths.length; i++) {
-            pathsAdd[i] = PATH + paths[i];
+            paths[i] = PATH + paths[i];
         }
 
-        return pathsAdd;
+        return paths;
     }
 }

@@ -16,8 +16,6 @@ import javax.sql.DataSource;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-    @Autowired
-    private DataSource dataSource;
 
 
     /**

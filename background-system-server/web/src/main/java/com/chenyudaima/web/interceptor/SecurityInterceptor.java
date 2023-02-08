@@ -1,11 +1,14 @@
 package com.chenyudaima.web.interceptor;
 
-import com.chenyudaima.constant.HttpHeaderConstant;
+import com.chenyudaima.constant.HttpHeader;
+import com.chenyudaima.constant.RequestAttribute;
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +45,7 @@ public class SecurityInterceptor extends Interceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //如果用户没有token或者验证token失败则抛异常
-        String authorization = request.getHeader(HttpHeaderConstant.K_REQUEST_HEADER_AUTHORIZATION);
+        String authorization = request.getHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION);
         if(authorization == null) {
             throw new SecurityException("未登录");
         }
@@ -52,12 +55,11 @@ public class SecurityInterceptor extends Interceptor {
         try {
             claims = jwtUtil.parseToken(authorization);
 
-            if(claims == null) throw new SecurityException();
+            if(claims == null) throw new SecurityException("token解析失败");
         }catch (Exception e) {
             throw new SecurityException("该token不可用");
         }
-
-        request.setAttribute("claims", claims);
+        request.setAttribute(RequestAttribute.CLAIMS, claims);
 
         return true;
     }

@@ -2,10 +2,19 @@ package com.chenyudaima.util;
 
 
 import com.alibaba.fastjson.JSON;
-import com.chenyudaima.constant.CharSetConstant;
-import com.chenyudaima.constant.HttpHeaderConstant;
-import com.chenyudaima.constant.HttpMethodConstant;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.parser.Feature;
+import com.chenyudaima.constant.CharSet;
+import com.chenyudaima.constant.HttpHeader;
+import com.chenyudaima.constant.HttpMethod;
+
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -25,31 +34,33 @@ public class HttpDataUtil {
     public static Map<String, String> getParams(HttpServletRequest request) throws Exception {
 
         if (
-                (request.getMethod().equals(HttpMethodConstant.POST) ||
-            request.getMethod().equals(HttpMethodConstant.PUT) ||
-            request.getMethod().equals(HttpMethodConstant.PATCH) ||
-            request.getMethod().equals(HttpMethodConstant.DELETE))
-            && request.getContentType().contains(HttpHeaderConstant.V_CONTENT_TYPE_APPLICATION_JSON)
+                (request.getMethod().equals(HttpMethod.POST) ||
+            request.getMethod().equals(HttpMethod.PUT) ||
+            request.getMethod().equals(HttpMethod.PATCH) ||
+            request.getMethod().equals(HttpMethod.DELETE))
+            && request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_JSON)
         ) {
             return HttpDataUtil.getPostJsonParams(request);
 
-        } else if (request.getMethod().equals(HttpMethodConstant.GET)) {
+        } else if (request.getMethod().equals(HttpMethod.GET)) {
 
             return HttpDataUtil.getUrlParams(request);
 
-        } else if ((request.getMethod().equals(HttpMethodConstant.POST) ||
-                request.getMethod().equals(HttpMethodConstant.PUT) ||
-                request.getMethod().equals(HttpMethodConstant.PATCH) ||
-                request.getMethod().equals(HttpMethodConstant.DELETE))
-                && (request.getContentType().contains(HttpHeaderConstant.V_CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED)
-                ||
-                request.getContentType().contains(HttpHeaderConstant.V_CONTENT_TYPE_MULTIPART_FORM_DATA))
+        } else if ((request.getMethod().equals(HttpMethod.POST) ||
+                request.getMethod().equals(HttpMethod.PUT) ||
+                request.getMethod().equals(HttpMethod.PATCH) ||
+                request.getMethod().equals(HttpMethod.DELETE))
+                &&
+                (request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED) ||
+                        request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA)
+                        )
+
+
         ) {
             return HttpDataUtil.getPostFormParams(request);
+        }else {
+            return new TreeMap<>();
         }
-
-
-        return null;
     }
 
     /**
@@ -58,28 +69,22 @@ public class HttpDataUtil {
     public static Map<String, String> getPostJsonParams(HttpServletRequest request) throws Exception {
         String json = new String(StreamUtils.copyToByteArray(request.getInputStream()));
 
-        SortedMap<String, String> sortedMap = new TreeMap<>();
+        return JSON.parseObject(json,new TypeReference<TreeMap<String, String>>() {});
 
-        return JSON.parseObject(json, SortedMap.class);
     }
 
 
     /**
-     * 获取POST请求中Body的Key-Value参数 application/x-www-form-urlencoded | multipart/form-data
+     * POST application/x-www-form-urlencoded 获取请求中Body的Key-Value参数
+     *
+     * POST multipart/form-data SpringBoot会自动转换成StandardMultipartHttpServletRequest，可以继续使用request.getParameterMap()获取POST请求中Body的二进制参数
      */
     public static Map<String, String> getPostFormParams(HttpServletRequest request) throws Exception {
-        //Enumeration<String> parameterNames = request.getParameterNames();
-        //while(parameterNames.hasMoreElements()) {
-        //    Sting value = request.getParameter(parameterNames.nextElement());
-        //}
-
         Map<String, String[]> parameterMap = request.getParameterMap();
 
         Map<String, String> treeMap = new TreeMap<>();
 
-        parameterMap.forEach((k,v) -> {
-            treeMap.put(k, v[0]);
-        });
+        parameterMap.forEach((k,v) -> treeMap.put(k, v[0]));
 
         return treeMap;
     }
@@ -87,15 +92,14 @@ public class HttpDataUtil {
     /**
      * 获取http路径参数
      */
-    public static SortedMap<String, String> getUrlParams(HttpServletRequest request) throws Exception {
+    public static Map<String, String> getUrlParams(HttpServletRequest request) throws Exception {
         if (request.getQueryString().isEmpty()) {
-            return null;
+            return new TreeMap<>();
         }
 
+        String[] params = URLDecoder.decode(request.getQueryString(), CharSet.UTF8).split("&");
 
-        String[] params = URLDecoder.decode(request.getQueryString(), CharSetConstant.UTF8).split("&");
-
-        SortedMap<String, String> result = new TreeMap<>();
+        Map<String, String> result = new TreeMap<>();
         for (String param : params) {
             String[] keyValue = param.split("=");
             result.put(keyValue[0], keyValue[1]);

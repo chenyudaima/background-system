@@ -9,7 +9,7 @@ import java.util.Map;
  * @author 沉鱼代码
  * @date 2023/2/7
  */
-public class SignatureUtil {
+public class SignUtil {
     /**
      * 验证参数是否被篡改
      * @param signature 签名
@@ -40,9 +40,9 @@ public class SignatureUtil {
     public static boolean verify(String signature, String params) {
         if(DigestUtils.md5DigestAsHex(params.getBytes()).toUpperCase().equals(signature)) {
             return true;
-        }else {
-            return false;
         }
+
+        return false;
     }
 
 

@@ -1,5 +1,6 @@
 package com.chenyudaima.web.controller;
 
+import com.chenyudaima.constant.RequestAttribute;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.service.HomeService;
 import io.jsonwebtoken.Claims;
@@ -16,11 +17,13 @@ import java.util.Map;
 public class HomeController {
 
     @Autowired
+    private HttpServletRequest request;
+    @Autowired
     private HomeService homeService;
 
     @GetMapping("/userInfo")
-    public Result<Map<String,Object>> userInfo(HttpServletRequest request) {
-        Claims claims = (Claims) request.getAttribute("claims");
+    public Result<Map<String,Object>> userInfo() {
+        Claims claims = (Claims) request.getAttribute(RequestAttribute.CLAIMS);
         return homeService.userInfo(Integer.parseInt(claims.getId()));
     }
 }

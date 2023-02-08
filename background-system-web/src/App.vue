@@ -11,11 +11,11 @@ export default {
   created() {
     
     //定时刷新token
-    setInterval(() => {
-      http.get("/system/updateToken").then(resp => {
-        localStorage.setItem("token", resp.data);
-      })
-    }, 60000)
+    // setInterval(() => {
+    //   http.get("/system/updateToken").then(resp => {
+    //     localStorage.setItem("token", resp.data);
+    //   })
+    // }, 60000)
   }
 
 };

@@ -5,6 +5,6 @@ package com.chenyudaima.constant;
  * @author 沉鱼代码
  * @date 2023/1/28
  */
-public class CharSetConstant {
+public class CharSet {
     public static final String UTF8 = "UTF-8";
 }

@@ -1,7 +1,7 @@
 package com.chenyudaima.config;
 
-import com.chenyudaima.constant.PropertyConstant;
-import com.chenyudaima.constant.ResourcesConstant;
+import com.chenyudaima.constant.Property;
+import com.chenyudaima.constant.Resources;
 import com.chenyudaima.util.file.OpencvUtil;
 import org.opencv.core.Core;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class OpencvConfig {
     /**
      * dll动态库位置
      */
-    private static final String DLL_PATH = System.getProperty(PropertyConstant.JAVA_HOME) + "/bin/" + ResourcesConstant.OPENCV_JAVA3413_DLL;
+    private static final String DLL_PATH = System.getProperty(Property.JAVA_HOME) + "/bin/" + Resources.OPENCV_JAVA3413_DLL;
 
     /**
      * 加载动态库 Linux环境需要更换Linux的动态库
@@ -33,7 +33,7 @@ public class OpencvConfig {
         File file = new File(OpencvConfig.DLL_PATH);
 
         if(!file.exists()) {
-            try(InputStream is = OpencvUtil.class.getResourceAsStream("/" + ResourcesConstant.OPENCV + "/" + ResourcesConstant.OPENCV_JAVA3413_DLL);
+            try(InputStream is = OpencvUtil.class.getResourceAsStream("/" + Resources.OPENCV + "/" + Resources.OPENCV_JAVA3413_DLL);
                 OutputStream os = Files.newOutputStream(file.toPath())
             ) {
                 byte[] buffer = new byte[1024];
@@ -42,7 +42,7 @@ public class OpencvConfig {
                 }
                 os.flush();
             }catch (Exception e) {
-                log.error(ResourcesConstant.OPENCV_JAVA3413_DLL + "移动失败");
+                log.error(Resources.OPENCV_JAVA3413_DLL + "移动失败");
             }
         }
 

@@ -22,9 +22,8 @@ export default {
       let param = new FormData()
       let reader = new FileReader()
       reader.onload = e => {
-        param.append('file', file)
-        param.append('name', e.target.result)
-        http.post("/index/ocr", param).then(resp => {
+        param.append('image', e.target.result)
+        http.post("/index/ocr",param).then(resp => {
           document.getElementById("message").innerText = resp.data
         })
       }

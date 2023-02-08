@@ -1,6 +1,6 @@
 package com.chenyudaima.config;
 
-import com.chenyudaima.constant.CharSetConstant;
+import com.chenyudaima.constant.CharSet;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 
 /**
@@ -26,7 +26,7 @@ public class HttpConfig {
     /**
      * 字符集
      */
-    public static final String ENCODING = CharSetConstant.UTF8;
+    public static final String ENCODING = CharSet.UTF8;
 
 
     /**

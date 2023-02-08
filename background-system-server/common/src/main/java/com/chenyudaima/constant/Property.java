@@ -6,7 +6,7 @@ package com.chenyudaima.constant;
  * @author 沉鱼代码
  * @date 2023/1/29
  */
-public class PropertyConstant {
+public class Property {
 
     /**
      * java安装路径

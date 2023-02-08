@@ -5,7 +5,7 @@ package com.chenyudaima.constant;
  * @author 沉鱼代码
  * @date 2023/1/14
  */
-public class ResourcesConstant {
+public class Resources {
     public static final String TESS_DATA = "tessdata";
     public static final String APPLICATION_PROPERTIES = "application.properties";
 

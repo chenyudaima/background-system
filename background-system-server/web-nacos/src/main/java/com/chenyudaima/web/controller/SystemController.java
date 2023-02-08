@@ -1,6 +1,6 @@
 package com.chenyudaima.web.controller;
 
-import com.chenyudaima.constant.HttpHeaderConstant;
+import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class SystemController {
     private SystemService systemService;
 
     @GetMapping("/updateToken")
-    public Result<?> updateToken(@RequestHeader(HttpHeaderConstant.K_REQUEST_HEADER_AUTHORIZATION) String token) {
+    public Result<?> updateToken(@RequestHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION) String token) {
         return systemService.updateToken(token);
     }
 }

@@ -3,8 +3,8 @@ package com.chenyudaima.util.file;
 
 
 
-import com.chenyudaima.constant.FileTypeConstant;
-import com.chenyudaima.constant.PropertyConstant;
+import com.chenyudaima.constant.FileType;
+import com.chenyudaima.constant.Property;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -36,7 +36,12 @@ public class ImageUtil {
      * base64字符串转图片
      */
     public static File base64TranImage(String base64) {
-        return base64TranImage(base64, new File(System.getProperty(PropertyConstant.JAVA_IO_TMPDIR) + UUID.randomUUID() + FileTypeConstant.PNG));
+        String fileType = null;
+        if(base64.contains("data:image/")) {
+            fileType = base64.substring(base64.indexOf("data:image/") + 11, base64.indexOf(";"));
+
+        }
+        return base64TranImage(base64, new File(System.getProperty(Property.JAVA_IO_TMPDIR) + UUID.randomUUID() + "." + (fileType == null ? FileType.PNG : fileType)));
     }
 
     /**

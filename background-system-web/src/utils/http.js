@@ -25,11 +25,11 @@ http.interceptors.request.use(config => {
   //时间戳
   let timestamp = new Date().getTime()
 
-  //用户的token作为密钥进行md5加密，但不进行传参
+  //参与加密的key，但不进行传参
   let accessKey = config.headers.Authorization
 
   //唯一标识
-  let nonce = `${config.url}&${config.method}&${timestamp}&${Math.random()}&张三`
+  let nonce = `${config.url}#${config.method}#${timestamp}#${Math.random()}`
 
   if (config.method == httpMethod.POST ||
     config.method == httpMethod.DELETE ||
@@ -46,28 +46,80 @@ http.interceptors.request.use(config => {
       body.sort()
       
       //转换成 aa=aa&bb=bb 格式       
-      params = body.toString()
+      params = decodeURIComponent(body.toString())
 
       //删除参数中的密钥
-      body.delete(accessKey)
+      body.delete("accessKey")
 
     } else if (body instanceof FormData) {
+      body.append("timestamp", timestamp)
+      body.append("nonce", nonce)
 
-    } else if (body instanceof Object) {
-      config.data = qs.stringify(config.data)
-      config.data = Object.assign({ timestamp: new Date().getTime() }, config.data);
-      config.data = qs.stringify(config.data)
+      let map = new Map();
+      for (var kv of body.entries()) {
+        //判断是否是文件，文件不参与参数加密
+        if(kv[1] instanceof File) {
+          continue
+        }
+        map.set(kv[0], kv[1])
+      }
+
+      map.set("accessKey", accessKey)
+
+      //map进行排序
+      map = new Map([...map].sort());
+
+      params = ""
+      //排序之后拼接参数
+      for (var kv of map.entries()) {
+        params += kv[0] + "=" + kv[1] + "&"
+      }
+
+      params = params.substring(0, params.length - 1);
+
+    } else if (config.data instanceof Object) {
+
+      config.data = {
+        ...config.data,
+        timestamp: new Date().getTime(),
+        accessKey : accessKey,
+        nonce : nonce
+      }
+
+      params = ""
+
+      Object.keys(config.data).sort().forEach(key => {
+        params += `${key}=${config.data[key]}&`
+      })
+
+      params = params.substring(0, params.length - 1);
+
+      //删除json对象指定属性 accessKey不参与传输
+      delete config.data.accessKey
     }
 
   } else if (config.method == httpMethod.GET) {
+    
     config.params = {
+      ...config.params,
       timestamp: new Date().getTime(),
-      ...config.params
+      accessKey : accessKey,
+      nonce : nonce
     }
+    params = ""
+
+    Object.keys(config.params).sort().forEach(key => {
+      params += `${key}=${config.params[key]}&`
+    })
+    
+    params = params.substring(0, params.length - 1);
+
+    //删除json对象指定属性 accessKey不参与传输
+    delete config.params.accessKey
   }
 
   //设置参数签名请求头
-  config.headers.signature = md5(decodeURIComponent(params)).toUpperCase()
+  config.headers.signature = md5(params).toUpperCase()
 
   return config;
 

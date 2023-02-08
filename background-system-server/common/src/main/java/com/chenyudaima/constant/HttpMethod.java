@@ -5,7 +5,7 @@ package com.chenyudaima.constant;
  * @author 沉鱼代码
  * @date 2023/2/6
  */
-public class HttpMethodConstant {
+public class HttpMethod {
 
     public static final String GET = "GET";
     public static final String POST = "POST";
