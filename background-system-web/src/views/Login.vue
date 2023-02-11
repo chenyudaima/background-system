@@ -46,6 +46,11 @@ export default {
   },
 
   created() {
+    let message = this.$route.query.message
+    if(message != null) {
+      this.$message.error(message)
+    }
+
     let my = this
     document.onkeyup = function (e) {
       //取出按键信息中的按键代码(大部分浏览器通过keyCode属性获取按键代码，但少部分浏览器使用的却是charCode)

@@ -208,6 +208,9 @@ public class HttpClientUtil {
         }
     }
 
+    public static String postJson(String url, String jsonParams, Map<String, String> headers) throws Exception {
+        return postJson(url, jsonParams, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
 
     public static String postJson(String url, String jsonParams, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         // 创建httpClient对象

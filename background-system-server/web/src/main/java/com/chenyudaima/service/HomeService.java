@@ -12,4 +12,5 @@ public interface HomeService {
 
     Result<Map<String, Object>> userInfo(int id);
 
+    Result<?> logout(String token);
 }

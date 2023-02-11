@@ -1,5 +1,6 @@
 package com.chenyudaima.config;
 
+import com.chenyudaima.exception.RequestHeaderException;
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.exception.SignException;
 import com.chenyudaima.model.Result;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -24,7 +24,11 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value=Exception.class)
+    @ExceptionHandler(value={
+            Throwable.class,
+            Exception.class,
+            AssertionError.class, //使用assert关键字断言出现的异常
+    })
     public Result<?> Exception(HttpServletRequest request, Exception e) {
         e.printStackTrace();
         return new Result<>(500, e.getMessage(), null);
@@ -42,7 +46,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value= SecurityException.class)
     public Result<?> PermissionException(HttpServletRequest request, Exception e) {
-        return new Result<>(403, "没有权限访问",null);
+        String message;
+        if(e instanceof SecurityException) {
+            message = e.getMessage();
+        }else {
+            message = "没有权限访问";
+        }
+        return new Result<>(403, message,null);
     }
 
 
@@ -59,7 +69,6 @@ public class GlobalExceptionHandler {
             ConstraintViolationException.class})
     public Result<?> ValidationException(HttpServletRequest request, Exception e) {
         String message;
-        e.printStackTrace();
         Result<?> result = new Result<>();
         result.setCode(401);
 
@@ -89,6 +98,14 @@ public class GlobalExceptionHandler {
         result.setMessage(message);
 
         return result;
+    }
+
+    /**
+     * 请求头异常
+     */
+    @ExceptionHandler(value = {RequestHeaderException.class})
+    public Result<?> RequestHeaderException(HttpServletRequest request, Exception e) {
+        return new Result<>(400, e.getMessage(), null);
     }
 
 }

@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Redis操作工具类（包含分布式锁）
+ * Redis操作工具类（包含分布式锁）（保证所有key都是String数据结构）
  * 记得对象要实现序列化接口
  */
 @Component
@@ -123,6 +123,32 @@ public class RedisUtil {
     }
 
     /**
+     * hash类型获取值 根据某个key的值
+     * @param key
+     * @param hashKey
+     * @return
+     * @param <T>
+     */
+    public <T> T hash_get(String key, String hashKey) {
+        try {
+            return (T) redisTemplate.opsForHash().get(key, hashKey);
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * hash类型删除值 删除内部的某一个key
+     * @param key
+     * @param hashKey
+     * @return 返回删除之后的长度
+     */
+    public Long hash_delete(String key, String hashKey) {
+        return redisTemplate.opsForHash().delete(key, hashKey);
+    }
+
+
+    /**
      * hash类型获取值 获取所有值
      * @param key
      * @return 指定key的所有值
@@ -130,6 +156,7 @@ public class RedisUtil {
      * @param <V>
      */
     public <T, V> Map<T, V> hash_entries(String key) {
+
         return (Map<T, V>) redisTemplate.opsForHash().entries(key);
     }
 
@@ -166,12 +193,33 @@ public class RedisUtil {
 
 
     /**
-     * 判断key是否存在
+     * 设置key的过期时间 (如果已有过期时间就会重置成当前设置的过期时间)
      * @param key
+     * @param time
+     * @param unit
+     * @return
+     */
+    public Boolean expire(String key, long time, TimeUnit unit) {
+        return redisTemplate.expire(key, time, unit);
+    }
+
+    /**
+     * 判断key是否存在 (不支持正则匹配)
+     * @param key 完整的key
      * @return 是否存在
      */
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 判断key是否存在，存在则返回 （支持正则匹配）
+     * Keys会引发Redis锁，并且增加Redis的CPU占用，官方建议用集合类型
+     * @param pattern  支持 ？(表示代表任何一个字符)  *(表示任何)  [abc](通配括号内的某一个字符)
+     * @return 匹配的所有key
+     */
+    public Set<String> keys(String pattern) {
+        return redisTemplate.keys(pattern);
     }
 
     /**
@@ -199,4 +247,5 @@ public class RedisUtil {
     public RLock getLock(String key) {
         return redissonClient.getLock(key);
     }
+
 }

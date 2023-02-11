@@ -32,12 +32,8 @@ public class FileUtil {
      * @param file 文件
      * @return 文件的字节
      */
-    public static byte[] getByte(File file) {
-        try {
-            return Files.readAllBytes(file.toPath());
-        } catch (IOException e) {
-            return null;
-        }
+    public static byte[] getBytes(File file) throws Exception {
+        return Files.readAllBytes(file.toPath());
     }
 
 

@@ -15,8 +15,4 @@ public class SystemController {
     @Autowired
     private SystemService systemService;
 
-    @GetMapping("/updateToken")
-    public Result<?> updateToken(@RequestHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION) String token) {
-        return systemService.updateToken(token);
-    }
 }

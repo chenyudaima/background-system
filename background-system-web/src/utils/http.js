@@ -38,6 +38,7 @@ http.interceptors.request.use(config => {
     let body = config.data
 
     if (body instanceof URLSearchParams) {
+      config.headers['content-type'] = "application/x-www-form-urlencoded"
       body.append("timestamp", timestamp)
       body.append("accessKey", accessKey)
       body.append("nonce", nonce)
@@ -138,7 +139,7 @@ http.interceptors.response.use(
 
     //403为权限不足
     if (response.code == 403) {
-      router.push("/login")
+      router.push({path:"/login", query:{"message": response.message}})
       return response;
     }
 

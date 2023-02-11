@@ -83,7 +83,7 @@ export default {
 
   methods: {
     loginOut() {
-      localStorage.removeItem("token")
+      http.get("/home/logout").then(resp => {if(resp.code == 200) {localStorage.removeItem("token")}})
       this.$router.push("/login")
     }
   },

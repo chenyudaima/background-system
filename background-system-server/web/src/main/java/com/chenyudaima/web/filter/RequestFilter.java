@@ -2,6 +2,7 @@ package com.chenyudaima.web.filter;
 
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.HttpMethod;
+import com.chenyudaima.exception.RequestHeaderException;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -16,10 +17,15 @@ import java.io.IOException;
  * @date 2023/2/6
  */
 @WebFilter(urlPatterns = {"/*"})
-public class Filter1 implements Filter {
+public class RequestFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
         HttpServletRequest servletRequest = (HttpServletRequest) request;
+        //
+        //if(servletRequest.getContentType() != null) {
+        //    throw new RequestHeaderException("没有Content-Type请求头");
+        //}
 
         if (
                 (servletRequest.getMethod().equals(HttpMethod.POST) ||

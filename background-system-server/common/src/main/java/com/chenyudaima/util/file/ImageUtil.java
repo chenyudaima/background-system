@@ -41,13 +41,14 @@ public class ImageUtil {
             fileType = base64.substring(base64.indexOf("data:image/") + 11, base64.indexOf(";"));
 
         }
-        return base64TranImage(base64, new File(System.getProperty(Property.JAVA_IO_TMPDIR) + UUID.randomUUID() + "." + (fileType == null ? FileType.PNG : fileType)));
+        File file = new File(System.getProperty(Property.JAVA_IO_TMPDIR),UUID.randomUUID() + "." + (fileType == null ? FileType.PNG : fileType));
+        return base64TranImage(base64, file);
     }
 
     /**
      * base64字符串转图片
      */
-    public static File base64TranImage(String base64, File file) {
+    public static File base64TranImage(String base64, File file ) {
         Base64.Decoder decoder = Base64.getDecoder();
         if(base64.contains("data:")) {
             base64 = base64.substring(base64.indexOf(",") + 1);

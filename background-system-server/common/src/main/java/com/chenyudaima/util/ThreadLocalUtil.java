@@ -2,6 +2,7 @@ package com.chenyudaima.util;
 
 /**
  * 本地线程工具类
+ * 如果在线程池中执行，使用完一定要执行remove()方法
  */
 public class ThreadLocalUtil {
     private static final ThreadLocal<Object> THREAD_LOCAL = new ThreadLocal<>();

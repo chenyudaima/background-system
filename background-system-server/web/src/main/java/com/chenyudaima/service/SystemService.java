@@ -7,5 +7,4 @@ import com.chenyudaima.model.Result;
  * @date 2023/1/3
  */
 public interface SystemService {
-    Result<?> updateToken(String token);
 }

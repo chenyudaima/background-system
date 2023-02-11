@@ -17,8 +17,12 @@ public class JwtUtil {
     @Value("${jwt.config.signKey}")
     private String signWith;
 
-    @Value("${jwt.config.expiration}")
-    private int expiration;
+    /**
+     * 创建token
+     */
+    public String createToken(String id, String subject) {
+        return createToken(id, subject, null);
+    }
 
     /**
      * 创建token
@@ -37,10 +41,11 @@ public class JwtUtil {
                 //加密方式和key
                 .signWith(SignatureAlgorithm.HS512,signWith);
 
-        if(expiration > 0) {
-            //设置过期时间
-            jwtBuilder.setExpiration(new Date(System.currentTimeMillis() + expiration));
-        }
+        //过期时间在redis设置
+        //if(expiration > 0) {
+        //    //设置过期时间
+        //    jwtBuilder.setExpiration(new Date(System.currentTimeMillis() + expiration));
+        //}
 
         if(map != null && map.size() > 0) {
             //自定义claim信息

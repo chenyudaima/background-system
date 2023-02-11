@@ -26,7 +26,7 @@ public class HttpHeader {
 
 
     /**
-     * 指定传输数据为二进制类型 （文件传输格式）
+     * 指定传输数据为二进制类型 （文件传输格式） 一定有boundary这个可选参数
      */
     public static final String V_CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
 

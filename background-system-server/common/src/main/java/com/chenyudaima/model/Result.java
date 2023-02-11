@@ -17,6 +17,10 @@ public class Result<T> {
         this.data = data;
     }
 
+    public static Result<?> success() {
+        return new Result<>(200,null, null);
+    }
+
     public static <T> Result<T> success(T data) {
         return new Result<>(200,null, data);
     }

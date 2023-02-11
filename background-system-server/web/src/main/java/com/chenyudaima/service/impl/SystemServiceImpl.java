@@ -13,12 +13,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SystemServiceImpl implements SystemService {
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    @Override
-    public Result<?> updateToken(String token) {
-        Claims claims = jwtUtil.parseToken(token);
-        return Result.success(jwtUtil.createToken(claims.getId(), claims.getSubject(), null));
-    }
 }

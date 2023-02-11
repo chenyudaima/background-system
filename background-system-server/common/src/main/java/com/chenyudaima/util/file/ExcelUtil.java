@@ -2,7 +2,10 @@ package com.chenyudaima.util.file;
 
 import org.apache.poi.ss.usermodel.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,8 @@ import java.util.List;
  * Excel文件操作工具类
  */
 public class ExcelUtil {
-
-    public static List<List<List<String>>> parse(File file) throws Exception {
-        Workbook workbook = WorkbookFactory.create(file);
+    public static List<List<List<String>>> parse(InputStream inputStream) throws Exception {
+        Workbook workbook = WorkbookFactory.create(inputStream);
 
         //整个文件数据
         List<List<List<String>>> listList = new ArrayList<>();
@@ -41,6 +43,10 @@ public class ExcelUtil {
         }
 
         return listList;
+    }
+
+    public static List<List<List<String>>> parse(File file) throws Exception {
+        return parse(Files.newInputStream(file.toPath()));
     }
 
 }

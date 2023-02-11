@@ -39,7 +39,7 @@ public class ThreadPoolUtil {
     }
 
     /**
-     * 多线程执行任务
+     * 多线程执行任务 （会抛异常）
      * @param runnable 任务
      */
     public static void execute(Runnable runnable) {
@@ -47,7 +47,7 @@ public class ThreadPoolUtil {
     }
 
     /**
-     * 多线程执行任务
+     * 多线程执行任务 （不会抛异常，异常需要从Future获取）
      * @param runnable 任务
      * @return 线程执行状态及执行结果
      */
@@ -56,7 +56,7 @@ public class ThreadPoolUtil {
     }
 
     /**
-     * 多线程执行任务（带返回值） 不能用Lambda表达式
+     * 多线程执行任务（带返回值，不会抛异常，异常需要从Future获取，不能用Lambda表达式）
      * @param callable 任务
      * @return 线程执行状态及执行结果
      */

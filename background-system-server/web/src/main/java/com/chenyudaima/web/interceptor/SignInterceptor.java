@@ -32,7 +32,9 @@ public class SignInterceptor extends Interceptor {
 
     @Override
     public String[] getExcludePathPatterns() {
-        return new String[]{};
+        return new String[]{
+                "/test/**"
+        };
     }
 
     @Override
@@ -64,14 +66,13 @@ public class SignInterceptor extends Interceptor {
 
         //判断时间戳是否大于当前时间1分钟
         long timestamp = Long.parseLong(params.get(HttpParam.TIMESTAMP));
-        long currentTimestamp = System.currentTimeMillis() - (1000 * 60);
+        long currentTimestamp = System.currentTimeMillis() - 60000;
         if(currentTimestamp > timestamp) {
             throw new SignException("请求超时，请重新发起请求");
         }
 
         //防重放
         String nonce = params.get(HttpParam.NONCE);
-
         assert nonce != null;
 
 
