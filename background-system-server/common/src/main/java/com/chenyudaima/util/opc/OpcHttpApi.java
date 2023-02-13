@@ -3,7 +3,6 @@ package com.chenyudaima.util.opc;
 import com.alibaba.fastjson.JSON;
 import com.chenyudaima.constant.CharSet;
 import com.chenyudaima.constant.HttpHeader;
-import com.chenyudaima.model.OpcNode;
 import com.chenyudaima.util.HttpClientUtil;
 import org.apache.commons.codec.binary.Base64;
 
@@ -26,7 +25,7 @@ import java.util.Map;
 public class OpcHttpApi {
 
     /**
-     * https://ip:port/config/v1/project/channels/
+     * http://ip:port/config/v1/project/channels/
      */
     private final String url;
 
@@ -36,6 +35,7 @@ public class OpcHttpApi {
     private final Map<String,String> headerMap = new HashMap<>();
 
     public OpcHttpApi(String ip) {
+        //默认http端口是57412
         this(ip, 57412, null, null);
     }
 

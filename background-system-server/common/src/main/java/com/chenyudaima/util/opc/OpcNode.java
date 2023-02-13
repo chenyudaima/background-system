@@ -1,6 +1,5 @@
-package com.chenyudaima.model;
+package com.chenyudaima.util.opc;
 
-import lombok.Data;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 

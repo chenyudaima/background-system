@@ -1,7 +1,5 @@
 package com.chenyudaima.util.opc;
 
-import com.chenyudaima.model.OpcNode;
-import com.chenyudaima.model.OpcUaConfig;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaSubscription;
@@ -84,7 +82,7 @@ public class OpcUaSubscription {
      * @param executor 线程池
      * @return OpcUa订阅对象
      */
-    public static OpcUaSubscription create(OpcUaConfig opcUaConfig,ThreadPoolExecutor executor) throws Exception {
+    public static OpcUaSubscription create(OpcUaConfig opcUaConfig, ThreadPoolExecutor executor) throws Exception {
         return new OpcUaSubscription(opcUaConfig, executor);
     }
 
@@ -113,7 +111,7 @@ public class OpcUaSubscription {
             subscription = opcUaClient.getSubscriptionManager().createSubscription(opcUaConfig.getRequestedPublishingInterval()).get();
 
         } catch (Exception e) {
-            log.error("OpcUa连接失败:{},地址:{},等待{}秒继续...",e.getMessage(),opcUaConfig.getOpcUaUrl(),opcUaConfig.getConnect());
+            log.error("OpcUa连接失败:{},地址:{},等待{}秒继续...",e.getMessage(), opcUaConfig.getOpcUaUrl(), opcUaConfig.getConnect());
             try {
                 Thread.sleep(opcUaConfig.getConnect());
             } catch (Exception e1) {
@@ -211,7 +209,7 @@ public class OpcUaSubscription {
                         heartbeat = 0;
 
                         //排除Bad或者null的节点值
-                        if(dataValue.getStatusCode().isBad() || dataValue.getValue().isNull()) {
+                        if(dataValue.getValue().isNull() || dataValue.getStatusCode().isBad()) {
                             return;
                         }
 

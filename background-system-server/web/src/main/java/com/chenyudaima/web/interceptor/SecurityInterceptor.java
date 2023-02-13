@@ -12,9 +12,6 @@ import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -65,6 +62,7 @@ public class SecurityInterceptor extends Interceptor {
         if(authorization == null) {
             throw new SecurityException("未登录");
         }
+
 
         //redis中的token
         String token = RedisKey.TOKEN + authorization;

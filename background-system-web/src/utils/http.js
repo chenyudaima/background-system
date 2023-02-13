@@ -38,7 +38,6 @@ http.interceptors.request.use(config => {
     let body = config.data
 
     if (body instanceof URLSearchParams) {
-      config.headers['content-type'] = "application/x-www-form-urlencoded"
       body.append("timestamp", timestamp)
       body.append("accessKey", accessKey)
       body.append("nonce", nonce)
@@ -79,7 +78,6 @@ http.interceptors.request.use(config => {
       params = params.substring(0, params.length - 1);
 
     } else if (config.data instanceof Object) {
-
       config.data = {
         ...config.data,
         timestamp: new Date().getTime(),
@@ -98,7 +96,6 @@ http.interceptors.request.use(config => {
       //删除json对象指定属性 accessKey不参与传输
       delete config.data.accessKey
     }
-
   } else if (config.method == httpMethod.GET) {
     
     config.params = {

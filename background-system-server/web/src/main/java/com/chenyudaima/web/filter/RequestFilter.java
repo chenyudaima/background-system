@@ -22,10 +22,10 @@ public class RequestFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest servletRequest = (HttpServletRequest) request;
-        //
-        //if(servletRequest.getContentType() != null) {
-        //    throw new RequestHeaderException("没有Content-Type请求头");
-        //}
+
+        if(!servletRequest.getMethod().equals(HttpMethod.GET) && servletRequest.getContentType() == null) {
+            throw new RequestHeaderException("非get请求需要content-type请求头");
+        }
 
         if (
                 (servletRequest.getMethod().equals(HttpMethod.POST) ||

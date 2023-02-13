@@ -1,7 +1,6 @@
 package com.chenyudaima.util.opc;
 
 import com.chenyudaima.constant.Property;
-import com.chenyudaima.model.OpcUaConfig;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.identity.AnonymousProvider;
 import org.eclipse.milo.opcua.sdk.client.api.identity.UsernameProvider;
@@ -14,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * OpcUa操作
+ * 创建OpcUa连接对象
  * @author 沉鱼代码
  * @date 2023/2/10
  */

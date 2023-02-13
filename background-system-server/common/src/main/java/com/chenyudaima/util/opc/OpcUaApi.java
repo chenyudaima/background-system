@@ -1,13 +1,12 @@
 package com.chenyudaima.util.opc;
 
-import com.chenyudaima.model.OpcUaConfig;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 
 /**
- * OpcUa Api
+ * OpcUa读取节点值
  * @author 沉鱼代码
  * @date 2023/2/10
  */

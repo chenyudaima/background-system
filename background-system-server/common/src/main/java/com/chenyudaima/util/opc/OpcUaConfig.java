@@ -1,9 +1,7 @@
-package com.chenyudaima.model;
+package com.chenyudaima.util.opc;
 
 
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaSubscriptionManager;
-
-import java.util.concurrent.ThreadPoolExecutor;
 
 
 /**
@@ -11,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class OpcUaConfig {
     /**
-     * opc连接地址
+     * OpcUa连接地址
      */
     private String opcUaUrl;
 
