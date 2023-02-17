@@ -20,7 +20,9 @@
         password,phone,age,
         sex,status
     </sql>
+
     <select id="selectUserByAccountAndPassword" resultType="SysUser">
         select <include refid="Base_Column_List"/> from sys_user where account=#{account} and password=#{password}
     </select>
+
 </mapper>

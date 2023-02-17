@@ -9,6 +9,7 @@ import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -23,12 +24,10 @@ import java.util.concurrent.TimeUnit;
  * 权限拦截器
  */
 @Component
+@RequiredArgsConstructor
 public class SecurityInterceptor extends Interceptor {
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private RedisUtil redisUtil;
+    private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
     @Value("${jwt.config.expiration}")
     private int expiration;
@@ -76,7 +75,7 @@ public class SecurityInterceptor extends Interceptor {
         Claims claims = jwtUtil.parseToken(authorization);
 
         //查询token是否在这，如果不在就显示请重新登录，如果改变就显示被挤下线
-        String token1 = redisUtil.hash_get(RedisKey.TOKEN_ALL, claims.getSubject());
+        String token1 = redisUtil.hash_get(RedisKey.TOKEN_ALL, claims.getId());
 
         if(token1 == null) {
             throw new SecurityException("账号异常，请重新登录");

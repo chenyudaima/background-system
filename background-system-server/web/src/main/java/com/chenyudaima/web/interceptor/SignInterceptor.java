@@ -7,7 +7,7 @@ import com.chenyudaima.exception.SignException;
 import com.chenyudaima.util.HttpDataUtil;
 import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.util.SignUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
@@ -22,7 +22,10 @@ import java.util.concurrent.TimeUnit;
  * @date 2023/2/6
  */
 @Component
+@RequiredArgsConstructor
 public class SignInterceptor extends Interceptor {
+    private final RedisUtil redisUtil;
+
     @Override
     public String[] getAddPathPatterns() {
         return new String[]{
@@ -41,9 +44,6 @@ public class SignInterceptor extends Interceptor {
     public int priority() {
         return 2;
     }
-
-    @Autowired
-    private RedisUtil redisUtil;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

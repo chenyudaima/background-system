@@ -1,95 +1,181 @@
 <template>
-  <el-container height="100%">
+  <el-container style="height: 100%;">
 
-    <!-- 头部 -->
-    <el-header height="60px" style="background: rgb(34, 160, 231); display: flex; justify-content: space-between;">
-      <div style="display: flex; align-items: center;">
-        <img :src="require('/public/img/1.jpg')" width="60" height="60" />
-        <div style="margin-left: 10px;">后台系统</div>
+    <!--头部  -->
+    <el-header>
+      <div style="display: flex;align-items: center;">
+        <img src="../../public/img/home_icon.jpg" alt="" width="50" height="50">
+        <span style="margin-left: 20px;">数据核对系统</span>
       </div>
-
       <div>
-        <span icon="el-icon-coordinate">{{ name }}</span>
-        <el-button type="text" icon="el-icon-coordinate" @click="loginOut" style="color: #fbfffd;">注销</el-button>
+        <span>{{ name }}</span>
+        <el-button type="info" @click="loginOut">退出</el-button>
       </div>
     </el-header>
 
-    <el-container height="800px">
-      <!-- 左边目录 -->
-      <el-aside style="background-color: rgb(55, 61, 68);">
 
-        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
-          background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
+    <!-- 页面主体区  嵌套容器  包裹 Aside与Main -->
+    <el-container>
+
+      <!-- 左侧 -->
+      <el-aside width="200px" style="background-color: #333744">
+
+        <!-- 
+          unique-opened 是否保持只有一个子菜单展开
+          background-color 导航栏背景颜色
+          text-color 一级菜单字体颜色
+          active-text-color 二级菜单字体颜色
+         -->
+        <el-menu :unique-opened="true" background-color="#333744" text-color="#fff" active-text-color="#ffd04b"
+          :router="true">
+
+          <template v-for="item in menuList">
+            
+            <!--判断一级菜单里面是否有二级菜单 -->
+            <template v-if="item.children.length != 0">
+              <el-submenu :index="item.routerPath" :key="item.id">
+                <template slot="title">
+                  <!-- <i v-bind:class="item.iconwebcode"></i> -->
+                  <span>{{ item.name }}</span>
+                </template>
+                <!--判断是否有三级菜单 -->
+                <template v-for="subItem in item.children">
+                  <el-submenu v-if="subItem.children.length != 0" :index="subItem.routerPath" :key="subItem.id">
+
+                    <template slot="title">
+                      <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
+                      {{ subItem.name }}
+                    </template>
+
+
+                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id" :index="threeItem.routerPath">
+                      <!-- <i v-bind:class="threeItem.iconwebcode"></i> -->
+                      {{ threeItem.name }}</el-menu-item>
+                  </el-submenu>
+
+                  <!--二级菜单 -->
+                  <el-menu-item v-else :index="subItem.routerPath" :key="subItem.id">
+                    <template slot="title">
+                      <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
+                      {{ subItem.name }}
+                    </template>
+                  </el-menu-item>
+                </template>
+              </el-submenu>
             </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
-          </el-menu-item>
-          <el-menu-item index="3" disabled>
-            <i class="el-icon-document"></i>
-            <span slot="title">导航三</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-setting"></i>
-            <span slot="title">导航四</span>
-          </el-menu-item>
-        </el-menu>
 
+            <!--一级菜单 -->
+            <template v-else>
+              <el-menu-item :index="item.routerPath" :key="item.id">
+                <!-- <i v-bind:class="item.iconwebcode"></i> -->
+                {{ item.name }}
+              </el-menu-item>
+            </template>
+
+          </template>
+
+        </el-menu>
       </el-aside>
 
-      <!-- 页面 -->
-      <el-main style="background-color: rgb(234, 237, 241);">
+      <!-- 主体 -->
+      <el-main style="background-color: #EAEDF1;">
         <router-view></router-view>
       </el-main>
 
     </el-container>
+
   </el-container>
 </template>
 
-<script>
-import http from '@/utils/http'
+<script >
+import http from '@/utils/http.js'
 export default {
+  name: 'Home',
+
   data() {
     return {
-      name: null,
-      catalogue: null
+      //当前用户名
+      name: '',
+
+      //当前
+      menuList: []
     }
   },
 
   created() {
+    //查询用户信息
     http.get("/home/userInfo").then(resp => {
-      this.name = resp.data.sysUser.name
-      this.catalogue = resp.data.catalogue
-
+      this.name = resp.data
     })
+
+    //加载菜单栏和对应路由
+    this.loadMenu()
   },
 
   methods: {
     loginOut() {
-      http.get("/home/logout").then(resp => {if(resp.code == 200) {localStorage.removeItem("token")}})
+      http.get("/home/logout").then(resp => {
+        if (resp.code == 200) {
+          sessionStorage.clear()
+          localStorage.clear()
+        }
+      })
       this.$router.push("/login")
+    },
+
+    async loadMenu() {
+      let routers = {
+        path: '/home',
+        name: 'home',
+        component: () => import('@/views/Home.vue'),
+        children: []
+      }
+
+      await http.get("/home/navigation").then(resp => {
+        this.menuList = resp.data
+        routers.children = this.routerHandler(this.menuList)
+      })
+      
+      //添加路由
+      // this.$router.options.routes.push(routers)
+      // this.$router.addRoutes([route])
+      this.$router.addRoute(routers)
+    },
+
+    //解析菜单数据生成路由
+    routerHandler(menu) {
+      return menu.map(menu => {
+        menu.path = menu.routerPath
+        menu.component = () => import(`@/views${menu.routerComponent}`)
+
+        //如果大于0说明有子菜单
+        if (menu.children.length > 0) {
+          menu.children = this.routerHandler(menu.children)
+        }
+        return menu
+      })
     }
+
   },
-};
+}
 </script>
 
-<style scoped>
 
+<style scoped>
+.el-menu {
+  border-right-width: 0;
+}
+
+.el-header {
+  background-color: #373D41;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0px;
+
+  align-items: center;
+
+  color: #fff;
+
+  font-size: 20px;
+}
 </style>

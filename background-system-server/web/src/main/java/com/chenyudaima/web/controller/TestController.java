@@ -1,6 +1,7 @@
 package com.chenyudaima.web.controller;
 
 import com.chenyudaima.model.SysUser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,21 +17,10 @@ import javax.sql.DataSource;
  */
 @RestController
 @RequestMapping("/test")
+@RequiredArgsConstructor
 public class TestController {
 
-    //@Autowired
-    //private HttpServletRequest request;
 
-
-    @PostMapping("/upload")
-    public String upload(@RequestBody  MultipartFile file) {
-        return file.getName();
-    }
-
-    @PostMapping("/1")
-    public String dd(String name,HttpServletRequest request) {
-        return name;
-    }
 
 
 }

@@ -10,7 +10,9 @@ import java.util.Map;
  */
 public interface HomeService {
 
-    Result<Map<String, Object>> userInfo(int id);
+    Result<?> userInfo();
 
     Result<?> logout(String token);
+
+    Result<?> navigation();
 }
