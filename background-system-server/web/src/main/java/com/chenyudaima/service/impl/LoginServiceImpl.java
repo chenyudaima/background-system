@@ -48,13 +48,13 @@ public class LoginServiceImpl implements LoginService {
         }
 
         //使用用户名和id创建token
-        String token =  jwtUtil.createToken(sysUser.getId().toString(), sysUser.getName());
+        String token =  jwtUtil.createToken(sysUser.getId(), sysUser.getName());
 
         //查询上次登录的token，如果存在则删除 不删除，加强提示功能
         //Optional.ofNullable((String)redisUtil.hash_get(RedisKey.TOKEN_ALL, sysUser.getAccount())).ifPresent(x -> redisUtil.delete(x));
 
         //如果在TOKEN_ALL内部key存在则直接覆盖（挤下线）
-        redisUtil.hash_put(RedisKey.TOKEN_ALL, sysUser.getId().toString(), RedisKey.TOKEN + token);
+        redisUtil.hash_put(RedisKey.TOKEN_ALL, sysUser.getId(), RedisKey.TOKEN + token);
 
         //给token绑定客户端信息
         Map<TokenClientEnum, String> tokenClientMap = new HashMap<>();

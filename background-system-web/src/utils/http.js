@@ -1,9 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index.js'
-import httpMethod from '/public/common/constant/httpMethod.js'
 import md5 from 'js-md5'
-import qs from 'qs'
-
 
 const http = axios.create({
   baseURL: "http://localhost:8080/", // 请求地址
@@ -11,8 +8,8 @@ const http = axios.create({
   withCredentials: true, // 跨域请求是否需要携带 cookie
 })
 
-//配置
-http.defaults.baseURL = '/system'
+//后端部署路径（配置）
+http.defaults.baseURL = '/api'
 
 //请求拦截
 http.interceptors.request.use(config => {
@@ -31,10 +28,10 @@ http.interceptors.request.use(config => {
   //唯一标识
   let nonce = `${config.url}#${config.method}#${timestamp}#${Math.random()}`
 
-  if (config.method == httpMethod.POST ||
-    config.method == httpMethod.DELETE ||
-    config.method == httpMethod.PUT ||
-    config.method == httpMethod.PATCH) {
+  if (config.method == "post" ||
+    config.method == "delete" ||
+    config.method == "put" ||
+    config.method == "patch") {
     let body = config.data
 
     if (body instanceof URLSearchParams) {
@@ -96,7 +93,7 @@ http.interceptors.request.use(config => {
       //删除json对象指定属性 accessKey不参与传输
       delete config.data.accessKey
     }
-  } else if (config.method == httpMethod.GET) {
+  } else if (config.method == "get") {
     
     config.params = {
       ...config.params,
@@ -133,7 +130,6 @@ let isRefreshing = false
 http.interceptors.response.use(
   (res) => {
     let response = res.data
-
     //403为权限不足
     if (response.code == 403) {
       router.push({path:"/login", query:{"message": response.message}})

@@ -3,6 +3,7 @@ package com.chenyudaima.service.impl;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
 import com.chenyudaima.mapper.SysMenuMapper;
+import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysMenu;
 import com.chenyudaima.model.SysUser;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -32,11 +30,13 @@ public class HomeServiceImpl implements HomeService {
     private final RedisUtil redisUtil;
     private final SysMenuMapper sysMenuMapper;
 
+    private final SysUserMapper sysUserMapper;
+
 
     @Override
     public Result<?> userInfo() {
         Claims claims = (Claims) request.getAttribute(RequestAttribute.CLAIMS);
-        return Result.success(claims.getSubject());
+        return Result.success(sysUserMapper.selectById(claims.getId()));
     }
 
     @Override
@@ -86,6 +86,7 @@ public class HomeServiceImpl implements HomeService {
             i--;
         }
 
+        Collections.reverse(sysMenus);
         return Result.success(sysMenus);
     }
 

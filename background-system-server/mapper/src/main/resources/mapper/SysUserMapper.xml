@@ -16,13 +16,34 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,account,
-        password,phone,age,
-        sex,status
+        id,`name`,`account`,
+        `password`,phone,age,
+        sex,`status`
     </sql>
 
     <select id="selectUserByAccountAndPassword" resultType="SysUser">
         select <include refid="Base_Column_List"/> from sys_user where account=#{account} and password=#{password}
+    </select>
+    <select id="selectAll" resultType="com.chenyudaima.model.SysUser">
+        select id,
+               `name`,
+               `account`,
+               phone,
+               age,
+               sex,
+               `status`
+        from sys_user
+    </select>
+    <select id="selectById" resultType="com.chenyudaima.model.SysUser">
+        select id,
+               `name`,
+               `account`,
+               phone,
+               age,
+               sex,
+               `status`
+        from sys_user
+        where id = #{id}
     </select>
 
 </mapper>

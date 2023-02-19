@@ -28,7 +28,7 @@
                      where role_id in (select role_id
                                        from sys_user_role
                                        where user_id = 1))
-        order by `order`
+        order by `order` desc
 
     </select>
 

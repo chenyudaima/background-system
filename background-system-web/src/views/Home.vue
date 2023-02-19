@@ -8,7 +8,7 @@
         <span style="margin-left: 20px;">数据核对系统</span>
       </div>
       <div>
-        <span>{{ name }}</span>
+        <span>{{ user.name }}</span>
         <el-button type="info" @click="loginOut">退出</el-button>
       </div>
     </el-header>
@@ -28,7 +28,7 @@
           router 启用该模式会在激活导航时以 index 作为 path 进行路由跳转
          -->
         <el-menu :unique-opened="true" background-color="#333744" text-color="#fff" active-text-color="#ffd04b"
-          :router="true" style="text-align:center">
+          :router="true">
 
           <template v-for="item in menuList">
 
@@ -98,13 +98,14 @@
 
 <script >
 import http from '@/utils/http.js'
+import routerUtil from '@/utils/routerUtil.js'
 export default {
   name: 'Home',
 
   data() {
     return {
-      //当前用户名
-      name: '',
+      //用户信息
+      user: {},
 
       //当前
       menuList: []
@@ -114,7 +115,7 @@ export default {
   created() {
     //查询用户信息
     http.get("/home/userInfo").then(resp => {
-      this.name = resp.data
+      this.user = resp.data
     })
 
     this.loadMenu()
@@ -134,46 +135,15 @@ export default {
 
     //加载菜单栏和对应路由
     async loadMenu() {
-      let routers = {
-        path: '/home',
-        name: 'home',
-        component: () => import('@/views/Home.vue'),
-        children: []
-      }
-
       await http.get("/home/menu").then(resp => {
         this.menuList = resp.data
-        //过滤没有路径的
-        routers.children = this.routerHandler(this.menuList)
+        routerUtil.routerHandler(resp.data).forEach(router => {
+          this.$router.addRoute("home", router)
+        })
       })
 
-      //动态添加路由表
-      this.$router.addRoute(routers)
+      
     },
-
-    //解析菜单数据生成路由
-    routerHandler(menuList) {
-      let array = []
-      menuList.forEach(menu => {
-        if (menu.routerComponent != null || menu.routerPath != null) {
-          array.push({
-            path: menu.routerPath,
-            name: menu.name,
-            component: () => import(`@/views${menu.routerComponent}`)
-          })
-        }
-
-        //如果大于0说明有子菜单
-        if(menu.children == null) {
-          menu.children = []
-        }
-        if (menu.children.length > 0) {
-          array = [...array, ...this.routerHandler(menu.children)]
-        }
-      })
-
-      return array
-    }
 
   },
 }

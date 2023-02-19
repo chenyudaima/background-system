@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 给Controller加上前缀 （当作项目部署路径）
      */
-    private static final String PATH = "/system";
+    private static final String PATH = "/api";
 
 
     /**

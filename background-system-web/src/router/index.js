@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import routerUtil from '@/utils/routerUtil.js'
 
 Vue.use(VueRouter)
 
@@ -28,12 +29,30 @@ const router = new VueRouter({
 })
 
 
+let count = 0;
 //路由跳转前
 router.beforeEach((to, from, next) => {
   //如果未匹配到路由则跳转到首页 (也可以跳转到404页面)
   if (to.matched.length === 0) {
-    router.push("/")
+    //说明用户刷新了路由
+    if (localStorage.getItem("currentRoute") == to.path) {
+      //先加载路由
+      routerUtil.loadRouter()
+      count ++
+      if(count > 3) {
+        router.push("/")
+      }else {
+        next()
+      }
+      
+    } else {
+      router.push("/")
+    }
+
   } else {
+    //储存当前的路由
+    localStorage.setItem("currentRoute", to.path)
+    count = 0
     next()
   }
 })
