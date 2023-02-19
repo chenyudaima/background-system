@@ -32,9 +32,9 @@ public class HomeController {
     /**
      * 查询导航栏
      */
-    @GetMapping("/navigation")
+    @GetMapping("/menu")
     public Result<?> navigation() {
-        return homeService.navigation();
+        return homeService.menu();
     }
 
 

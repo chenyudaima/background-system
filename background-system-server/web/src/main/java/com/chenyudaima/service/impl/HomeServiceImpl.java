@@ -48,55 +48,46 @@ public class HomeServiceImpl implements HomeService {
     }
 
     @Override
-    public Result<?> navigation() {
+    public Result<?> menu() {
         Claims claims = (Claims) request.getAttribute(RequestAttribute.CLAIMS);
 
         //用户id
         String id = claims.getId();
 
         //查询这个用户的所有菜单栏
-        List<SysMenuVo> list = sysMenuMapper.selectByUserId(id);
+        List<SysMenuVo> sysMenus = sysMenuMapper.selectByUserId(id);
 
-        //对菜单栏进行解析
-        list = setSubmenu(list);
+        int headIndex = 0;
 
-        //过滤只保留没有父id的菜单
-        list = list.stream().filter(x -> x.getParentId() == null).collect(Collectors.toList());
+        for (int i = sysMenus.size() - 1; i >= headIndex;) {
 
-        return Result.success(list);
-    }
+            SysMenuVo sysMenuVo = sysMenus.get(i);
 
-
-    /**
-     * 递归给菜单设置子菜单
-     * @param sysMenus 菜单
-     * @return 设置完之后的的菜单
-     */
-    public List<SysMenuVo> setSubmenu(List<SysMenuVo> sysMenus) {
-        List<SysMenuVo> list = new ArrayList<>();
-
-        if(sysMenus == null || sysMenus.size() == 0) {
-            return list;
-        }
-
-        //所有菜单
-        for (SysMenuVo sysMenuVo : sysMenus) {
+            //如果是父菜单，则把元素放在最前面
             if(sysMenuVo.getParentId() == null) {
-
+                sysMenus.add(0, sysMenus.remove(i));
+                headIndex ++;
+                continue;
             }
 
+            //如果是子菜单，查找它的父菜单，然后放进去，再从list中删除这个元素
+            for (int j = i - 1; j >= 0; j--) {
+                SysMenuVo sysMenuVo1 = sysMenus.get(j);
+                if(sysMenuVo1.getId().equals(sysMenuVo.getParentId())) {
+                    if(sysMenuVo1.getChildren() == null) {
+                        sysMenuVo1.setChildren(new ArrayList<>());
+                    }
+                    sysMenuVo1.getChildren().add(sysMenuVo);
+                    break;
+                }
+            }
 
-            //当前菜单的所有子菜单
-            List<SysMenuVo> collect = sysMenus.stream().filter(x -> x.getParentId() != null && x.getParentId().equals(sysMenuVo.getId())).collect(Collectors.toList());
-
-            //递归当前子菜单是否有子菜单
-            //collect = setSubmenu(collect);
-
-            sysMenuVo.setChildren(collect);
-
-            list.add(sysMenuVo);
+            sysMenus.remove(i);
+            i--;
         }
-        return list;
+
+        return Result.success(sysMenus);
     }
+
 
 }

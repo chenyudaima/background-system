@@ -21,4 +21,6 @@ public class SysMenu implements Serializable {
     private String routerComponent;
 
     private String description;
+
+    private int order;
 }

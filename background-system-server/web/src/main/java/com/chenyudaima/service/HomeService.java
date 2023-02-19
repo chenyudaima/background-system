@@ -14,5 +14,5 @@ public interface HomeService {
 
     Result<?> logout(String token);
 
-    Result<?> navigation();
+    Result<?> menu();
 }

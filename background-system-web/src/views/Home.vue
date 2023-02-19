@@ -21,44 +21,53 @@
       <el-aside width="200px" style="background-color: #333744">
 
         <!-- 
-          unique-opened 是否保持只有一个子菜单展开
+          unique-opened 是否保持只有一个子菜单展开 如果true不生效说明菜单index相同,所以非路由菜单的index设置为id
           background-color 导航栏背景颜色
           text-color 一级菜单字体颜色
           active-text-color 二级菜单字体颜色
+          router 启用该模式会在激活导航时以 index 作为 path 进行路由跳转
          -->
         <el-menu :unique-opened="true" background-color="#333744" text-color="#fff" active-text-color="#ffd04b"
-          :router="true">
+          :router="true" style="text-align:center">
 
           <template v-for="item in menuList">
-            
+
             <!--判断一级菜单里面是否有二级菜单 -->
             <template v-if="item.children.length != 0">
-              <el-submenu :index="item.routerPath" :key="item.id">
+              <el-submenu :index="item.id.toString()" :key="item.id">
+
+                <!--一级菜单 -->
                 <template slot="title">
                   <!-- <i v-bind:class="item.iconwebcode"></i> -->
                   <span>{{ item.name }}</span>
                 </template>
-                <!--判断是否有三级菜单 -->
-                <template v-for="subItem in item.children">
-                  <el-submenu v-if="subItem.children.length != 0" :index="subItem.routerPath" :key="subItem.id">
 
+                <template v-for="subItem in item.children">
+                  <!--判断是否有三级菜单 -->
+                  <el-submenu v-if="subItem.children.length != 0" :index="subItem.id.toString()" :key="subItem.id">
+
+                    <!-- 二级菜单 -->
                     <template slot="title">
                       <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
                       {{ subItem.name }}
                     </template>
 
 
-                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id" :index="threeItem.routerPath">
+                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id"
+                      :index="threeItem.routerPath">
                       <!-- <i v-bind:class="threeItem.iconwebcode"></i> -->
                       {{ threeItem.name }}</el-menu-item>
                   </el-submenu>
 
-                  <!--二级菜单 -->
+                  
                   <el-menu-item v-else :index="subItem.routerPath" :key="subItem.id">
+
+                    <!--二级菜单 -->
                     <template slot="title">
                       <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
                       {{ subItem.name }}
                     </template>
+
                   </el-menu-item>
                 </template>
               </el-submenu>
@@ -108,11 +117,11 @@ export default {
       this.name = resp.data
     })
 
-    //加载菜单栏和对应路由
     this.loadMenu()
   },
 
   methods: {
+    //退出
     loginOut() {
       http.get("/home/logout").then(resp => {
         if (resp.code == 200) {
@@ -123,6 +132,7 @@ export default {
       this.$router.push("/login")
     },
 
+    //加载菜单栏和对应路由
     async loadMenu() {
       let routers = {
         path: '/home',
@@ -131,29 +141,38 @@ export default {
         children: []
       }
 
-      await http.get("/home/navigation").then(resp => {
+      await http.get("/home/menu").then(resp => {
         this.menuList = resp.data
+        //过滤没有路径的
         routers.children = this.routerHandler(this.menuList)
       })
-      
-      //添加路由
-      // this.$router.options.routes.push(routers)
-      // this.$router.addRoutes([route])
+
+      //动态添加路由表
       this.$router.addRoute(routers)
     },
 
     //解析菜单数据生成路由
-    routerHandler(menu) {
-      return menu.map(menu => {
-        menu.path = menu.routerPath
-        menu.component = () => import(`@/views${menu.routerComponent}`)
+    routerHandler(menuList) {
+      let array = []
+      menuList.forEach(menu => {
+        if (menu.routerComponent != null || menu.routerPath != null) {
+          array.push({
+            path: menu.routerPath,
+            name: menu.name,
+            component: () => import(`@/views${menu.routerComponent}`)
+          })
+        }
 
         //如果大于0说明有子菜单
-        if (menu.children.length > 0) {
-          menu.children = this.routerHandler(menu.children)
+        if(menu.children == null) {
+          menu.children = []
         }
-        return menu
+        if (menu.children.length > 0) {
+          array = [...array, ...this.routerHandler(menu.children)]
+        }
       })
+
+      return array
     }
 
   },

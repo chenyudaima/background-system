@@ -480,7 +480,15 @@ public class HttpClientUtil {
         }
     }
 
-    public static String upload(String url, File file, Map<String, String> headers, Map<String, String> params, int connectionTimeout, int responseTimeout) throws Exception {
+    public static String upload(String url, File file, Map<String, String> params) throws Exception {
+        return upload(url, file, params,null);
+    }
+
+    public static String upload(String url, File file, Map<String, String> params, Map<String, String> headers) throws Exception {
+        return upload(url, file, params, headers, HttpConfig.CONNECTION_TIMEOUT, HttpConfig.RESPONSE_TIMEOUT);
+    }
+
+    public static String upload(String url, File file,Map<String, String> params, Map<String, String> headers, int connectionTimeout, int responseTimeout) throws Exception {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         CloseableHttpResponse response = null;

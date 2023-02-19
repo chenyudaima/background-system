@@ -11,11 +11,12 @@
             <result property="routerPath" column="router_path" jdbcType="VARCHAR"/>
             <result property="routerComponent" column="router_component" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="order" column="order" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,parent_id,
-        router_path,router_component,description
+        id,`name`,parent_id,
+        router_path,router_component,`description`,`order`
     </sql>
 
     <select id="selectByUserId" resultType="com.chenyudaima.vo.SysMenuVo">
@@ -27,6 +28,7 @@
                      where role_id in (select role_id
                                        from sys_user_role
                                        where user_id = 1))
+        order by `order`
 
     </select>
 
