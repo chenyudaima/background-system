@@ -10,12 +10,13 @@ import javax.servlet.annotation.WebListener;
  * @date 2023/2/7
  */
 @WebListener
-public class MyListener implements ServletContextListener {
+public class ServletListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         System.out.println("ServletContext初始化！！！");
         System.out.println(sce.getServletContext().getServerInfo());
     }
+
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         System.out.println("ServletContext销毁");

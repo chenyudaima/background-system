@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
   //如果未匹配到路由则跳转到首页 (也可以跳转到404页面)
   if (to.matched.length === 0) {
     //说明用户刷新了路由
-    if (localStorage.getItem("currentRoute") == to.path) {
+    if (sessionStorage.getItem("currentRoute") == to.path) {
       //先加载路由
       routerUtil.loadRouter()
       count ++
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
 
   } else {
     //储存当前的路由
-    localStorage.setItem("currentRoute", to.path)
+    sessionStorage.setItem("currentRoute", to.path)
     count = 0
     next()
   }

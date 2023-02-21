@@ -9,7 +9,7 @@ const http = axios.create({
 })
 
 //后端部署路径（配置）
-http.defaults.baseURL = '/api'
+http.defaults.baseURL = '/system-api'
 
 //请求拦截
 http.interceptors.request.use(config => {
@@ -130,20 +130,12 @@ let isRefreshing = false
 http.interceptors.response.use(
   (res) => {
     let response = res.data
+    
     //403为权限不足
     if (response.code == 403) {
       router.push({path:"/login", query:{"message": response.message}})
       return response;
     }
-
-    //每次请求都会刷新token 或者定时刷新token
-    // if (!isRefreshing && window.location.pathname != "/login") {
-    //   isRefreshing = true
-    //   http.get("/system/updateToken").then(resp => {
-    //     localStorage.setItem("token", resp.data);
-    //     isRefreshing = false;
-    //   })
-    // }
 
     return response;
   },
