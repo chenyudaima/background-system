@@ -21,13 +21,11 @@ const routes = [
   }
 ]
 
-
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
 })
-
 
 let count = 0;
 //路由跳转前

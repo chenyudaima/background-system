@@ -18,22 +18,22 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public Result<?> query() {
-        return userService.query();
+    public Result<?> query(int page, int pageSize) {
+        return userService.query(page, pageSize);
     }
 
-    @PostMapping
-    public Result<?> add() {
-        return userService.query();
-    }
-
-    @PatchMapping
-    public Result<?> update() {
-        return userService.query();
-    }
-
-    @DeleteMapping
-    public Result<?> delete() {
-        return userService.query();
-    }
+    //@PostMapping
+    //public Result<?> add() {
+    //    return userService.query();
+    //}
+    //
+    //@PatchMapping
+    //public Result<?> update() {
+    //    return userService.query();
+    //}
+    //
+    //@DeleteMapping
+    //public Result<?> delete() {
+    //    return userService.query();
+    //}
 }

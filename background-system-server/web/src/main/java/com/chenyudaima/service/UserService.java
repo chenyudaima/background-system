@@ -7,5 +7,5 @@ import com.chenyudaima.model.Result;
  * @date 2023/2/19
  */
 public interface UserService {
-    Result<?> query();
+    Result<?> query(int page, int pageSize);
 }

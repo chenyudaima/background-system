@@ -118,6 +118,7 @@ export default {
       this.user = resp.data
     })
 
+    //加载路由和菜单
     this.loadMenu()
   },
 

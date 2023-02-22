@@ -24,7 +24,7 @@
     <select id="selectUserByAccountAndPassword" resultType="SysUser">
         select <include refid="Base_Column_List"/> from sys_user where account=#{account} and password=#{password}
     </select>
-    <select id="selectAll" resultType="com.chenyudaima.model.SysUser">
+    <select id="select" resultType="com.chenyudaima.model.SysUser">
         select id,
                `name`,
                `account`,
@@ -33,6 +33,7 @@
                sex,
                `status`
         from sys_user
+        limit ${(page - 1) * pageSize},#{pageSize}
     </select>
     <select id="selectById" resultType="com.chenyudaima.model.SysUser">
         select id,
