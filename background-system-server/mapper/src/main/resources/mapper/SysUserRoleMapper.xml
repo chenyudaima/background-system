@@ -13,4 +13,20 @@
     <sql id="Base_Column_List">
         id,user_id,role_id
     </sql>
+    <insert id="insertBatch">
+        insert into sys_user_role values
+        <foreach collection="roleIds" item="item" index="index" separator=",">
+            (null, #{userId}, #{item})
+        </foreach>
+    </insert>
+    <delete id="deleteByUserIdBatch">
+        delete from sys_user_role where user_id in
+        <foreach collection="userIds" item="userId" open="(" close=")" separator=",">
+            #{userId}
+        </foreach>
+    </delete>
+    <delete id="deleteByUserId">
+        delete from sys_user_role where user_id = #{userId}
+    </delete>
+
 </mapper>

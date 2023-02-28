@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index.js'
-import md5 from 'js-md5'
+import signUtil from '@/utils/signUtil.js'
 
 const http = axios.create({
   baseURL: "http://localhost:8080/", // 请求地址
@@ -13,108 +13,12 @@ http.defaults.baseURL = '/system-api'
 
 //请求拦截
 http.interceptors.request.use(config => {
+
   //设置权限请求头
   config.headers.Authorization = localStorage.getItem("token");
 
-  //排序和格式化之后的参数(需要参与加密的参数)
-  let params;
-
-  //时间戳
-  let timestamp = new Date().getTime()
-
-  //参与加密的key，但不进行传参
-  let accessKey = config.headers.Authorization
-
-  //唯一标识
-  let nonce = `${config.url}#${config.method}#${timestamp}#${Math.random()}`
-
-  if (config.method == "post" ||
-    config.method == "delete" ||
-    config.method == "put" ||
-    config.method == "patch") {
-    let body = config.data
-
-    if (body instanceof URLSearchParams) {
-      body.append("timestamp", timestamp)
-      body.append("accessKey", accessKey)
-      body.append("nonce", nonce)
-
-      //按key排序，a字母在前，第一个相同继续看第二个字母，不看长度
-      body.sort()
-      
-      //转换成 aa=aa&bb=bb 格式       
-      params = decodeURIComponent(body.toString())
-
-      //删除参数中的密钥
-      body.delete("accessKey")
-
-    } else if (body instanceof FormData) {
-      body.append("timestamp", timestamp)
-      body.append("nonce", nonce)
-
-      let map = new Map();
-      for (var kv of body.entries()) {
-        //判断是否是文件，文件不参与参数加密
-        if(kv[1] instanceof File) {
-          continue
-        }
-        map.set(kv[0], kv[1])
-      }
-
-      map.set("accessKey", accessKey)
-
-      //map进行排序
-      map = new Map([...map].sort());
-
-      params = ""
-      //排序之后拼接参数
-      for (var kv of map.entries()) {
-        params += kv[0] + "=" + kv[1] + "&"
-      }
-
-      params = params.substring(0, params.length - 1);
-
-    } else if (config.data instanceof Object) {
-      config.data = {
-        ...config.data,
-        timestamp: new Date().getTime(),
-        accessKey : accessKey,
-        nonce : nonce
-      }
-
-      params = ""
-
-      Object.keys(config.data).sort().forEach(key => {
-        params += `${key}=${config.data[key]}&`
-      })
-
-      params = params.substring(0, params.length - 1);
-
-      //删除json对象指定属性 accessKey不参与传输
-      delete config.data.accessKey
-    }
-  } else if (config.method == "get") {
-    
-    config.params = {
-      ...config.params,
-      timestamp: new Date().getTime(),
-      accessKey : accessKey,
-      nonce : nonce
-    }
-    params = ""
-
-    Object.keys(config.params).sort().forEach(key => {
-      params += `${key}=${config.params[key]}&`
-    })
-    
-    params = params.substring(0, params.length - 1);
-
-    //删除json对象指定属性 accessKey不参与传输
-    delete config.params.accessKey
-  }
-
-  //设置参数签名请求头
-  config.headers.signature = md5(params).toUpperCase()
+  //添加签名参数及参数加密请求头
+  signUtil.signature(config)
 
   return config;
 
@@ -129,11 +33,16 @@ let isRefreshing = false
 //响应拦截
 http.interceptors.response.use(
   (res) => {
+    //如果是下载，响应的不是Object对象，直接返回res
+    if(!(res.data instanceof Object)) {
+      return res;
+    }
+
     let response = res.data
-    
+
     //403为权限不足
     if (response.code == 403) {
-      router.push({path:"/login", query:{"message": response.message}})
+      router.push({ path: "/login", query: { "message": response.message } })
       return response;
     }
 

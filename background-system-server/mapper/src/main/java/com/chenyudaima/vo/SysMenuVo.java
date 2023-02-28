@@ -10,12 +10,13 @@ import java.util.List;
  */
 @Data
 public class SysMenuVo implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    private Integer id;
+    private String id;
 
     private String name;
 
-    private Integer parentId;
+    private String parentId;
 
     private String routerPath;
 
@@ -23,7 +24,6 @@ public class SysMenuVo implements Serializable {
 
     private String description;
 
-    private int order;
-
+    private Integer order;
     private List<SysMenuVo> children;
 }

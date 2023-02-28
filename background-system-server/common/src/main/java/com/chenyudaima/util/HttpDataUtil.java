@@ -31,60 +31,59 @@ public class HttpDataUtil {
     /**
      * 获取http请求的参数
      */
-    public static Map<String, String> getParams(HttpServletRequest request) throws Exception {
-
-        if (
-                (request.getMethod().equals(HttpMethod.POST) ||
-            request.getMethod().equals(HttpMethod.PUT) ||
-            request.getMethod().equals(HttpMethod.PATCH) ||
-            request.getMethod().equals(HttpMethod.DELETE))
-            && request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_JSON)
-        ) {
-            return HttpDataUtil.getPostJsonParams(request);
-
-        } else if (request.getMethod().equals(HttpMethod.GET)) {
-
+    public static TreeMap<String, String> getParams(HttpServletRequest request) throws Exception {
+        if (request.getMethod().equals(HttpMethod.GET)) {
             return HttpDataUtil.getUrlParams(request);
+        }
 
-        } else if ((request.getMethod().equals(HttpMethod.POST) ||
+
+        if ((request.getMethod().equals(HttpMethod.POST) ||
                 request.getMethod().equals(HttpMethod.PUT) ||
                 request.getMethod().equals(HttpMethod.PATCH) ||
                 request.getMethod().equals(HttpMethod.DELETE))
                 &&
-                (request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED) ||
-                        request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA)
-                        )
+                request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_JSON)) {
+            return HttpDataUtil.getPostJsonParams(request);
+        }
 
 
+        if ((request.getMethod().equals(HttpMethod.POST) ||
+                request.getMethod().equals(HttpMethod.PUT) ||
+                request.getMethod().equals(HttpMethod.PATCH)
+                        &&
+                        (request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_APPLICATION_X_WWW_FORM_URLENCODED) ||
+                                request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA)))
         ) {
             return HttpDataUtil.getPostFormParams(request);
-        }else {
-            return new TreeMap<>();
         }
+
+
+        return new TreeMap<>();
     }
 
     /**
      * 获取POST请求中Body的json参数 application/json
      */
-    public static Map<String, String> getPostJsonParams(HttpServletRequest request) throws Exception {
+    public static TreeMap<String, String> getPostJsonParams(HttpServletRequest request) throws Exception {
         String json = new String(StreamUtils.copyToByteArray(request.getInputStream()));
 
-        return JSON.parseObject(json,new TypeReference<TreeMap<String, String>>() {});
+        return JSON.parseObject(json, new TypeReference<TreeMap<String, String>>() {
+        });
 
     }
 
 
     /**
      * POST application/x-www-form-urlencoded 获取请求中Body的Key-Value参数
-     *
+     * <p>
      * POST multipart/form-data SpringBoot会自动转换成StandardMultipartHttpServletRequest，可以继续使用request.getParameterMap()获取POST请求中Body的二进制参数
      */
-    public static Map<String, String> getPostFormParams(HttpServletRequest request) throws Exception {
+    public static TreeMap<String, String> getPostFormParams(HttpServletRequest request) throws Exception {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
-        Map<String, String> treeMap = new TreeMap<>();
+        TreeMap<String, String> treeMap = new TreeMap<>();
 
-        parameterMap.forEach((k,v) -> treeMap.put(k, v[0]));
+        parameterMap.forEach((k, v) -> treeMap.put(k, v[0]));
 
         return treeMap;
     }
@@ -92,14 +91,14 @@ public class HttpDataUtil {
     /**
      * 获取http路径参数
      */
-    public static Map<String, String> getUrlParams(HttpServletRequest request) throws Exception {
+    public static TreeMap<String, String> getUrlParams(HttpServletRequest request) throws Exception {
         if (request.getQueryString().isEmpty()) {
             return new TreeMap<>();
         }
 
         String[] params = URLDecoder.decode(request.getQueryString(), CharSet.UTF8).split("&");
 
-        Map<String, String> result = new TreeMap<>();
+        TreeMap<String, String> result = new TreeMap<>();
         for (String param : params) {
             String[] keyValue = param.split("=");
             result.put(keyValue[0], keyValue[1]);

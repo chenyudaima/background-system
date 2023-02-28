@@ -8,8 +8,18 @@
         <span style="margin-left: 20px;">数据核对系统</span>
       </div>
       <div>
-        <span>{{ user.name }}</span>
-        <el-button type="info" @click="loginOut">退出</el-button>
+        
+        <el-dropdown style="padding: 20px" trigger="click">
+          <span style="color: #409EFF">
+            {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>个人信息</el-dropdown-item>
+            <el-dropdown-item><el-button type="danger" size="mini" round @click="loginOut">退出</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-button type="danger" round @click="loginOut">退出</el-button>
       </div>
     </el-header>
 
@@ -53,13 +63,12 @@
                     </template>
 
 
-                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id"
-                      :index="threeItem.routerPath">
+                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id" :index="threeItem.routerPath">
                       <!-- <i v-bind:class="threeItem.iconwebcode"></i> -->
                       {{ threeItem.name }}</el-menu-item>
                   </el-submenu>
 
-                  
+
                   <el-menu-item v-else :index="subItem.routerPath" :key="subItem.id">
 
                     <!--二级菜单 -->
@@ -107,7 +116,7 @@ export default {
       //用户信息
       user: {},
 
-      //当前
+      //菜单
       menuList: []
     }
   },
@@ -119,7 +128,11 @@ export default {
     })
 
     //加载路由和菜单
-    this.loadMenu()
+    this.loadMenu().then(() => {
+      if (this.$route.path == "/home") {
+        this.$router.push("/home/index")
+      }
+    })
   },
 
   methods: {
@@ -143,7 +156,7 @@ export default {
         })
       })
 
-      
+
     },
 
   },

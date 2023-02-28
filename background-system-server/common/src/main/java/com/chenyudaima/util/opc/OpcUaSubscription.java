@@ -1,5 +1,6 @@
 package com.chenyudaima.util.opc;
 
+import com.chenyudaima.config.ThreadPoolConfig;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaSubscription;
@@ -27,7 +28,7 @@ import static org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.Unsigned.
  * @date 2023/2/10
  */
 public class OpcUaSubscription {
-    private static final Logger log = LoggerFactory.getLogger(OpcUaApi.class);
+    private static final Logger log = LoggerFactory.getLogger(OpcUaSubscription.class);
     private final OpcUaConfig opcUaConfig;
 
     /**
@@ -89,7 +90,7 @@ public class OpcUaSubscription {
     /**
      * 连接 连接失败会无限重试
      */
-    public void connect() {
+    private void connect() {
         try {
             //关闭上一次的连接
             opcUaClient.disconnect().get();
@@ -124,7 +125,7 @@ public class OpcUaSubscription {
     /**
      * 重连，在心跳异常的时候执行
      */
-    public void reconnect() {
+    private void reconnect() {
         try {
             //发起连接
             connect();
@@ -153,7 +154,7 @@ public class OpcUaSubscription {
     /**
      * 开启心跳检测线程 （在run的时候执行，全局只执行一次）
      */
-    public void heartbeat() {
+    private void heartbeat() {
         executor.execute(() -> {
             while (true) {
                 if (heartbeat > opcUaConfig.getHeartbeatAbnormal()) {
@@ -176,7 +177,7 @@ public class OpcUaSubscription {
      * 节点订阅
      * @param node 节点
      */
-    public void subscription(OpcNode node) {
+    private void subscription(OpcNode node) {
         UaMonitoredItem item = null;
 
         //节点id

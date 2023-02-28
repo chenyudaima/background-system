@@ -23,8 +23,8 @@ public class RequestFilter implements Filter {
 
         HttpServletRequest servletRequest = (HttpServletRequest) request;
 
-        if(!servletRequest.getMethod().equals(HttpMethod.GET) && servletRequest.getContentType() == null) {
-            throw new RequestHeaderException("非get请求需要content-type请求头");
+        if(servletRequest.getContentType() == null && !servletRequest.getMethod().equals(HttpMethod.GET)) {
+            throw new RequestHeaderException();
         }
 
         if (

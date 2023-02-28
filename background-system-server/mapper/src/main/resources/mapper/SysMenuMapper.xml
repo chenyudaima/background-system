@@ -11,13 +11,58 @@
             <result property="routerPath" column="router_path" jdbcType="VARCHAR"/>
             <result property="routerComponent" column="router_component" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
-        <result property="order" column="order" jdbcType="INTEGER"/>
+            <result property="order" column="order" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,`name`,parent_id,
         router_path,router_component,`description`,`order`
     </sql>
+
+    <insert id="insert">
+        insert into sys_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null"> name, </if>
+            <if test="parentId != null"> parent_id, </if>
+            <if test="routerPath != null"> router_path, </if>
+            <if test="routerComponent != null"> router_component, </if>
+            <if test="order != null"> `order`, </if>
+            <if test="description != null"> `description`, </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null"> #{name}, </if>
+            <if test="parentId != null"> #{parentId}, </if>
+            <if test="routerPath != null"> #{routerPath}, </if>
+            <if test="routerComponent != null"> #{routerComponent}, </if>
+            <if test="order != null"> #{order}, </if>
+            <if test="description != null"> #{description}, </if>
+        </trim>
+    </insert>
+
+    <update id="update">
+        update sys_menu
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="parentId != null">parent_id=#{parentId},</if>
+            <if test="routerPath != null">router_path=#{routerPath},</if>
+            <if test="routerComponent != null">router_component=#{routerComponent},</if>
+            <if test="order != null">`order`=#{order},</if>
+            <if test="description != null">`description`=#{description},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from sys_menu where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdBatch">
+        delete from sys_menu where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="selectByUserId" resultType="com.chenyudaima.vo.SysMenuVo">
         SELECT
@@ -27,9 +72,35 @@
                      from sys_role_menu
                      where role_id in (select role_id
                                        from sys_user_role
-                                       where user_id = 1))
+                                       where user_id = #{id}))
         order by `order` desc
 
+    </select>
+
+    <select id="select" resultType="com.chenyudaima.model.SysMenu">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_menu
+        <where>
+            <if test="sysMenu.name != null and sysMenu.name != ''">and name=#{sysMenu.name}</if>
+            <if test="sysMenu.routerPath != null and sysMenu.routerPath != ''">and router_path=#{sysMenu.routerPath}</if>
+            <if test="sysMenu.routerComponent != null and sysMenu.routerComponent != ''">and router_component=#{sysMenu.routerComponent}</if>
+        </where>
+        order by id
+        limit ${(page - 1) * pageSize}, #{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from sys_menu
+        <where>
+            <if test="name != null and name != ''">and name=#{name}</if>
+            <if test="routerPath != null and routerPath != ''">and router_path=#{routerPath}</if>
+            <if test="routerComponent != null and routerComponent != ''">and router_component=#{routerComponent}</if>
+        </where>
+    </select>
+
+    <select id="selectAll" resultType="com.chenyudaima.vo.SysMenuVo">
+        select <include refid="Base_Column_List"/> from sys_menu order by `order` desc
     </select>
 
 </mapper>

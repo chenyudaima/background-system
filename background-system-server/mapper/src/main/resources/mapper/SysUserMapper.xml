@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chenyudaima.mapper.SysUserMapper">
 
-    <resultMap id="BaseResultMap" type="com.chenyudaima.model.SysUser">
+    <resultMap id="SelectMap" type="com.chenyudaima.vo.SysUserVo">
             <id property="id" column="id" jdbcType="INTEGER"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="account" column="account" jdbcType="VARCHAR"/>
@@ -13,28 +13,93 @@
             <result property="age" column="age" jdbcType="TINYINT"/>
             <result property="sex" column="sex" jdbcType="TINYINT"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
+        <collection property="roleIds" ofType="String">
+            <result column="role_id" jdbcType="INTEGER" />
+        </collection>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,`name`,`account`,
-        `password`,phone,age,
-        sex,`status`
-    </sql>
+    <update id="update" parameterType="com.chenyudaima.model.SysUser">
+        update sys_user
+        <set>
+            <if test="name != null">name=#{name},</if>
+            <if test="account != null">account=#{account},</if>
+            <if test="phone != null">phone=#{phone},</if>
+            <if test="age != null">age=#{age},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="password != null">password=#{password},</if>
+        </set>
+        where id=#{id}
 
-    <select id="selectUserByAccountAndPassword" resultType="SysUser">
-        select <include refid="Base_Column_List"/> from sys_user where account=#{account} and password=#{password}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from sys_user
+        where id = #{id}
+    </delete>
+    <delete id="deleteByIdBatch">
+        delete
+        from sys_user
+        where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="select" resultMap="SelectMap">
+        select su.id,
+               su.`name`,
+               su.`account`,
+               su.phone,
+               su.age,
+               su.sex,
+               su.`status`,
+               sur.role_id
+        from sys_user su left join sys_user_role sur on su.id = sur.user_id
+        <where>
+            <if test="sysUser.name != null and sysUser.name != ''">and name=#{sysUser.name}</if>
+            <if test="sysUser.account != null and sysUser.account != ''">and account=#{sysUser.account}</if>
+            <if test="sysUser.status != null and sysUser.status != ''">and status=#{sysUser.status}</if>
+        </where>
+        order by id
+        limit ${(page - 1) * pageSize},#{pageSize}
     </select>
-    <select id="select" resultType="com.chenyudaima.model.SysUser">
+
+    <insert id="insert" parameterType="com.chenyudaima.model.SysUser" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null"> name, </if>
+            <if test="account != null"> `account`, </if>
+            <if test="password != null"> `password`, </if>
+            <if test="phone != null"> phone, </if>
+            <if test="age != null"> age, </if>
+            <if test="sex != null"> sex, </if>
+            <if test="status != null"> `status`, </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null"> #{name}, </if>
+            <if test="account != null"> #{account}, </if>
+            <if test="password != null"> #{password}, </if>
+            <if test="phone != null"> #{phone}, </if>
+            <if test="age != null"> #{age}, </if>
+            <if test="sex != null"> #{sex}, </if>
+            <if test="status != null"> #{status}, </if>
+        </trim>
+    </insert>
+
+    <select id="selectUserByAccountAndPassword" resultType="com.chenyudaima.model.SysUser">
         select id,
                `name`,
                `account`,
                phone,
                age,
                sex,
-               `status`
-        from sys_user
-        limit ${(page - 1) * pageSize},#{pageSize}
+               `status` from sys_user where account=#{account} and password=#{password}
     </select>
+
+
     <select id="selectById" resultType="com.chenyudaima.model.SysUser">
         select id,
                `name`,
@@ -45,6 +110,15 @@
                `status`
         from sys_user
         where id = #{id}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from sys_user
+        <where>
+            <if test="name != null and name != ''">and name=#{name}</if>
+            <if test="account != null and account != ''">and account=#{account}</if>
+            <if test="status != null and status != ''">and status=#{status}</if>
+        </where>
     </select>
 
 </mapper>

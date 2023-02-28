@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {RequestHeaderException.class})
     public Result<?> RequestHeaderException(HttpServletRequest request, Exception e) {
-        return new Result<>(400, e.getMessage(), null);
+        return new Result<>(400, "错误的请求头", null);
     }
 
 }

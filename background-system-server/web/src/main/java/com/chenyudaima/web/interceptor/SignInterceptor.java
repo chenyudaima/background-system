@@ -14,6 +14,7 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,6 +48,7 @@ public class SignInterceptor extends Interceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         //获取参数签名
         String signature = request.getHeader(HttpHeader.K_REQUEST_HEADER_SIGNATURE);
 
@@ -54,12 +56,13 @@ public class SignInterceptor extends Interceptor {
             throw new SignException("没有参数签名");
         }
 
-        Map<String, String> params = HttpDataUtil.getParams(request);
+        //获取用户请求的参数
+        TreeMap<String, String> params = HttpDataUtil.getParams(request);
 
         //参与加密的accessKey
         params.put(HttpParam.ACCESS_KEY, request.getHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION));
 
-        //验证参数签名
+        //验签
         if(!SignUtil.jointVerify(signature, params)) {
             throw new SignException("非法篡改参数");
         }

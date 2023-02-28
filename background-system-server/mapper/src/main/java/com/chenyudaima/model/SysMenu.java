@@ -14,7 +14,7 @@ public class SysMenu implements Serializable {
 
     private String name;
 
-    private Integer parentId;
+    private String parentId;
 
     private String routerPath;
 
@@ -22,5 +22,5 @@ public class SysMenu implements Serializable {
 
     private String description;
 
-    private int order;
+    private Integer order;
 }

@@ -54,6 +54,8 @@ public class HomeServiceImpl implements HomeService {
         //用户id
         String id = claims.getId();
 
+        //根据id查询用户角色
+
         //查询这个用户的所有菜单栏
         List<SysMenuVo> sysMenus = sysMenuMapper.selectByUserId(id);
 
@@ -87,6 +89,7 @@ public class HomeServiceImpl implements HomeService {
         }
 
         Collections.reverse(sysMenus);
+
         return Result.success(sysMenus);
     }
 

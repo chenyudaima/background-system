@@ -4,13 +4,63 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chenyudaima.mapper.SysRoleMapper">
 
-    <resultMap id="BaseResultMap" type="com.chenyudaima.model.SysRole">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-    </resultMap>
-
     <sql id="Base_Column_List">
         id,name,description
     </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="description != null">`description`,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="description != null">#{description},</if>
+        </trim>
+    </insert>
+
+    <update id="update">
+        update sys_role
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from sys_role where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdBatch">
+        delete from sys_role where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="select" resultType="com.chenyudaima.model.SysRole">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+        <where>
+            <if test="sysRole.name != null and sysRole.name != ''">name = #{sysRole.name}</if>
+        </where>
+        order by id
+        limit ${(page -1) * pageSize},#{pageSize}
+
+    </select>
+
+    <select id="selectAll" resultType="com.chenyudaima.model.SysRole">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*)
+        from sys_role
+    </select>
 </mapper>

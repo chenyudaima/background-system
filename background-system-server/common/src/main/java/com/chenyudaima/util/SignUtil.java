@@ -2,6 +2,7 @@ package com.chenyudaima.util;
 
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -10,6 +11,7 @@ import java.util.Map;
  * @date 2023/2/7
  */
 public class SignUtil {
+
     /**
      * 验证参数是否被篡改
      * @param signature 签名
@@ -28,6 +30,7 @@ public class SignUtil {
 
         String params = stringBuilder.toString();
         params = params.substring(0, params.length() -1);
+
         return verify(signature, params);
     }
 

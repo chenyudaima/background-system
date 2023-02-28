@@ -5,7 +5,7 @@ import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaSubscriptionManager
 
 
 /**
- * Opc连接属性（包括Http，OpcUa）
+ * OpcUa连接属性
  */
 public class OpcUaConfig {
     /**
