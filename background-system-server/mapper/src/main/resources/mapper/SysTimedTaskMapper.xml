@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyudaima.mapper.SysTimedTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.chenyudaima.model.SysTimedTask">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="classname" column="className" jdbcType="VARCHAR"/>
+            <result property="cron" column="cron" jdbcType="VARCHAR"/>
+            <result property="param" column="param" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,className,cron,
+        param,status,description
+    </sql>
+
+    <select id="selectByClassName" resultType="com.chenyudaima.model.SysTimedTask">
+        select <include refid="Base_Column_List"/> from sys_timed_task where className = #{className}
+    </select>
+
+    <select id="selectAll" resultType="com.chenyudaima.model.SysTimedTask">
+        select <include refid="Base_Column_List"/> from sys_timed_task
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*)
+        from sys_timed_task
+    </select>
+
+    <select id="select" resultType="com.chenyudaima.model.SysTimedTask">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_timed_task limit ${(page -1) * pageSize},#{pageSize}
+    </select>
+</mapper>

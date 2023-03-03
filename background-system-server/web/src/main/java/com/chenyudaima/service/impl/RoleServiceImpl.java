@@ -13,6 +13,7 @@ import com.chenyudaima.vo.SysRoleVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -86,7 +87,7 @@ public class RoleServiceImpl implements RoleService {
         return Result.success(map);
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> update(SysRoleVo sysRole) {
         SysRole role = new SysRole();
 
@@ -105,7 +106,7 @@ public class RoleServiceImpl implements RoleService {
         return Result.success();
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> add(SysRoleVo sysRole) {
 
         SysRole role = new SysRole();
@@ -121,7 +122,7 @@ public class RoleServiceImpl implements RoleService {
         return Result.success();
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> deleteById(String id) {
         sysRoleMapper.deleteById(id);
 
@@ -130,7 +131,7 @@ public class RoleServiceImpl implements RoleService {
         return Result.success();
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> deleteByIdBatch(String[] ids) {
         sysRoleMapper.deleteByIdBatch(ids);
         sysRoleMenuMapper.deleteByRoleIdBatch(ids);

@@ -16,6 +16,11 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org</groupId>
             <artifactId>opencv</artifactId>
         </dependency>

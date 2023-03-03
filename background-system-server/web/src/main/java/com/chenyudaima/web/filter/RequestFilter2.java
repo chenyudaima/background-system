@@ -17,7 +17,7 @@ import java.io.IOException;
  * @date 2023/2/6
  */
 @WebFilter(urlPatterns = {"/*"})
-public class RequestFilter implements Filter {
+public class RequestFilter2 implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 

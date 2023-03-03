@@ -8,7 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 /**
- * Servlet监听器
+ * Servlet初始化前，销毁前的执行
  * @author 沉鱼代码
  * @date 2023/2/7
  */
@@ -17,12 +17,11 @@ import javax.servlet.annotation.WebListener;
 public class ServletListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        log.info("ServletContext初始化！！！");
-        log.info(sce.getServletContext().getServerInfo());
+        log.info("Servlet正在初始化...");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        log.info("ServletContext销毁");
+        log.info("Servlet销毁...");
     }
 }

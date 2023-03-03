@@ -43,7 +43,7 @@ public class SignInterceptor extends Interceptor {
 
     @Override
     public int priority() {
-        return 2;
+        return 4;
     }
 
     @Override

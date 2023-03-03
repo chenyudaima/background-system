@@ -15,7 +15,7 @@ import java.util.Map;
  * @author 沉鱼代码
  * @date 2023/2/19
  */
-@RequestMapping("/home/system/menu")
+@RequestMapping("/home/system/sysMenu")
 @RestController
 @RequiredArgsConstructor
 public class MenuController {

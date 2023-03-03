@@ -1,5 +1,6 @@
 package com.chenyudaima.web.controller;
 
+import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import javax.sql.DataSource;
 public class TestController {
 
 
-
+    @GetMapping("/1")
+    public Result<?> get() {
+        return Result.success("Niho");
+    }
 
 }

@@ -19,7 +19,7 @@ public class ThreadPoolConfig {
      * 获取默认配置线程池
      * @return 线程池
      */
-    public static ThreadPoolExecutor getExecutor() {
+    public static ThreadPoolExecutor getDefaultExecutor() {
 
         return new ThreadPoolExecutor(
                 //线程池核心数

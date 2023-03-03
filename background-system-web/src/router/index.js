@@ -44,6 +44,7 @@ router.beforeEach((to, from, next) => {
       //先加载路由
       routerUtil.loadRouter()
       count ++
+      
       if(count > 3) {
         router.push("/")
       }else {

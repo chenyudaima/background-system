@@ -1,7 +1,7 @@
 package com.chenyudaima.service.impl;
 
+import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
-import com.chenyudaima.enumeration.TokenClientEnum;
 import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
@@ -9,14 +9,12 @@ import com.chenyudaima.service.LoginService;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,19 +48,16 @@ public class LoginServiceImpl implements LoginService {
         //使用用户名和id创建token
         String token =  jwtUtil.createToken(sysUser.getId(), sysUser.getName());
 
-        //查询上次登录的token，如果存在则删除 不删除，加强提示功能
-        //Optional.ofNullable((String)redisUtil.hash_get(RedisKey.TOKEN_ALL, sysUser.getAccount())).ifPresent(x -> redisUtil.delete(x));
-
         //如果在TOKEN_ALL内部key存在则直接覆盖（挤下线）
         redisUtil.hash_put(RedisKey.TOKEN_ALL, sysUser.getId(), RedisKey.TOKEN + token);
 
         //给token绑定客户端信息
-        Map<TokenClientEnum, String> tokenClientMap = new HashMap<>();
-        tokenClientMap.put(TokenClientEnum.IP, request.getRemoteAddr());
-        tokenClientMap.put(TokenClientEnum.HOST, request.getRemoteHost());
+        Map<String, String> clientInfoMap = new HashMap<>();
+        clientInfoMap.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
+
 
         //设置1小时过期时间
-        redisUtil.set(RedisKey.TOKEN + token, tokenClientMap, expiration, TimeUnit.MINUTES);
+        redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, expiration, TimeUnit.MINUTES);
 
         return Result.success(token);
     }

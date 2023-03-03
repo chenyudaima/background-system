@@ -1,7 +1,9 @@
 import md5 from 'js-md5'
+import qs from 'qs'
 
 //对需要请求的参数进行签名
 function signature(config) {
+
   //请求的服务器路径
   let url = config.baseURL + config.url + "/"
 
@@ -13,20 +15,24 @@ function signature(config) {
 
   //参与加密的key，但不进行传参
   let accessKey = config.headers.Authorization
-
+  
   //唯一标识
   let nonce = `${config.method}#${url}#${timestamp}#${Math.random()}`
 
   if (config.method == "get") {
-    config.params = {
+
+    //对json中value为null的改为''空字符串
+    //axios的请求路径不会拼接为null的，这样改为''，等于所有都进行拼接，所有都进行参数签名
+    config.params = qs.parse(qs.stringify({
       ...config.params,
       timestamp: new Date().getTime(),
       accessKey: accessKey,
       nonce: nonce
-    }
+    }))
+
     params = ""
 
-    Object.keys(config.params).sort().forEach(key => {
+    Object.keys(config.params).sort().forEach((key) => {
       params += `${key}=${config.params[key]}&`
     })
 
@@ -34,6 +40,7 @@ function signature(config) {
 
     //删除json对象指定属性 accessKey不参与传输
     delete config.params.accessKey
+
   } else if (config.method == "post" || config.method == "put" || config.method == "patch") {
     let body = config.data
     if (body instanceof URLSearchParams) {
@@ -153,12 +160,11 @@ function signature(config) {
 
       params = params.substring(0, params.length - 1);
 
-
       //删除json对象指定属性 accessKey不参与传输
       delete config.data.accessKey
     }
   }
-  
+
   //设置参数签名请求头
   config.headers.signature = md5(params).toUpperCase()
 }

@@ -7,6 +7,7 @@ import com.chenyudaima.model.SysMenu;
 import com.chenyudaima.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Result<?> query(SysMenu sysMenu, int page, int pageSize) {
         Map<String, Object> map = new HashMap<>();
-        map.put("menuList", sysMenuMapper.select(sysMenu, page, pageSize));
+        map.put("sysMenuList", sysMenuMapper.select(sysMenu, page, pageSize));
         map.put("total", sysMenuMapper.selectCount(sysMenu));
         return Result.success(map);
     }
@@ -43,14 +44,14 @@ public class MenuServiceImpl implements MenuService {
         return Result.success();
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> deleteByIdBatch(String[] ids) {
         sysMenuMapper.deleteByIdBatch(ids);
         sysRoleMenuMapper.deleteByMenuIdBatch(ids);
         return Result.success();
     }
 
-    @Override
+    @Transactional(timeout = 60)
     public Result<?> deleteById(String id) {
         sysMenuMapper.deleteById(id);
         sysRoleMenuMapper.deleteByMenuId(id);

@@ -89,7 +89,8 @@ public class HttpDataUtil {
     }
 
     /**
-     * 获取http路径参数
+     * 获取http路径参数（value空的也会获取，就是map中的value是null）
+     *
      */
     public static TreeMap<String, String> getUrlParams(HttpServletRequest request) throws Exception {
         if (request.getQueryString().isEmpty()) {
@@ -101,7 +102,12 @@ public class HttpDataUtil {
         TreeMap<String, String> result = new TreeMap<>();
         for (String param : params) {
             String[] keyValue = param.split("=");
-            result.put(keyValue[0], keyValue[1]);
+
+            if(keyValue.length > 1) {
+                result.put(keyValue[0], keyValue[1]);
+            }else {
+                result.put(keyValue[0], "");
+            }
         }
         return result;
     }

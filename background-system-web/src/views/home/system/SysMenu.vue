@@ -34,7 +34,7 @@
     <!-- 表格 -->
     <el-main>
       <!-- 表格 -->
-      <el-table style="width: 100%;height: @rowheight*10 !important;" :data="menuList" border ref="checkedTable"
+      <el-table style="width: 100%;height: @rowheight*10 !important;" :data="sysMenuList" border ref="checkedTable"
         :header-cell-style="headerCellStyle">
         <el-table-column align="center" type="selection">
         </el-table-column>
@@ -90,30 +90,30 @@
     <!-- 表单 -->
     <el-dialog :title="formTitle" :visible.sync="dialog" width="30%" custom-class="dialogClass">
 
-      <el-form :model="menu" label-width="100px" ref="from">
+      <el-form :model="sysMenu" label-width="100px" ref="from">
 
         <el-form-item label="菜单名称" prop="name">
-          <el-input type="text" v-model="menu.name" autocomplete="off"></el-input>
+          <el-input type="text" v-model="sysMenu.name" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="父菜单" prop="parentId">
-          <el-input type="text" v-model="menu.parentId" autocomplete="off"></el-input>
+          <el-input type="text" v-model="sysMenu.parentId" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="路由路径" prop="routerPath">
-          <el-input type="text" v-model="menu.routerPath" autocomplete="off"></el-input>
+          <el-input type="text" v-model="sysMenu.routerPath" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="路由组件" prop="routerComponent">
-          <el-input v-model="menu.routerComponent"></el-input>
+          <el-input v-model="sysMenu.routerComponent"></el-input>
         </el-form-item>
 
         <el-form-item label="排序" prop="order">
-          <el-input v-model.number="menu.order"></el-input>
+          <el-input v-model.number="sysMenu.order"></el-input>
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
-          <el-input v-model="menu.description"></el-input>
+          <el-input v-model="sysMenu.description"></el-input>
         </el-form-item>
 
 
@@ -151,7 +151,7 @@ export default {
       total: 0,
 
       //当前页数据
-      menuList: [],
+      sysMenuList: [],
 
       //对话框
       dialog: false,
@@ -163,7 +163,7 @@ export default {
       formTitle: '',
 
       //默认数据模型
-      menu: {
+      sysMenu: {
         id: null,
         name: null,
         parentId: null,
@@ -208,17 +208,17 @@ export default {
         this.queryMenu[key] = null
       }
 
-      http.get("/home/system/menu", { params: param }).then(resp => {
+      http.get("/home/system/sysMenu", { params: param }).then(resp => {
         if (resp.code != 200) {
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
           return;
         }
         this.total = resp.data.total
-        if (resp.data.menuList.length == 0 && query.page > 1) {
+        if (resp.data.sysMenuList.length == 0 && query.page > 1) {
           this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
           return;
         }
-        this.menuList = resp.data.menuList
+        this.sysMenuList = resp.data.sysMenuList
       })
     },
 
@@ -242,9 +242,9 @@ export default {
       }
 
       if (ids.length == 1) {
-        await http.delete("/home/system/menu/" + ids[0])
+        await http.delete("/home/system/sysMenu/" + ids[0])
       } else {
-        await http.delete("/home/system/menu/", { data: { ids: ids } })
+        await http.delete("/home/system/sysMenu/", { data: { ids: ids } })
       }
 
       this.query()
@@ -253,11 +253,11 @@ export default {
 
     //提交表单
     submitForm() {
-      let menu = this.menu
+      let sysMenu = this.sysMenu
 
       //判断状态 1增加，2修改
       if (this.dialogStatus == 1) {
-        http.post("/home/system/menu", menu).then(resp => {
+        http.post("/home/system/sysMenu", sysMenu).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -269,7 +269,7 @@ export default {
       }
 
       if (this.dialogStatus == 2) {
-        http.patch("/home/system/menu", menu).then(resp => {
+        http.patch("/home/system/sysMenu", sysMenu).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -284,7 +284,7 @@ export default {
 
     //重置表单
     resetForm() {
-      this.menu = {
+      this.sysMenu = {
         id: null,
         name: null,
         parentId: null,
@@ -304,18 +304,18 @@ export default {
     },
 
     //修改
-    update(menu) {
+    update(sysMenu) {
       this.formTitle = "修改菜单"
       this.dialog = true
-      this.menu = { ...menu }
+      this.sysMenu = { ...sysMenu }
       this.dialogStatus = 2
     },
 
     //查看
-    show(menu) {
+    show(sysMenu) {
       this.formTitle = "查看菜单"
       this.dialog = true
-      this.menu = { ...menu }
+      this.sysMenu = { ...sysMenu }
       this.dialogStatus = 3
 
     },
@@ -327,7 +327,7 @@ export default {
     },
 
     exportExcel() {
-      http.get("/home/system/menu/exportExcel").then(resp => {
+      http.get("/home/system/sysMenu/exportExcel").then(resp => {
         let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
 
         const url = window.URL.createObjectURL(

@@ -47,6 +47,8 @@ public class HttpHeader {
      */
     public static final String K_REQUEST_HEADER_SIGNATURE = "Signature";
 
+    public static final String K_REQUEST_HEADER_USER_AGENT = "User-Agent";
+
 
 
 

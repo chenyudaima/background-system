@@ -1,21 +1,17 @@
 package com.chenyudaima.web.interceptor;
 
 import com.chenyudaima.constant.HttpHeader;
-import com.chenyudaima.constant.HttpMethod;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
-import com.chenyudaima.enumeration.TokenClientEnum;
 import com.chenyudaima.exception.SecurityException;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -87,17 +83,16 @@ public class SecurityInterceptor extends Interceptor {
         }
 
         //获取redis中token绑定的客户端
-        Map<TokenClientEnum, String> tokenClientMap = redisUtil.get(token);
+        Map<String, String> clientInfoMap = redisUtil.get(token);
 
         //对比当前请求的客户端是否相同
-        Map<TokenClientEnum, String> map = new HashMap<>();
-        map.put(TokenClientEnum.IP, request.getRemoteAddr());
-        map.put(TokenClientEnum.HOST, request.getRemoteHost());
+        Map<String, String> clientInfoMap1 = new HashMap<>();
+        clientInfoMap1.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
 
         //参数不同说明是被别人登录，或者当前的是非法用户，显示请重新登录
-        tokenClientMap.forEach((k,v) -> {
-            String value = map.get(k);
-            if(value != null && !value.equals(v)) {
+        clientInfoMap.forEach((k,v) -> {
+            String value = clientInfoMap1.get(k);
+            if(value == null || !value.equals(v)) {
                 throw new SecurityException("非法身份");
             }
         });

@@ -170,8 +170,8 @@ export default {
         ...this.queryRole
       }
 
-      for (var key in this.queryMenu) {
-        this.queryMenu[key] = null
+      for (var key in this.queryRole) {
+        this.queryRole[key] = null
       }
 
       http.get("/home/system/role", { params: param }).then(resp => {
@@ -179,6 +179,7 @@ export default {
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
           return;
         }
+
         this.total = resp.data.total
         this.menuList = resp.data.menuList
         if (resp.data.roleList.length == 0 && query.page > 1) {
