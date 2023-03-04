@@ -17,8 +17,6 @@ public class SysTimedTaskLog implements Serializable {
 
     private String executeParam;
     private String executeResult;
-
-    @JsonF(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date startExecuteTime;
 
     private Integer executeStatus;
