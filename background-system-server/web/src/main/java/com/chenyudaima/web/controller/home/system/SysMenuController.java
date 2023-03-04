@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping("/home/system/sysMenu")
 @RestController
 @RequiredArgsConstructor
-public class MenuController {
+public class SysMenuController {
     private final MenuService menuService;
 
     @GetMapping

@@ -4,19 +4,51 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chenyudaima.mapper.SysTimedTaskMapper">
 
-    <resultMap id="BaseResultMap" type="com.chenyudaima.model.SysTimedTask">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="classname" column="className" jdbcType="VARCHAR"/>
-            <result property="cron" column="cron" jdbcType="VARCHAR"/>
-            <result property="param" column="param" jdbcType="VARCHAR"/>
-            <result property="status" column="status" jdbcType="TINYINT"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-    </resultMap>
-
     <sql id="Base_Column_List">
-        id,className,cron,
-        param,status,description
+        id,class_name ,cron,
+        param,`status`,`description`
     </sql>
+
+    <insert id="insert" parameterType="com.chenyudaima.model.SysTimedTask" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_timed_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="className != null"> class_name, </if>
+            <if test="cron != null"> cron, </if>
+            <if test="param != null"> param, </if>
+            <if test="status != null"> `status`, </if>
+            <if test="description != null"> `description`, </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="className != null"> #{className}, </if>
+            <if test="cron != null">#{cron}, </if>
+            <if test="param != null">#{param}, </if>
+            <if test="status != null"> #{status}, </if>
+            <if test="description != null"> #{description}, </if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.chenyudaima.model.SysTimedTask">
+        update sys_timed_task
+        <set>
+            <if test="className != null and className != ''"> class_name = #{className}, </if>
+            <if test="cron != null and cron != ''"> cron = #{cron}, </if>
+            <if test="param != null and param != ''"> param = #{param}, </if>
+            <if test="status != null"> `status` = #{status}, </if>
+            <if test="description != null and description != ''"> `description` = #{description}, </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        delete from sys_timed_task where id = #{id}
+    </delete>
+
+    <delete id="deleteByIdBatch">
+        delete from sys_timed_task where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="selectByClassName" resultType="com.chenyudaima.model.SysTimedTask">
         select <include refid="Base_Column_List"/> from sys_timed_task where className = #{className}
@@ -29,11 +61,25 @@
     <select id="selectCount" resultType="java.lang.Long">
         select count(*)
         from sys_timed_task
+        <where>
+            <if test="className != null and className != ''">and class_name = #{className}</if>
+            <if test="status != null">and `status` = #{status}</if>
+        </where>
     </select>
 
     <select id="select" resultType="com.chenyudaima.model.SysTimedTask">
         select
         <include refid="Base_Column_List"/>
-        from sys_timed_task limit ${(page -1) * pageSize},#{pageSize}
+        from sys_timed_task
+        <where>
+            <if test="sysTimedTask.className != null and sysTimedTask.className != ''">and class_name = #{sysTimedTask.className}</if>
+            <if test="sysTimedTask.status != null">and `status` = #{sysTimedTask.status}</if>
+        </where>
+        limit ${(page -1) * pageSize},#{pageSize}
     </select>
+
+    <select id="selectById" resultType="com.chenyudaima.model.SysTimedTask">
+        select <include refid="Base_Column_List"/> from sys_timed_task where id = #{id}
+    </select>
+
 </mapper>

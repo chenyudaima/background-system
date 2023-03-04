@@ -5,7 +5,15 @@ body,
 }
 
 body {
+  /* 界面的边距 */
   margin: 0;
 
-  font-family:”Microsoft YaHei”,Arial,Helvetica,sans-serif,”宋体”;
+  /* 全局字体 */
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  /* font-family:”Microsoft YaHei”,Arial,Helvetica,sans-serif,”宋体”; */
+}
+
+/* 解决el-textarea字体问题 */
+.el-textarea__inner {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }

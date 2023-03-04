@@ -33,7 +33,7 @@
     <!-- 表格 -->
     <el-main>
       <!-- 表格 -->
-      <el-table style="width: 100%;height: @rowheight*10 !important;" :data="userList" border ref="checkedTable"
+      <el-table :cell-style="{'text-align':'center'}" style="width: 100%;height: @rowheight*10 !important;" :data="userList" border ref="checkedTable"
         :header-cell-style="headerCellStyle">
         <el-table-column align="center" type="selection">
         </el-table-column>

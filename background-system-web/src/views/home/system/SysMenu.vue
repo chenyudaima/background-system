@@ -7,15 +7,15 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="菜单名称">
-          <el-input v-model="queryMenu.name" @keydown.enter.native="query" />
+          <el-input v-model="querySysMenu.name" @keydown.enter.native="query" />
         </el-form-item>
 
         <el-form-item label="路由路径">
-          <el-input v-model="queryMenu.routerPath" @keydown.enter.native="query" />
+          <el-input v-model="querySysMenu.routerPath" @keydown.enter.native="query" />
         </el-form-item>
 
         <el-form-item label="路由组件">
-          <el-input v-model="queryMenu.routerComponent" @keydown.enter.native="query" />
+          <el-input v-model="querySysMenu.routerComponent" @keydown.enter.native="query" />
         </el-form-item>
 
         <el-form-item>
@@ -34,7 +34,7 @@
     <!-- 表格 -->
     <el-main>
       <!-- 表格 -->
-      <el-table style="width: 100%;height: @rowheight*10 !important;" :data="sysMenuList" border ref="checkedTable"
+      <el-table :cell-style="{'text-align':'center'}" style="width: 100%;height: @rowheight*10 !important;" :data="sysMenuList" border ref="checkedTable"
         :header-cell-style="headerCellStyle">
         <el-table-column align="center" type="selection">
         </el-table-column>
@@ -173,7 +173,7 @@ export default {
         description: null
       },
 
-      queryMenu: {
+      querySysMenu: {
         name: null,
         routerPath: null,
         routerComponent: null
@@ -201,11 +201,11 @@ export default {
       let param = {
         page: query.page,
         pageSize: query.pageSize,
-        ...this.queryMenu
+        ...this.querySysMenu
       }
 
-      for (var key in this.queryMenu) {
-        this.queryMenu[key] = null
+      for (var key in this.querySysMenu) {
+        this.querySysMenu[key] = null
       }
 
       http.get("/home/system/sysMenu", { params: param }).then(resp => {

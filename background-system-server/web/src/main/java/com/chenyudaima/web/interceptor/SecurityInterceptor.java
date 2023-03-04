@@ -103,8 +103,6 @@ public class SecurityInterceptor extends Interceptor {
         //把解析出来的数据放到请求中，内部有用户id，用户名
         request.setAttribute(RequestAttribute.CLAIMS, claims);
 
-
-        //从User-Agent请求头获取客户端参数
         return true;
     }
 

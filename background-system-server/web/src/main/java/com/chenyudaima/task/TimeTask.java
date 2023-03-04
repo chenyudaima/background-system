@@ -1,8 +1,19 @@
 package com.chenyudaima.task;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.TypeReference;
+import com.chenyudaima.mapper.SysTimedTaskLogMapper;
+import com.chenyudaima.model.SysTimedTask;
+import com.chenyudaima.model.SysTimedTaskLog;
+import com.chenyudaima.util.SpringUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -11,30 +22,58 @@ import java.util.Map;
  * @author 沉鱼代码
  * @date 2023/2/28
  */
+@Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public abstract class TimeTask implements Runnable {
+
+    private SysTimedTaskLogMapper sysTimedTaskLogMapper;
+
+    @Autowired
+    public void setSysTimedTaskLogMapper(SysTimedTaskLogMapper sysTimedTaskLogMapper) {
+        this.sysTimedTaskLogMapper = sysTimedTaskLogMapper;
+    }
 
     private Map<String, String> paramMap;
 
+    private SysTimedTask sysTimedTask;
+
     @Override
     public void run() {
-        Object result = null;
+        SysTimedTaskLog sysTimedTaskLog = new SysTimedTaskLog();
+        sysTimedTaskLog.setStartExecuteTime(new Date());
+        long time = System.currentTimeMillis();
+        String result = null;
+        int status = 1;
+
         try {
             result = run(paramMap);
         } catch (Exception e) {
-            //System.out.println(o.toString());//任务的返回
-            //e.toString() 异常信息
-            //e.getStackTrace()[0].toString() 异常定位
-        }
-    }
-
-    public void setParam(String param) {
-        if (param == null) {
-            return;
+            result = e + "\n" + e.getStackTrace()[0].toString();
+            status = 0;
         }
 
-        paramMap = JSON.parseObject(param, new TypeReference<Map<String, String>>() {});
+        time = System.currentTimeMillis() - time;
+        sysTimedTaskLog.setExecuteParam(sysTimedTask.getParam());
+        sysTimedTaskLog.setTimedTaskId(sysTimedTask.getId());
+        sysTimedTaskLog.setExecuteStatus(status);
+        sysTimedTaskLog.setElapsedTime(time);
+        sysTimedTaskLog.setExecuteResult(result);
+        sysTimedTaskLogMapper.insert(sysTimedTaskLog);
+    }
+
+    public void setSysTimedTask(SysTimedTask sysTimedTask) {
+        if (sysTimedTask.getParam() != null) {
+            try {
+                paramMap = JSON.parseObject(sysTimedTask.getParam(), new TypeReference<Map<String, String>>() {
+                });
+            }catch (Exception e) {
+                throw new JSONException("参数需要标准JSON格式，JSON中的value非数字需要带 双引号\"\" 或者 单引号''");
+            }
+        }
+
+        this.sysTimedTask = sysTimedTask;
     }
 
 
-    abstract Object run(Map<String, String> paramMap) throws Exception;
+    abstract String run(Map<String, String> paramMap) throws Exception;
 }

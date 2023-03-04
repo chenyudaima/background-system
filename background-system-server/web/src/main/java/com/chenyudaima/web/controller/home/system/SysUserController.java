@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ import java.util.Map;
 @RequestMapping("/home/system/user")
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class SysUserController {
 
     private final UserService userService;
 

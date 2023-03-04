@@ -27,6 +27,7 @@ function routerHandler(menuList) {
     if (menu.children == null) {
       menu.children = []
     }
+    
     if (menu.children.length > 0) {
       array = [...array, ...routerHandler(menu.children)]
     }

@@ -41,7 +41,9 @@ public class SpringListener implements ApplicationRunner {
         List<SysTimedTask> sysTimedTasks = SpringUtil.getBean(SysTimedTaskMapper.class)
                 .selectAll();
         for (SysTimedTask sysTimedTask : sysTimedTasks) {
-            TaskService.startTimeTask(sysTimedTask);
+            if(sysTimedTask.getStatus() != 0) {
+                TaskService.startTimeTask(sysTimedTask);
+            }
         }
     }
 }

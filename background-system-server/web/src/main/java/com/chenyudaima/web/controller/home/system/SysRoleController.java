@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/home/system/role")
 @RequiredArgsConstructor
-public class RoleController {
+public class SysRoleController {
     private final RoleService roleService;
 
     @GetMapping

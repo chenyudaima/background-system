@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyudaima.mapper.SysTimedTaskLogMapper">
+
+    <sql id="Base_Column_List">
+        id,timed_task_id,execute_param,execute_result,
+        start_execute_time,execute_status,elapsed_time
+    </sql>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.chenyudaima.model.SysTimedTaskLog"
+            useGeneratedKeys="true">
+        insert into sys_timed_task_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="timedTaskId != null">timed_task_id,</if>
+            <if test="executeParam != null">execute_param,</if>
+            <if test="executeResult != null">execute_result,</if>
+            <if test="startExecuteTime != null">start_execute_time,</if>
+            <if test="executeStatus != null">execute_status,</if>
+            <if test="elapsedTime != null">elapsed_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="timedTaskId != null">#{timedTaskId},</if>
+            <if test="executeParam != null">#{executeParam},</if>
+            <if test="executeResult != null">#{executeResult},</if>
+            <if test="startExecuteTime != null">#{startExecuteTime},</if>
+            <if test="executeStatus != null">#{executeStatus},</if>
+            <if test="elapsedTime != null">#{elapsedTime},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteBySysTimedTaskId">
+        delete
+        from sys_timed_task_log
+        where timed_task_id = #{id}
+    </delete>
+
+    <delete id="deleteBySysTimedTaskIds">
+        delete from sys_timed_task_log where timed_task_id in
+        <foreach collection="timedTaskIds" item="timedTaskId" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="select" resultType="com.chenyudaima.model.SysTimedTaskLog">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_timed_task_log where timed_task_id = #{sysTimedTaskLog.timedTaskId}
+        order by start_execute_time desc
+        limit ${(page -1) * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from sys_timed_task_log
+    </select>
+
+
+</mapper>

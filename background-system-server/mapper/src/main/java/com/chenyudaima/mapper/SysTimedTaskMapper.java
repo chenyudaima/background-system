@@ -15,4 +15,14 @@ public interface SysTimedTaskMapper {
 
     List<SysTimedTask> select(SysTimedTask sysTimedTask, int page, int pageSize);
 
+    int update(SysTimedTask sysTimedTask);
+
+    SysTimedTask selectById(String id);
+
+    int deleteById(String id);
+
+    int deleteByIdBatch(String[] ids);
+
+    int insert(SysTimedTask sysTimedTask);
+
 }

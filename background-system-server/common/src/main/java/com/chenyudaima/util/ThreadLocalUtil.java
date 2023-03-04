@@ -13,8 +13,16 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * ThreadLocal 和 TransmittableThreadLocal可以同时使用，互不影响
  */
 public class ThreadLocalUtil {
+
+    /**
+     * 本地线程操作
+     */
     private static final ThreadLocal<Object> THREAD_LOCAL = new ThreadLocal<>();
 
+
+    /**
+     * 父子线程操作
+     */
     private static  final TransmittableThreadLocal<Object> TRANSMITTABLE_THREAD_LOCAL = new TransmittableThreadLocal<>();
 
     /**
@@ -41,7 +49,7 @@ public class ThreadLocalUtil {
 
     /**
      * 放到当前线程中，子线程也能拿
-     * @param o
+     * @param o 为null的话内部会自动remove操作
      */
     public static void tSet(Object o) {
         TRANSMITTABLE_THREAD_LOCAL.set(o);
