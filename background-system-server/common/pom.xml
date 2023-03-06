@@ -25,6 +25,9 @@
         <dependency>
             <groupId>org</groupId>
             <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/opencv-3413.jar</systemPath>
         </dependency>
 
         <!--解析xml文件工具-->
@@ -136,26 +139,26 @@
 
 
             <!--将指定jar放到maven仓库-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>${maven-install-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                        <configuration>
-                            <groupId>org</groupId>
-                            <artifactId>opencv</artifactId>
-                            <version>${opencv.version}</version>
-                            <packaging>jar</packaging>
-                            <file>${basedir}/lib/opencv-3413.jar</file>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+            <!--    <groupId>org.apache.maven.plugins</groupId>-->
+            <!--    <artifactId>maven-install-plugin</artifactId>-->
+            <!--    <version>${maven-install-plugin.version}</version>-->
+            <!--    <executions>-->
+            <!--        <execution>-->
+            <!--            <phase>clean</phase>-->
+            <!--            <goals>-->
+            <!--                <goal>install-file</goal>-->
+            <!--            </goals>-->
+            <!--            <configuration>-->
+            <!--                <groupId>org</groupId>-->
+            <!--                <artifactId>opencv</artifactId>-->
+            <!--                <version>${opencv.version}</version>-->
+            <!--                <packaging>jar</packaging>-->
+            <!--                <file>${basedir}/lib/opencv-3413.jar</file>-->
+            <!--            </configuration>-->
+            <!--        </execution>-->
+            <!--    </executions>-->
+            <!--</plugin>-->
 
         </plugins>
     </build>

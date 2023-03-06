@@ -50,8 +50,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                     .addPathPatterns(processingPath(interceptor.getAddPathPatterns()))
                     .excludePathPatterns(processingPath(interceptor.getExcludePathPatterns()))
         ));
-
-
     }
 
 

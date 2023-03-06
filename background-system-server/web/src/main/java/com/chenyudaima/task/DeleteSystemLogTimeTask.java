@@ -3,7 +3,6 @@ package com.chenyudaima.task;
 import com.alibaba.fastjson.JSON;
 import com.chenyudaima.mapper.SysTimedTaskLogMapper;
 import com.chenyudaima.util.RedisUtil;
-import com.github.houbb.auto.log.annotation.AutoLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
