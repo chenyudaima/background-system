@@ -8,14 +8,15 @@
         <span style="margin-left: 20px;">数据核对系统</span>
       </div>
       <div>
-        
+
         <el-dropdown style="padding: 20px" trigger="click">
           <span style="color: #409EFF">
             {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>个人信息</el-dropdown-item>
-            <el-dropdown-item><el-button type="danger" size="mini" round @click="loginOut">退出</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button type="danger" size="mini" round
+                @click="loginOut">退出</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 

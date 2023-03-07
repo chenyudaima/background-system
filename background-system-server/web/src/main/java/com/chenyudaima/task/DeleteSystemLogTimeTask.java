@@ -1,14 +1,8 @@
 package com.chenyudaima.task;
 
-import com.alibaba.fastjson.JSON;
-import com.chenyudaima.mapper.SysTimedTaskLogMapper;
-import com.chenyudaima.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -26,12 +20,10 @@ import java.util.Map;
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class DeleteSystemLogTimeTask extends TimeTask {
 
     String run(Map<String, String> paramMap) throws Exception {
 
-        log.error("你好");
         return "成功";
     }
 }

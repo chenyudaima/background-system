@@ -6,11 +6,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.chenyudaima.mapper.SysTimedTaskLogMapper;
 import com.chenyudaima.model.SysTimedTask;
 import com.chenyudaima.model.SysTimedTaskLog;
-import com.chenyudaima.util.SpringUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +40,8 @@ public abstract class TimeTask implements Runnable {
         SysTimedTaskLog sysTimedTaskLog = new SysTimedTaskLog();
         sysTimedTaskLog.setStartExecuteTime(new Date());
         long time = System.currentTimeMillis();
-        String result = null;
+
+        String result;
         int status = 1;
 
         try {

@@ -6,9 +6,9 @@ import com.chenyudaima.util.SpringUtil;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 
 /**
@@ -18,14 +18,17 @@ import java.util.concurrent.ScheduledFuture;
  * @date 2023/3/1
  */
 public class TaskService {
+
+    /**
+     * 定时任务线程池
+     */
     private static final ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
 
     /**
      * key 任务id
      * value 定时任务
      */
-    private static final Map<String, ScheduledFuture<?>> map = new ConcurrentHashMap<>();
-
+    private static final Map<String, ScheduledFuture<?>> map = new HashMap<>();
 
     static {
         threadPoolTaskScheduler.initialize();
@@ -35,10 +38,10 @@ public class TaskService {
      * 根据任务id启动定时任务
      * @param sysTimedTask 参数
      */
-    public static void startTimeTask(SysTimedTask sysTimedTask) throws ClassNotFoundException, JSONException {
+    public static synchronized void startTimeTask(SysTimedTask sysTimedTask) throws ClassNotFoundException, JSONException {
         ScheduledFuture<?> sFuture = map.get(sysTimedTask.getId());
 
-        //说明之前启动过，防止重复启动
+        //说明上一条并发线程启动过，防止重复启动
         if(sFuture != null) {
             return;
         }
@@ -57,7 +60,7 @@ public class TaskService {
      * 根据任务id关闭定时任务
      * @param id 任务id
      */
-    public static void stopTimeTask(String id) {
+    public static synchronized void stopTimeTask(String id) {
         Optional.ofNullable(map.get(id)).ifPresent(scheduledFuture -> {
             //取消定时任务
             scheduledFuture.cancel(true);

@@ -102,7 +102,7 @@
     <el-dialog title="查看日志" :visible.sync="logDialog" width="50%" custom-class="dialogClass">
 
       <el-form :inline="true" @submit.native.prevent>
-        
+
         <el-form-item label="状态">
           <el-input v-model="sysTimedTaskLog.status" @keydown.enter.native="queryLog" />
         </el-form-item>
@@ -446,7 +446,7 @@ export default {
         page: this.logPage,
         pageSize: this.logPageSize
       }
-    
+
 
       http.get("/home/system/sysTimedTask/log", { params: param }).then(resp => {
         this.sysTimedTaskLogList = resp.data.sysTimedTaskLogList

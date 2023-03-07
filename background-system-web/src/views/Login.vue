@@ -47,7 +47,7 @@ export default {
 
   created() {
     let message = this.$route.query.message
-    if(message != null) {
+    if (message != null) {
       this.$message.error(message)
     }
 

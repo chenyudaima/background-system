@@ -1,5 +1,6 @@
 package com.chenyudaima.util.opc;
 
+import com.chenyudaima.config.OpencvConfig;
 import com.chenyudaima.config.ThreadPoolConfig;
 import org.eclipse.milo.opcua.sdk.client.OpcUaClient;
 import org.eclipse.milo.opcua.sdk.client.api.subscriptions.UaMonitoredItem;
@@ -284,5 +285,6 @@ public class OpcUaSubscription {
     public void add(Supplier<Collection<OpcNode>> supplier, BiConsumer<OpcNode, DataValue> biConsumer) {
         nodeMap.put(supplier, biConsumer);
     }
+
 
 }

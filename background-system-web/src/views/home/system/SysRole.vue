@@ -26,8 +26,8 @@
     <!-- 表格 -->
     <el-main>
       <!-- 表格 -->
-      <el-table :cell-style="{'text-align':'center'}" style="width: 100%;height: @rowheight*10 !important;" :data="roleList" border ref="checkedTable"
-        :header-cell-style="headerCellStyle">
+      <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
+        :data="roleList" border ref="checkedTable" :header-cell-style="headerCellStyle">
         <el-table-column align="center" type="selection">
         </el-table-column>
 
@@ -81,7 +81,8 @@
         </el-form-item>
 
         <el-form-item label="角色菜单" prop="description">
-          <el-tree ref="tree" :data="menuList" show-checkbox node-key="id" :props="{ children: 'children', label: 'name'}">
+          <el-tree ref="tree" :data="menuList" show-checkbox node-key="id"
+            :props="{ children: 'children', label: 'name' }">
           </el-tree>
         </el-form-item>
 
@@ -259,7 +260,7 @@ export default {
         description: null,
         menuIds: []
       }
-      
+
       this.$refs.tree.setCheckedKeys([])
     },
 
@@ -271,7 +272,7 @@ export default {
       this.$nextTick(() => {
         this.resetForm()
       })
-      
+
     },
 
     //修改
@@ -302,7 +303,7 @@ export default {
           this.$refs.tree.setChecked(x, true)
         })
       })
-      
+
     },
 
     //关闭提示框
