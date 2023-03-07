@@ -26,7 +26,7 @@ public class ThreadPoolConfig {
                 POLLER_THREAD_COUNT + 1,
 
                 //线程池允许的最大线程数
-                POLLER_THREAD_COUNT * 8,
+                POLLER_THREAD_COUNT * 2,
 
                 //线程闲置超时时间
                 10,

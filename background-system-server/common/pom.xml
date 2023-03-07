@@ -15,6 +15,13 @@
 
     <dependencies>
 
+        <!--application.properties配置处理器 使@EnableConfigurationProperties注解生效-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!--ThreadLocal加强，父子线程参数传递-->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -25,10 +32,14 @@
         <dependency>
             <groupId>org</groupId>
             <artifactId>opencv</artifactId>
-            <version>${opencv.version}</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/opencv-3413.jar</systemPath>
         </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>org</groupId>-->
+        <!--    <artifactId>opencv</artifactId>-->
+        <!--    <version>${opencv.version}</version>-->
+        <!--    <scope>system</scope>-->
+        <!--    <systemPath>${basedir}/lib/opencv-3413.jar</systemPath>-->
+        <!--</dependency>-->
 
         <!--解析xml文件工具-->
         <dependency>
@@ -74,6 +85,12 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.objenesis</groupId>
+                    <artifactId>objenesis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--http请求工具-->
@@ -139,26 +156,26 @@
 
 
             <!--将指定jar放到maven仓库-->
-            <!--<plugin>-->
-            <!--    <groupId>org.apache.maven.plugins</groupId>-->
-            <!--    <artifactId>maven-install-plugin</artifactId>-->
-            <!--    <version>${maven-install-plugin.version}</version>-->
-            <!--    <executions>-->
-            <!--        <execution>-->
-            <!--            <phase>clean</phase>-->
-            <!--            <goals>-->
-            <!--                <goal>install-file</goal>-->
-            <!--            </goals>-->
-            <!--            <configuration>-->
-            <!--                <groupId>org</groupId>-->
-            <!--                <artifactId>opencv</artifactId>-->
-            <!--                <version>${opencv.version}</version>-->
-            <!--                <packaging>jar</packaging>-->
-            <!--                <file>${basedir}/lib/opencv-3413.jar</file>-->
-            <!--            </configuration>-->
-            <!--        </execution>-->
-            <!--    </executions>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>${maven-install-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>org</groupId>
+                            <artifactId>opencv</artifactId>
+                            <version>${opencv.version}</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/opencv-3413.jar</file>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
         </plugins>
     </build>

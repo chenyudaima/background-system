@@ -33,7 +33,7 @@ public class OpencvConfig {
         File file = new File(OpencvConfig.DLL_PATH);
 
         if(!file.exists()) {
-            try(InputStream is = OpencvUtil.class.getResourceAsStream("/" + Resources.OPENCV + "/" + Resources.OPENCV_JAVA3413_DLL);
+            try(InputStream is = OpencvConfig.class.getResourceAsStream("/" + Resources.OPENCV + "/" + Resources.OPENCV_JAVA3413_DLL);
                 OutputStream os = Files.newOutputStream(file.toPath())
             ) {
                 byte[] buffer = new byte[1024];

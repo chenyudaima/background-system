@@ -5,6 +5,7 @@ import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
+import com.chenyudaima.properties.JwtProperties;
 import com.chenyudaima.service.LoginService;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
@@ -29,8 +30,7 @@ public class LoginServiceImpl implements LoginService {
     private final RedisUtil redisUtil;
     private final HttpServletRequest request;
 
-    @Value("${jwt.config.expiration}")
-    private int expiration;
+    private final JwtProperties jwtProperties;
 
     @Override
     public Result<?> login(String account, String password) {
@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
 
 
         //设置1小时过期时间
-        redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, expiration, TimeUnit.MINUTES);
+        redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, jwtProperties.getExpiration(), TimeUnit.MINUTES);
 
         return Result.success(token);
     }

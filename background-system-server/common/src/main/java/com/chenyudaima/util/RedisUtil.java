@@ -248,4 +248,33 @@ public class RedisUtil {
         return redissonClient.getLock(key);
     }
 
+    /**
+     * 根据表名生成主键Id
+     * 可优化
+     * @param tableName 表名
+     * @return 主键Id
+     */
+    public Long getId(String tableName) throws Exception {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+        //String.format("%1$02d", var)
+        // %后的1指第一个参数，当前只有var一个可变参数，所以就是指var。
+        // $后的0表示，位数不够用0补齐，如果没有这个0（如%1$nd）就以空格补齐，0后面的n表示总长度，总长度可以可以是大于9例如（%1$010d），d表示将var按十进制转字符串，长度不够的话用0或空格补齐。
+
+        String monthFormat = String.format("%1$02d", month);
+        String dayFormat = String.format("%1$02d", day);
+        String hourFormat = String.format("%1$02d", hour);
+        String prefix = year + monthFormat + dayFormat+hourFormat;
+
+        Long increment = redisTemplate.opsForValue().increment(tableName + "_id_" + prefix,1);
+
+        //往前补6位
+        return Long.valueOf(prefix + String.format("%1$06d", increment));
+    }
+
 }

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.chenyudaima.mapper.SysTimedTaskLogMapper;
 import com.chenyudaima.model.SysTimedTask;
 import com.chenyudaima.model.SysTimedTaskLog;
+import com.chenyudaima.util.Snowflake;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,9 +27,16 @@ public abstract class TimeTask implements Runnable {
 
     private SysTimedTaskLogMapper sysTimedTaskLogMapper;
 
+    private Snowflake snowflake;
+
     @Autowired
     public void setSysTimedTaskLogMapper(SysTimedTaskLogMapper sysTimedTaskLogMapper) {
         this.sysTimedTaskLogMapper = sysTimedTaskLogMapper;
+    }
+
+    @Autowired
+    public void setSnowflakeIdWorker(Snowflake snowflake) {
+        this.snowflake = snowflake;
     }
 
     private Map<String, String> paramMap;
@@ -37,9 +45,10 @@ public abstract class TimeTask implements Runnable {
 
     @Override
     public void run() {
+        long time = System.currentTimeMillis();
         SysTimedTaskLog sysTimedTaskLog = new SysTimedTaskLog();
         sysTimedTaskLog.setStartExecuteTime(new Date());
-        long time = System.currentTimeMillis();
+        sysTimedTaskLog.setId(String.valueOf(snowflake.nextId()));
 
         String result;
         int status = 1;

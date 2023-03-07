@@ -48,6 +48,11 @@ public class OpcUaSubscription {
     private int heartbeat = 0;
 
     /**
+     * 是否运行（状态）
+     */
+    private boolean status = false;
+
+    /**
      * key 获取订阅节点的回调函数
      * value 节点的订阅回调函数
      * key里面的节点对应的回调函数是value
@@ -199,6 +204,7 @@ public class OpcUaSubscription {
         );
 
         try {
+
             //创建监测请求
             MonitoredItemCreateRequest request = new MonitoredItemCreateRequest(
                     readValueId, MonitoringMode.Reporting, parameters
@@ -251,29 +257,39 @@ public class OpcUaSubscription {
     }
 
     /**
-     * 运行 （全局只需执行一次）
+     * 运行 （全局只需执行一次）（运行一次和多次的效果一样）
      */
     public void run() {
-        executor.execute(() -> {
-            //发起连接
-            connect();
+        if(status) return;
 
-            //开启心跳线程
-            heartbeat();
+        synchronized (this) {
+            if(!status) {
+                executor.execute(() -> {
+                    //修改状态
+                    status = true;
 
-            //订阅节点
-            nodeMap.forEach((supplier, biConsumer) -> {
-                Collection<OpcNode> opcNodes = supplier.get();
-                for (OpcNode node : opcNodes) {
-                    executor.execute(() -> {
-                        node.setBiConsumer(biConsumer);
-                        subscription(node);
+                    //发起连接
+                    connect();
+
+                    //开启心跳线程
+                    heartbeat();
+
+                    //订阅节点
+                    nodeMap.forEach((supplier, biConsumer) -> {
+                        Collection<OpcNode> opcNodes = supplier.get();
+                        for (OpcNode node : opcNodes) {
+                            executor.execute(() -> {
+                                node.setBiConsumer(biConsumer);
+                                subscription(node);
+                            });
+
+                        }
                     });
 
-                }
-            });
+                });
+            }
+        }
 
-        });
     }
 
 

@@ -4,6 +4,7 @@ import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
 import com.chenyudaima.exception.SecurityException;
+import com.chenyudaima.properties.JwtProperties;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import io.jsonwebtoken.Claims;
@@ -25,9 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class SecurityInterceptor extends Interceptor {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
-
-    @Value("${jwt.config.expiration}")
-    private int expiration;
+    private final JwtProperties jwtProperties;
 
     @Override
     public String[] getAddPathPatterns() {
@@ -98,7 +97,7 @@ public class SecurityInterceptor extends Interceptor {
         });
 
         //重置redis中的token过期时间
-        redisUtil.expire(token, expiration, TimeUnit.MINUTES);
+        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
 
         //把解析出来的数据放到请求中，内部有用户id，用户名
         request.setAttribute(RequestAttribute.CLAIMS, claims);

@@ -13,6 +13,7 @@
             useGeneratedKeys="true">
         insert into sys_timed_task_log
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
             <if test="timedTaskId != null">timed_task_id,</if>
             <if test="executeParam != null">execute_param,</if>
             <if test="executeResult != null">execute_result,</if>
@@ -21,6 +22,7 @@
             <if test="elapsedTime != null">elapsed_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
             <if test="timedTaskId != null">#{timedTaskId},</if>
             <if test="executeParam != null">#{executeParam},</if>
             <if test="executeResult != null">#{executeResult},</if>

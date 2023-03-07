@@ -1,7 +1,9 @@
 package com.chenyudaima.util;
 
 
+import com.chenyudaima.properties.JwtProperties;
 import io.jsonwebtoken.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -12,10 +14,10 @@ import java.util.Map;
  * Jwt工具类
  */
 @Component
-@Slf4j
+@RequiredArgsConstructor
 public class JwtUtil {
-    @Value("${jwt.config.signKey}")
-    private String signWith;
+
+    private final JwtProperties jwtProperties;
 
     /**
      * 创建token
@@ -39,7 +41,7 @@ public class JwtUtil {
                 .setIssuedAt(new Date())
 
                 //加密方式和key
-                .signWith(SignatureAlgorithm.HS512,signWith);
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSignKey());
 
         //过期时间在redis设置
         //if(expiration > 0) {
@@ -59,6 +61,7 @@ public class JwtUtil {
      * 解析token
      */
     public Claims parseToken(String token) {
-        return Jwts.parser().setSigningKey(signWith).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(jwtProperties.getSignKey()).parseClaimsJws(token).getBody();
     }
+
 }
