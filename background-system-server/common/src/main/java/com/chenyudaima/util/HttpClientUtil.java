@@ -512,7 +512,7 @@ public class HttpClientUtil {
         HttpEntity httpEntity = multipartEntityBuilder.build();
         httpPost.setEntity(httpEntity);
         try {
-            return getHttpResult(response,httpClient,httpPost);
+            return getHttpResult(response, httpClient, httpPost);
         }finally {
             EntityUtils.consume(httpEntity);
             close(response);

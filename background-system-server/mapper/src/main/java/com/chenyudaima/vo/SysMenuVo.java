@@ -22,6 +22,8 @@ public class SysMenuVo implements Serializable {
 
     private String routerComponent;
 
+    private String icon;
+
     private String description;
 
     private Integer order;

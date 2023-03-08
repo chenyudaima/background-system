@@ -45,6 +45,11 @@
         </foreach>
     </delete>
 
+    <delete id="deleteByDay">
+        delete from sys_timed_task_log
+        where (TO_DAYS(NOW()) - TO_DAYS(start_execute_time)) >= #{day}
+    </delete>
+
     <select id="select" resultType="com.chenyudaima.model.SysTimedTaskLog">
         select
         <include refid="Base_Column_List"/>

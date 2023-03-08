@@ -20,7 +20,7 @@
           </el-dropdown-menu>
         </el-dropdown>
 
-        <el-button type="danger" round @click="loginOut">退出</el-button>
+        <el-button type="danger" round @click="loginOut" size="mini">退出</el-button>
       </div>
     </el-header>
 
@@ -49,7 +49,7 @@
 
                 <!--一级菜单 -->
                 <template slot="title">
-                  <!-- <i v-bind:class="item.iconwebcode"></i> -->
+                  <i :class="item.icon"></i>
                   <span>{{ item.name }}</span>
                 </template>
 
@@ -59,13 +59,13 @@
 
                     <!-- 二级菜单 -->
                     <template slot="title">
-                      <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
+                      <i :class="subItem.icon"></i>
                       {{ subItem.name }}
                     </template>
 
 
                     <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id" :index="threeItem.routerPath">
-                      <!-- <i v-bind:class="threeItem.iconwebcode"></i> -->
+                      <i :class="threeItem.icon"></i>
                       {{ threeItem.name }}</el-menu-item>
                   </el-submenu>
 
@@ -74,7 +74,7 @@
 
                     <!--二级菜单 -->
                     <template slot="title">
-                      <!-- <i v-bind:class="subItem.iconwebcode"></i> -->
+                      <i :class="subItem.icon"></i>
                       {{ subItem.name }}
                     </template>
 
@@ -86,7 +86,7 @@
             <!--一级菜单 -->
             <template v-else>
               <el-menu-item :index="item.routerPath" :key="item.id">
-                <!-- <i v-bind:class="item.iconwebcode"></i> -->
+                <i :class="item.icon"></i>
                 {{ item.name }}
               </el-menu-item>
             </template>

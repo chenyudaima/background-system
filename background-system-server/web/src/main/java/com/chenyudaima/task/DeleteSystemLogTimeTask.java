@@ -1,5 +1,6 @@
 package com.chenyudaima.task;
 
+import com.chenyudaima.mapper.SysTimedTaskLogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -22,8 +23,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DeleteSystemLogTimeTask extends TimeTask {
 
-    String run(Map<String, String> paramMap) throws Exception {
+    private final SysTimedTaskLogMapper sysTimedTaskLogMapper;
 
-        return "成功";
+    String run(Map<String, String> paramMap) throws Exception {
+        //删除定时任务n天前的日志
+        sysTimedTaskLogMapper.deleteByDay(Integer.parseInt(paramMap.get("sys_timed_task_log_the_other_day")));
+
+        return null;
     }
+
 }

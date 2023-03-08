@@ -1,5 +1,6 @@
 package com.chenyudaima.web.interceptor;
 
+import com.chenyudaima.config.WebMvcConfig;
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
@@ -95,6 +96,10 @@ public class SecurityInterceptor extends Interceptor {
                 throw new SecurityException("非法身份");
             }
         });
+
+        //请求的控制器路径
+        String path = request.getServletPath().substring(WebMvcConfig.PATH.length());
+
 
         //重置redis中的token过期时间
         redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);

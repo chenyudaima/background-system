@@ -4,19 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chenyudaima.mapper.SysMenuMapper">
 
-    <resultMap id="BaseResultMap" type="com.chenyudaima.model.SysMenu">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="name" column="name" jdbcType="VARCHAR"/>
-            <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
-            <result property="routerPath" column="router_path" jdbcType="VARCHAR"/>
-            <result property="routerComponent" column="router_component" jdbcType="VARCHAR"/>
-            <result property="description" column="description" jdbcType="VARCHAR"/>
-            <result property="order" column="order" jdbcType="INTEGER"/>
-    </resultMap>
 
     <sql id="Base_Column_List">
         id,`name`,parent_id,
-        router_path,router_component,`description`,`order`
+        router_path,router_component,icon,`description`,`order`
     </sql>
 
     <insert id="insert">
@@ -26,6 +17,7 @@
             <if test="parentId != null"> parent_id, </if>
             <if test="routerPath != null"> router_path, </if>
             <if test="routerComponent != null"> router_component, </if>
+            <if test="icon != null"> icon, </if>
             <if test="order != null"> `order`, </if>
             <if test="description != null"> `description`, </if>
         </trim>
@@ -35,6 +27,7 @@
             <if test="parentId != null"> #{parentId}, </if>
             <if test="routerPath != null"> #{routerPath}, </if>
             <if test="routerComponent != null"> #{routerComponent}, </if>
+            <if test="icon != null"> #{icon}, </if>
             <if test="order != null"> #{order}, </if>
             <if test="description != null"> #{description}, </if>
         </trim>
@@ -47,6 +40,7 @@
             <if test="parentId != null">parent_id=#{parentId},</if>
             <if test="routerPath != null">router_path=#{routerPath},</if>
             <if test="routerComponent != null">router_component=#{routerComponent},</if>
+            <if test="icon != null">icon=#{icon},</if>
             <if test="order != null">`order`=#{order},</if>
             <if test="description != null">`description`=#{description},</if>
         </set>

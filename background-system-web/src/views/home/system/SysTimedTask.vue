@@ -75,6 +75,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="show(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="run(scope.row)">执行一次</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -461,6 +462,15 @@ export default {
     logHandleCurrentChange(page) {
       this.logPage = page
       this.queryLog()
+    },
+    run(sysTimedTask) {
+      http.post("/home/system/sysTimedTask/run", sysTimedTask).then(resp => {
+        if(resp.code == 200) {
+          this.$message.success("执行成功")
+        }else {
+          this.$message.error(resp.message)
+        }
+      })
     }
   }
 

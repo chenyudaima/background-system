@@ -44,7 +44,7 @@ public class FileInterceptor extends Interceptor {
 
     @Override
     public int priority() {
-        return 3;
+        return 2;
     }
 
     @Override

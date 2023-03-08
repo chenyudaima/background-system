@@ -31,7 +31,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     /**
      * 给Controller加上前缀 （当作项目部署路径）
      */
-    private static final String PATH = "/system_api";
+    public static final String PATH = "/system_api";
 
     /**
      * 配置拦截器 （会自动查找实现Interceptor接口的类进行配置）

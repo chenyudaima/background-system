@@ -81,8 +81,12 @@
         </el-form-item>
 
         <el-form-item label="角色菜单" prop="description">
-          <el-tree ref="tree" :data="menuList" show-checkbox node-key="id"
-            :props="{ children: 'children', label: 'name' }">
+          <el-tree ref="tree" :data="menuList" show-checkbox node-key="id">
+            <span class = "custom-tree-node" slot-scope = " { data }">
+              <i :class="data.icon"></i>
+              &nbsp;
+              <span>{{ data.name }}</span>
+            </span>
           </el-tree>
         </el-form-item>
 

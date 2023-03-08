@@ -55,7 +55,6 @@ public class LoginServiceImpl implements LoginService {
         Map<String, String> clientInfoMap = new HashMap<>();
         clientInfoMap.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
 
-
         //设置1小时过期时间
         redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, jwtProperties.getExpiration(), TimeUnit.MINUTES);
 

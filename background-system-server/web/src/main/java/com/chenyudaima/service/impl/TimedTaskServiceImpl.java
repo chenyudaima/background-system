@@ -7,6 +7,9 @@ import com.chenyudaima.model.SysTimedTask;
 import com.chenyudaima.model.SysTimedTaskLog;
 import com.chenyudaima.service.TimedTaskService;
 import com.chenyudaima.task.TaskService;
+import com.chenyudaima.task.TimeTask;
+import com.chenyudaima.util.SpringUtil;
+import com.chenyudaima.util.ThreadPoolUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
  * @author 沉鱼代码
@@ -98,6 +102,18 @@ public class TimedTaskServiceImpl implements TimedTaskService {
         map.put("sysTimedTaskLogList", sysTimedTaskLogMapper.select(sysTimedTaskLog, page, pageSize));
         map.put("total", sysTimedTaskLogMapper.selectCount(sysTimedTaskLog));
         return Result.success(map);
+    }
+
+    @Override
+    public Result<?> run(SysTimedTask sysTimedTask) {
+        try {
+            TimeTask timeTask = (TimeTask) SpringUtil.getBean(Class.forName(sysTimedTask.getClassName()));
+            timeTask.setSysTimedTask(sysTimedTask);
+            ThreadPoolUtil.submit(timeTask).get();
+        } catch (Exception e) {
+            throw new RuntimeException("执行失败,{}", e);
+        }
+        return Result.success();
     }
 
 

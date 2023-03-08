@@ -48,10 +48,16 @@
         <el-table-column prop="parentId" label="父菜单">
         </el-table-column>
 
-        <el-table-column prop="routerPath" label="路由路径">
+        <el-table-column prop="routerPath" label="路由路径(接口路径)">
         </el-table-column>
 
         <el-table-column prop="routerComponent" label="路由组件">
+        </el-table-column>
+
+        <el-table-column prop="icon" label="图标">
+          <template slot-scope="scope">
+            <i :class="scope.row.icon"></i>
+          </template>
         </el-table-column>
 
         <el-table-column prop="order" label="排序">
@@ -100,12 +106,16 @@
           <el-input type="text" v-model="sysMenu.parentId" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="路由路径" prop="routerPath">
+        <el-form-item label="路由路径(接口路径)" prop="routerPath">
           <el-input type="text" v-model="sysMenu.routerPath" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="路由组件" prop="routerComponent">
           <el-input v-model="sysMenu.routerComponent"></el-input>
+        </el-form-item>
+
+        <el-form-item label="图标" prop="icon">
+          <el-input v-model.number="sysMenu.icon"></el-input>
         </el-form-item>
 
         <el-form-item label="排序" prop="order">
@@ -169,6 +179,7 @@ export default {
         parentId: null,
         routerPath: null,
         routerComponent: null,
+        icon: null,
         order: null,
         description: null
       },
@@ -290,6 +301,7 @@ export default {
         parentId: null,
         routerPath: null,
         routerComponent: null,
+        icon: null,
         order: null,
         description: null
       }

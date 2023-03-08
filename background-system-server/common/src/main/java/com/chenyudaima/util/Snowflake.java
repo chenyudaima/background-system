@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
  * 最多可以部署 32 * 32 = 1024 台机器
  * 速度：单线程执行获取一千条id只需要5毫秒
  * 单线程执行获取一千万条只需要5秒
+ *
+ *
+ * snowflake是Twitter开源的分布式ID生成算法，结果是一个long型的ID。其核心思想是：使用41bit作为毫秒数，10bit作为机器的ID（5个bit是数据中心，5个bit的机器ID），12bit作为毫秒内的流水号（意味着每个节点在每毫秒可以产生4096个ID），最后有一个符号，永远是0。可以保证几乎是全球唯一
  */
 
 @Component

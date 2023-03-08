@@ -48,7 +48,9 @@ public abstract class TimeTask implements Runnable {
         long time = System.currentTimeMillis();
         SysTimedTaskLog sysTimedTaskLog = new SysTimedTaskLog();
         sysTimedTaskLog.setStartExecuteTime(new Date());
-        sysTimedTaskLog.setId(String.valueOf(snowflake.nextId()));
+        sysTimedTaskLog.setId(snowflake.nextId());
+        sysTimedTaskLog.setExecuteParam(sysTimedTask.getParam());
+        sysTimedTaskLog.setTimedTaskId(sysTimedTask.getId());
 
         String result;
         int status = 1;
@@ -61,8 +63,6 @@ public abstract class TimeTask implements Runnable {
         }
 
         time = System.currentTimeMillis() - time;
-        sysTimedTaskLog.setExecuteParam(sysTimedTask.getParam());
-        sysTimedTaskLog.setTimedTaskId(sysTimedTask.getId());
         sysTimedTaskLog.setExecuteStatus(status);
         sysTimedTaskLog.setElapsedTime(time);
         sysTimedTaskLog.setExecuteResult(result);

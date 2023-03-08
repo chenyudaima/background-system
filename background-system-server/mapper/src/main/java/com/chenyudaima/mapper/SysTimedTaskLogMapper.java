@@ -22,4 +22,7 @@ public interface SysTimedTaskLogMapper {
 
     long selectCount(SysTimedTaskLog sysTimedTaskLog);
 
+    int deleteByDay(int day);
+
+
 }

@@ -21,4 +21,6 @@ public interface TimedTaskService {
 
     Result<?> querySysTimedTaskLog(SysTimedTaskLog sysTimedTaskLog, int page, int pageSize);
 
+    Result<?> run(SysTimedTask sysTimedTask);
+
 }

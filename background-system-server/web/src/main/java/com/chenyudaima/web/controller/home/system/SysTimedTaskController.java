@@ -32,6 +32,11 @@ public class SysTimedTaskController {
         return timedTaskService.querySysTimedTaskLog(sysTimedTaskLog, page, pageSize);
     }
 
+    @PostMapping("/run")
+    public Result<?> run(@RequestBody SysTimedTask sysTimedTask) {
+        return timedTaskService.run(sysTimedTask);
+    }
+
     @PostMapping
     public Result<?> add(@RequestBody SysTimedTask sysTimedTask) {
         return timedTaskService.add(sysTimedTask);

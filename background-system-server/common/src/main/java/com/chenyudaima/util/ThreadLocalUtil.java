@@ -7,6 +7,8 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  *
  * 如果在线程池中执行，使用完一定要执行remove()方法
  *
+ * request.setAttribute()内部有一个ThreadLocal，每一个ThreadLocal互不影响
+ *
  * 在父子线程参数传递中，InheritableThreadLocal 只能针对 new Thread()这种方式建立的线程,对于线程池创建的线程,线程是池化以后反复使用的,这个时候父子线程间的值传递已经没有意义了
  * 所以使用阿里开源的TransmittableThreadLocal
  *
