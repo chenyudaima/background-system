@@ -60,7 +60,7 @@
         <where>
             <if test="sysUser.name != null and sysUser.name != ''">and name=#{sysUser.name}</if>
             <if test="sysUser.account != null and sysUser.account != ''">and account=#{sysUser.account}</if>
-            <if test="sysUser.status != null and sysUser.status != ''">and status=#{sysUser.status}</if>
+            <if test="sysUser.status != null">and status=#{sysUser.status}</if>
         </where>
         order by id
         limit ${(page - 1) * pageSize},#{pageSize}
@@ -117,7 +117,7 @@
         <where>
             <if test="name != null and name != ''">and name=#{name}</if>
             <if test="account != null and account != ''">and account=#{account}</if>
-            <if test="status != null and status != ''">and status=#{status}</if>
+            <if test="status != null">and status=#{status}</if>
         </where>
     </select>
 

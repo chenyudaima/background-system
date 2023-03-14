@@ -130,11 +130,7 @@ public class RedisUtil {
      * @param <T>
      */
     public <T> T hash_get(String key, String hashKey) {
-        try {
-            return (T) redisTemplate.opsForHash().get(key, hashKey);
-        }catch (Exception e) {
-            return null;
-        }
+        return (T) redisTemplate.opsForHash().get(key, hashKey);
     }
 
     /**
@@ -156,7 +152,6 @@ public class RedisUtil {
      * @param <V>
      */
     public <T, V> Map<T, V> hash_entries(String key) {
-
         return (Map<T, V>) redisTemplate.opsForHash().entries(key);
     }
 
@@ -254,7 +249,7 @@ public class RedisUtil {
      * @param tableName 表名
      * @return 主键Id
      */
-    public Long getId(String tableName) throws Exception {
+    public Long getId(String tableName) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         int year = calendar.get(Calendar.YEAR);

@@ -22,8 +22,8 @@ public class SysMenuController {
     private final MenuService menuService;
 
     @GetMapping
-    public Result<?> query(SysMenu sysMenu, int page, int pageSize) {
-        return menuService.query(sysMenu, page, pageSize);
+    public Result<?> query() {
+        return menuService.query();
     }
 
     @PostMapping

@@ -44,7 +44,7 @@
           <template v-for="item in menuList">
 
             <!--判断一级菜单里面是否有二级菜单 -->
-            <template v-if="item.children.length != 0">
+            <template v-if="item.subMenu.length != 0">
               <el-submenu :index="item.id.toString()" :key="item.id">
 
                 <!--一级菜单 -->
@@ -53,9 +53,9 @@
                   <span>{{ item.name }}</span>
                 </template>
 
-                <template v-for="subItem in item.children">
+                <template v-for="subItem in item.subMenu">
                   <!--判断是否有三级菜单 -->
-                  <el-submenu v-if="subItem.children.length != 0" :index="subItem.id.toString()" :key="subItem.id">
+                  <el-submenu v-if="subItem.subMenu.length != 0" :index="subItem.id.toString()" :key="subItem.id">
 
                     <!-- 二级菜单 -->
                     <template slot="title">
@@ -64,7 +64,7 @@
                     </template>
 
 
-                    <el-menu-item v-for="threeItem in subItem.children" :key="threeItem.id" :index="threeItem.routerPath">
+                    <el-menu-item v-for="threeItem in subItem.subMenu" :key="threeItem.id" :index="threeItem.routerPath">
                       <i :class="threeItem.icon"></i>
                       {{ threeItem.name }}</el-menu-item>
                   </el-submenu>
@@ -130,7 +130,7 @@ export default {
 
     //加载路由和菜单
     this.loadMenu().then(() => {
-      if (this.$route.path == "/home") {
+      if (this.$route.path == "/home" || this.$route.path == "/home/") {
         this.$router.push("/home/index")
       }
     })

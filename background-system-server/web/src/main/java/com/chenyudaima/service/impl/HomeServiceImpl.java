@@ -76,10 +76,10 @@ public class HomeServiceImpl implements HomeService {
             for (int j = i - 1; j >= 0; j--) {
                 SysMenuVo sysMenuVo1 = sysMenus.get(j);
                 if(sysMenuVo1.getId().equals(sysMenuVo.getParentId())) {
-                    if(sysMenuVo1.getChildren() == null) {
-                        sysMenuVo1.setChildren(new ArrayList<>());
+                    if(sysMenuVo1.getSubMenu() == null) {
+                        sysMenuVo1.setSubMenu(new ArrayList<>());
                     }
-                    sysMenuVo1.getChildren().add(sysMenuVo);
+                    sysMenuVo1.getSubMenu().add(sysMenuVo);
                     break;
                 }
             }

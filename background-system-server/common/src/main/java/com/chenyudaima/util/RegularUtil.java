@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 /**
  * 正则解析工具类
+ * 使用的时候注意特殊符号用\\转义
  */
 public class RegularUtil {
     public static final Pattern BEGIN_NUMBER = Pattern.compile("(\\d+(\\.\\d+)?)");
@@ -166,6 +167,7 @@ public class RegularUtil {
      * @param prefix ra
      * @param suffix hm
      * @return 0.8
+     * 如果是 (xxx) 123 $  提去中间的，prefix参数和suffix中的特殊符号需要用\\转义     \\(xxx\\) 123 \$
      */
     public static String getMiddle(String text, String prefix, String suffix) {
         Pattern phonePattern = Pattern.compile("(?<=" + prefix + ").*?(?=" + suffix + ")");

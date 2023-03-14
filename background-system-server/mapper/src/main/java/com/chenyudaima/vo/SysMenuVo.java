@@ -27,5 +27,9 @@ public class SysMenuVo implements Serializable {
     private String description;
 
     private Integer order;
-    private List<SysMenuVo> children;
+
+    /**
+     * 子菜单
+     */
+    private List<SysMenuVo> subMenu;
 }

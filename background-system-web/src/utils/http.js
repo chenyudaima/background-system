@@ -49,7 +49,10 @@ http.interceptors.response.use(
 
     return response;
   },
+
+  //请求异常（网络异常）的回调函数
   (error) => {
+    router.push({ path: "/login", query: { "message": error.message } })
     return Promise.reject(error);
   }
 );

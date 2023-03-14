@@ -2,7 +2,6 @@ package com.chenyudaima.util;
 
 import org.springframework.util.DigestUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -18,7 +17,7 @@ public class SignUtil {
      * @param paramMap 参数Map
      * @return true 验证成功 ，false 验证失败
      */
-    public static boolean jointVerify(String signature, Map<String, String> paramMap) {
+    public static boolean verify(String signature, Map<String, String> paramMap) {
         StringBuilder stringBuilder = new StringBuilder();
 
         paramMap.forEach((k, v) -> {

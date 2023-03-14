@@ -1,143 +1,88 @@
 <template>
   <el-container style="height: 100%;">
 
-    <!-- 按钮 -->
-    <el-header style="text-align: left;height: @rowheight*10 !important;">
-
-      <el-form :inline="true" @submit.native.prevent>
-
-        <el-form-item label="菜单名称">
-          <el-input v-model="querySysMenu.name" @keydown.enter.native="query" />
-        </el-form-item>
-
-        <el-form-item label="路由路径">
-          <el-input v-model="querySysMenu.routerPath" @keydown.enter.native="query" />
-        </el-form-item>
-
-        <el-form-item label="路由组件">
-          <el-input v-model="querySysMenu.routerComponent" @keydown.enter.native="query" />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button @click="query" type="primary">查询</el-button>
-        </el-form-item>
-        <br />
-
-        <el-button @click="add" type="primary">增加</el-button>
-        <el-button @click="remove" type="danger">删除</el-button>
-        <el-button @click="exportExcel" type="primary">导出</el-button>
-
-      </el-form>
-
+    <!-- 按钮区域 -->
+    <el-header style="height: @rowheight*10 !important">
+      <el-button>添加</el-button>
+      <el-button @click="remove">删除</el-button>
     </el-header>
 
-    <!-- 表格 -->
-    <el-main>
-      <!-- 表格 -->
-      <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
-        :data="sysMenuList" border ref="checkedTable" :header-cell-style="headerCellStyle">
-        <el-table-column align="center" type="selection">
-        </el-table-column>
+    <el-container>
 
-        <el-table-column fixed prop="id" label="id">
-        </el-table-column>
+      <!-- 菜单权限Tree区域 -->
+      <el-aside width="500px">
 
-        <el-table-column prop="name" label="菜单名称">
-        </el-table-column>
+        <el-tree style="3Z" ref="tree" draggable @node-drop="nodeDrop" @allow-drop="allowDrop" :data="sysMenuList"
+          show-checkbox node-key="id" :props="{ children: 'subMenu' }" @node-click="sysMenuClick">
+          <span class="custom-tree-node" slot-scope=" { data }">
+            <i :class="data.icon"></i>
+            &nbsp;
+            <span>{{ data.name }}</span>
+          </span>
+        </el-tree>
 
-        <el-table-column prop="parentId" label="父菜单">
-        </el-table-column>
+      </el-aside>
 
-        <el-table-column prop="routerPath" label="路由路径(接口路径)">
-        </el-table-column>
+      <!-- 编辑查看区域 -->
+      <el-main>
+        <el-form :model="sysMenu" label-width="100px" ref="from" v-if="sysMenu != null">
 
-        <el-table-column prop="routerComponent" label="路由组件">
-        </el-table-column>
+          <el-form-item label="菜单名称" prop="name">
+            <el-input type="text" v-model="sysMenu.name" autocomplete="off"></el-input>
+          </el-form-item>
 
-        <el-table-column prop="icon" label="图标">
-          <template slot-scope="scope">
-            <i :class="scope.row.icon"></i>
-          </template>
-        </el-table-column>
+          <el-form-item label="父菜单" prop="parentId">
+            <el-input type="text" v-model="sysMenu.parentId" autocomplete="off" :disabled="true">
+              <template slot="prepend">拖拽实现</template>
+            </el-input>
+          </el-form-item>
 
-        <el-table-column prop="order" label="排序">
-        </el-table-column>
+          <el-form-item label="路由路径(接口路径)" prop="routerPath">
+            <el-input type="text" v-model="sysMenu.routerPath" autocomplete="off" :disabled="sysMenu.type == 2">
+              <template slot="prepend">http:// {{ host }}</template>
+            </el-input>
+          </el-form-item>
 
-        <el-table-column prop="description" label="描述">
-        </el-table-column>
+          <el-form-item label="路由组件" prop="routerComponent">
+            <el-input v-model="sysMenu.routerComponent" :disabled="sysMenu.type == 2">
+              <template slot="prepend">@/views</template>
+            </el-input>
+          </el-form-item>
 
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="show(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+          <el-form-item label="图标" prop="icon">
+            <el-input v-model.number="sysMenu.icon" :disabled="sysMenu.type == 2">
+              <template slot="prepend">
+                <i :class="sysMenu.icon"></i>
+              </template>
+            </el-input>
+          </el-form-item>
 
-    </el-main>
+          <el-form-item label="类型" prop="order">
+            <el-radio-group v-model="sysMenu.type">
+              <el-radio-button label="0">菜单</el-radio-button>
+              <el-radio-button label="1">页面</el-radio-button>
+              <el-radio-button label="2">权限</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
 
-    <!-- 分页 -->
-    <el-footer style="text-align:center;height: @rowheight*10 !important;">
-      <!--
-         分页
-         background 是否为分页按钮添加背景色
-         size-change 每页条数改变时触发
-         current-change 当前页改变时触发
-         current-page 当前页
-         page-sizes 每页条数选择框
-         page-size 每页条数
-       -->
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-        :page-sizes="pageSizes" :current-page="parseInt(this.$route.query.page)"
-        :page-size="parseInt(this.$route.query.pageSize)" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
-    </el-footer>
+          <el-form-item label="排序" prop="order">
+            <el-input v-model.number="sysMenu.order" :disabled="true">
+              <template slot="prepend">拖拽实现</template>
+            </el-input>
+          </el-form-item>
 
-    <!-- 表单 -->
-    <el-dialog :title="formTitle" :visible.sync="dialog" width="30%" custom-class="dialogClass">
-
-      <el-form :model="sysMenu" label-width="100px" ref="from">
-
-        <el-form-item label="菜单名称" prop="name">
-          <el-input type="text" v-model="sysMenu.name" autocomplete="off"></el-input>
-        </el-form-item>
-
-        <el-form-item label="父菜单" prop="parentId">
-          <el-input type="text" v-model="sysMenu.parentId" autocomplete="off"></el-input>
-        </el-form-item>
-
-        <el-form-item label="路由路径(接口路径)" prop="routerPath">
-          <el-input type="text" v-model="sysMenu.routerPath" autocomplete="off"></el-input>
-        </el-form-item>
-
-        <el-form-item label="路由组件" prop="routerComponent">
-          <el-input v-model="sysMenu.routerComponent"></el-input>
-        </el-form-item>
-
-        <el-form-item label="图标" prop="icon">
-          <el-input v-model.number="sysMenu.icon"></el-input>
-        </el-form-item>
-
-        <el-form-item label="排序" prop="order">
-          <el-input v-model.number="sysMenu.order"></el-input>
-        </el-form-item>
-
-        <el-form-item label="描述" prop="description">
-          <el-input v-model="sysMenu.description"></el-input>
-        </el-form-item>
+          <el-form-item label="描述" prop="description">
+            <el-input v-model="sysMenu.description"></el-input>
+          </el-form-item>
 
 
-        <el-form-item v-if="dialogStatus != 3">
-          <el-button type="primary" @click="submitForm">提交</el-button>
-          <el-button @click="resetForm">重置</el-button>
-        </el-form-item>
-      </el-form>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogClose">取 消</el-button>
-      </span>
-    </el-dialog>
-
+          <el-form-item>
+            <el-button type="primary" @click="submitForm">提交</el-button>
+            <el-button @click="resetForm">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 <script>
@@ -145,227 +90,102 @@
 import http from '@/utils/http.js'
 
 export default {
-  watch: {
-    //路径变化执行查询
-    $route(route) {
-      this.query()
-    }
-  },
 
   data() {
     return {
-      //每页条数选择
-      pageSizes: [5, 10],
-
-      //总数据量
-      total: 0,
-
-      //当前页数据
       sysMenuList: [],
 
-      //对话框
-      dialog: false,
+      //当前选中的菜单
+      sysMenu: null,
 
-      //当前对话框状态 0关闭，1增加，2修改，3查看
-      dialogStatus: 0,
-
-      //表单标题，根据对话框状态进行切换
-      formTitle: '',
-
-      //默认数据模型
-      sysMenu: {
-        id: null,
-        name: null,
-        parentId: null,
-        routerPath: null,
-        routerComponent: null,
-        icon: null,
-        order: null,
-        description: null
-      },
-
-      querySysMenu: {
-        name: null,
-        routerPath: null,
-        routerComponent: null
-      }
-
+      host: null
     }
   },
 
   created() {
-
-    //判断是否有路径参数，没有则手动添加
-    if (JSON.stringify(this.$route.query) == '{}') {
-      this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-    } else {
-      this.query()
-    }
+    this.host = window.location.host
+    this.query()
   },
 
   methods: {
-
-    //查询
     query() {
-      //从路径参数获取
-      let query = this.$route.query
-      let param = {
-        page: query.page,
-        pageSize: query.pageSize,
-        ...this.querySysMenu
-      }
-
-      for (var key in this.querySysMenu) {
-        this.querySysMenu[key] = null
-      }
-
-      http.get("/home/system/sysMenu", { params: param }).then(resp => {
-        if (resp.code != 200) {
-          this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+      http.get("/home/system/sysMenu").then(resp => {
+        if (resp.code == 500) {
+          this.$message.error(resp.message)
           return;
         }
-        this.total = resp.data.total
-        if (resp.data.sysMenuList.length == 0 && query.page > 1) {
-          this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
-          return;
-        }
-        this.sysMenuList = resp.data.sysMenuList
+
+        this.sysMenuList = resp.data
       })
     },
 
-    //每页条数变化执行（修改路径参数）
-    handleSizeChange(pageSize) {
-      this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, pageSize: pageSize } })
+    //菜单被点击的回调
+    sysMenuClick(sysMenu) {
+      this.sysMenu = sysMenu
     },
 
-    //当前页变化执行（修改路径参数）
-    handleCurrentChange(page) {
-      this.$router.replace({ path: this.$route.path, query: { ...this.$route.query, page: page } })
-    },
-
-    //删除勾选的数据行
+    //删除勾选的菜单
     async remove() {
-      let ids = []
-      this.$refs.checkedTable.selection.forEach(x => { ids.push(x.id) })
-
+      let ids = this.$refs.tree.getCheckedKeys()
       if (ids.length == 0) {
         return;
       }
 
       if (ids.length == 1) {
-        await http.delete("/home/system/sysMenu/" + ids[0])
+        await http.get("/home/system/sysMenu")
       } else {
-        await http.delete("/home/system/sysMenu/", { data: { ids: ids } })
+        await http.get("/home/system/sysMenu", { data: { ids: ids } })
       }
 
       this.query()
     },
 
-
-    //提交表单
-    submitForm() {
-      let sysMenu = this.sysMenu
-
-      //判断状态 1增加，2修改
-      if (this.dialogStatus == 1) {
-        http.post("/home/system/sysMenu", sysMenu).then(resp => {
-          if (resp.code == 200) {
-            this.query()
-            this.dialog = false
-          } else {
-            this.$message.error(resp.message)
-          }
-        })
-        return;
+    //拖拽菜单时回调函数（阻止某些时候的拖拽）
+    allowDrop(draggingNode, dropNode, type) {
+      //如果放到菜单下面，必须是按钮（权限）
+      if (dropNode.data.routerPath != null) {
+        return false;
       }
 
-      if (this.dialogStatus == 2) {
-        http.patch("/home/system/sysMenu", sysMenu).then(resp => {
-          if (resp.code == 200) {
-            this.query()
-            this.dialog = false
-          } else {
-            this.$message.error(resp.message)
-          }
-        })
-        return;
+      return true
+    },
+
+    //拖拽菜单成功时回调函数 before inner
+    nodeDrop(draggingNode, dropNode, type, event) {
+      if (type == "inner") {
+        draggingNode.data.parentId = dropNode.data.id
+      } else if (type == "before") {
+        draggingNode.data.parentId = dropNode.data.parentId
+        draggingNode.data.order = dropNode.data.order - 1
+      } else if (type == "after") {
+        draggingNode.data.parentId = dropNode.data.parentId
+        draggingNode.data.order = dropNode.data.order + 1
       }
 
-    },
-
-    //重置表单
-    resetForm() {
-      this.sysMenu = {
-        id: null,
-        name: null,
-        parentId: null,
-        routerPath: null,
-        routerComponent: null,
-        icon: null,
-        order: null,
-        description: null
-      }
-    },
-
-    //增加
-    add() {
-      this.formTitle = "增加菜单"
-      this.dialog = true
-      this.dialogStatus = 1
-      this.resetForm()
-    },
-
-    //修改
-    update(sysMenu) {
-      this.formTitle = "修改菜单"
-      this.dialog = true
-      this.sysMenu = { ...sysMenu }
-      this.dialogStatus = 2
-    },
-
-    //查看
-    show(sysMenu) {
-      this.formTitle = "查看菜单"
-      this.dialog = true
-      this.sysMenu = { ...sysMenu }
-      this.dialogStatus = 3
-
-    },
-
-    //关闭提示框
-    dialogClose() {
-      this.dialog = false
-      this.dialogStatus = 0
-    },
-
-    exportExcel() {
-      http.get("/home/system/sysMenu/exportExcel").then(resp => {
-        let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
-
-        const url = window.URL.createObjectURL(
-          new Blob(['\uFEFF' + resp.data], {
-            type: 'text/plain;charset=utf-8',
-          })
-        )
-
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
+      let param = draggingNode.data;
+      delete param.subMenu
+      http.patch("/home/system/sysMenu", param).then(resp => {
+        if (!(resp.data > 0)) {
+          this.$message.error("修改失败")
+        }
+        this.query()
       })
     },
 
-    headerCellStyle() {
-      return "background-color:#1989fa;color:#fff;font-weight:400";
+    submitForm() { },
+    resetForm() {
+      this.sysMenu = {
+        ...this.sysMenu,
+        name: null,
+        routerPath: null,
+        routerComponent: null,
+        icon: null,
+        description: null
+      }
     }
-  }
 
+  }
 }
 </script>
 
-<style>
-.dialogClass {
-  border-radius: 20px;
-}
-</style>
+<style></style>

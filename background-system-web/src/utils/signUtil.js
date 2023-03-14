@@ -164,7 +164,6 @@ function signature(config) {
       delete config.data.accessKey
     }
   }
-
   //设置参数签名请求头
   config.headers.signature = md5(params).toUpperCase()
 }

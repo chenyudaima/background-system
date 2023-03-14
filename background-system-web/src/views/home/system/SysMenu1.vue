@@ -6,18 +6,26 @@
 
       <el-form :inline="true" @submit.native.prevent>
 
-        <el-form-item label="角色名称">
-          <el-input v-model="queryRole.name" @keydown.enter.native="query" size="small" />
+        <el-form-item label="菜单名称">
+          <el-input v-model="querySysMenu.name" @keydown.enter.native="query" />
+        </el-form-item>
+
+        <el-form-item label="路由路径">
+          <el-input v-model="querySysMenu.routerPath" @keydown.enter.native="query" />
+        </el-form-item>
+
+        <el-form-item label="路由组件">
+          <el-input v-model="querySysMenu.routerComponent" @keydown.enter.native="query" />
         </el-form-item>
 
         <el-form-item>
-          <el-button @click="query" type="primary" size="small">查询</el-button>
+          <el-button @click="query" type="primary">查询</el-button>
         </el-form-item>
         <br />
 
-        <el-button @click="add" type="primary" size="small">增加</el-button>
-        <el-button @click="remove" type="danger" size="small">删除</el-button>
-        <el-button @click="exportExcel" type="primary" size="small">导出</el-button>
+        <el-button @click="add" type="primary">增加</el-button>
+        <el-button @click="remove" type="danger">删除</el-button>
+        <el-button @click="exportExcel" type="primary">导出</el-button>
 
       </el-form>
 
@@ -27,14 +35,32 @@
     <el-main>
       <!-- 表格 -->
       <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
-        :data="roleList" border ref="checkedTable" :header-cell-style="headerCellStyle">
+        :data="sysMenuList" border ref="checkedTable" :header-cell-style="headerCellStyle">
         <el-table-column align="center" type="selection">
         </el-table-column>
 
         <el-table-column fixed prop="id" label="id">
         </el-table-column>
 
-        <el-table-column prop="name" label="角色名称">
+        <el-table-column prop="name" label="菜单名称">
+        </el-table-column>
+
+        <el-table-column prop="parentId" label="父菜单">
+        </el-table-column>
+
+        <el-table-column prop="routerPath" label="路由路径(接口路径)">
+        </el-table-column>
+
+        <el-table-column prop="routerComponent" label="路由组件">
+        </el-table-column>
+
+        <el-table-column prop="icon" label="图标">
+          <template slot-scope="scope">
+            <i :class="scope.row.icon"></i>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="order" label="排序">
         </el-table-column>
 
         <el-table-column prop="description" label="描述">
@@ -70,24 +96,34 @@
     <!-- 表单 -->
     <el-dialog :title="formTitle" :visible.sync="dialog" width="30%" custom-class="dialogClass">
 
-      <el-form :model="role" label-width="100px" ref="from">
+      <el-form :model="sysMenu" label-width="100px" ref="from">
 
-        <el-form-item label="角色名称" prop="name">
-          <el-input type="text" v-model="role.name" autocomplete="off"></el-input>
+        <el-form-item label="菜单名称" prop="name">
+          <el-input type="text" v-model="sysMenu.name" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="父菜单" prop="parentId">
+          <el-input type="text" v-model="sysMenu.parentId" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="路由路径(接口路径)" prop="routerPath">
+          <el-input type="text" v-model="sysMenu.routerPath" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="路由组件" prop="routerComponent">
+          <el-input v-model="sysMenu.routerComponent"></el-input>
+        </el-form-item>
+
+        <el-form-item label="图标" prop="icon">
+          <el-input v-model.number="sysMenu.icon"></el-input>
+        </el-form-item>
+
+        <el-form-item label="排序" prop="order">
+          <el-input v-model.number="sysMenu.order"></el-input>
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
-          <el-input v-model="role.description"></el-input>
-        </el-form-item>
-
-        <el-form-item label="角色权限" prop="description">
-          <el-tree :props="{ children: 'subMenu' }" ref="tree" :data="menuList" show-checkbox node-key="id">
-            <span class = "custom-tree-node" slot-scope = " { data }">
-              <i :class="data.icon"></i>
-              &nbsp;
-              <span>{{ data.name }}</span>
-            </span>
-          </el-tree>
+          <el-input v-model="sysMenu.description"></el-input>
         </el-form-item>
 
 
@@ -125,7 +161,7 @@ export default {
       total: 0,
 
       //当前页数据
-      roleList: [],
+      sysMenuList: [],
 
       //对话框
       dialog: false,
@@ -136,18 +172,22 @@ export default {
       //表单标题，根据对话框状态进行切换
       formTitle: '',
 
-      menuList: [],
-
       //默认数据模型
-      role: {
+      sysMenu: {
         id: null,
         name: null,
-        description: null,
-        menuIds: []
+        parentId: null,
+        routerPath: null,
+        routerComponent: null,
+        icon: null,
+        order: null,
+        description: null
       },
 
-      queryRole: {
-        name: null
+      querySysMenu: {
+        name: null,
+        routerPath: null,
+        routerComponent: null
       }
 
     }
@@ -172,31 +212,24 @@ export default {
       let param = {
         page: query.page,
         pageSize: query.pageSize,
-        ...this.queryRole
+        ...this.querySysMenu
       }
 
-      for (var key in this.queryRole) {
-        this.queryRole[key] = null
+      for (var key in this.querySysMenu) {
+        this.querySysMenu[key] = null
       }
 
-      http.get("/home/system/role", { params: param }).then(resp => {
-        if(resp.code == 500) {
-          this.$message.error(resp.message)
-          return;
-        }
-
+      http.get("/home/system/sysMenu", { params: param }).then(resp => {
         if (resp.code != 200) {
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
           return;
         }
-
         this.total = resp.data.total
-        this.menuList = resp.data.menuList
-        if (resp.data.roleList.length == 0 && query.page > 1) {
+        if (resp.data.sysMenuList.length == 0 && query.page > 1) {
           this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
           return;
         }
-        this.roleList = resp.data.roleList
+        this.sysMenuList = resp.data.sysMenuList
       })
     },
 
@@ -220,9 +253,9 @@ export default {
       }
 
       if (ids.length == 1) {
-        await http.delete("/home/system/role/" + ids[0])
+        await http.delete("/home/system/sysMenu/" + ids[0])
       } else {
-        await http.delete("/home/system/role/", { data: { ids: ids } })
+        await http.delete("/home/system/sysMenu/", { data: { ids: ids } })
       }
 
       this.query()
@@ -231,12 +264,11 @@ export default {
 
     //提交表单
     submitForm() {
-      this.role.menuIds = this.$refs.tree.getCheckedKeys()
-      let role = this.role
+      let sysMenu = this.sysMenu
 
       //判断状态 1增加，2修改
       if (this.dialogStatus == 1) {
-        http.post("/home/system/role", role).then(resp => {
+        http.post("/home/system/sysMenu", sysMenu).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -248,7 +280,7 @@ export default {
       }
 
       if (this.dialogStatus == 2) {
-        http.patch("/home/system/role", role).then(resp => {
+        http.patch("/home/system/sysMenu", sysMenu).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -263,55 +295,40 @@ export default {
 
     //重置表单
     resetForm() {
-      this.role = {
+      this.sysMenu = {
         id: null,
         name: null,
-        description: null,
-        menuIds: []
+        parentId: null,
+        routerPath: null,
+        routerComponent: null,
+        icon: null,
+        order: null,
+        description: null
       }
-
-      this.$refs.tree.setCheckedKeys([])
     },
 
     //增加
     add() {
-      this.formTitle = "增加角色"
+      this.formTitle = "增加菜单"
       this.dialog = true
       this.dialogStatus = 1
-      this.$nextTick(() => {
-        this.resetForm()
-      })
-
+      this.resetForm()
     },
 
     //修改
-    update(role) {
-      this.formTitle = "修改角色"
+    update(sysMenu) {
+      this.formTitle = "修改菜单"
       this.dialog = true
-      this.role = { ...role }
+      this.sysMenu = { ...sysMenu }
       this.dialogStatus = 2
-
-      this.$nextTick(() => {
-        this.$refs.tree.setCheckedKeys([])
-        role.menuIds.forEach(x => {
-          this.$refs.tree.setChecked(x, true)
-        })
-      })
     },
 
     //查看
-    show(role) {
-      this.formTitle = "查看角色"
+    show(sysMenu) {
+      this.formTitle = "查看菜单"
       this.dialog = true
-      this.role = { ...role }
+      this.sysMenu = { ...sysMenu }
       this.dialogStatus = 3
-
-      this.$nextTick(() => {
-        this.$refs.tree.setCheckedKeys([])
-        role.menuIds.forEach(x => {
-          this.$refs.tree.setChecked(x, true)
-        })
-      })
 
     },
 
@@ -321,9 +338,8 @@ export default {
       this.dialogStatus = 0
     },
 
-    //导出excel
     exportExcel() {
-      http.get("/home/system/role/exportExcel").then(resp => {
+      http.get("/home/system/sysMenu/exportExcel").then(resp => {
         let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
 
         const url = window.URL.createObjectURL(
@@ -340,7 +356,6 @@ export default {
       })
     },
 
-    //表头样式
     headerCellStyle() {
       return "background-color:#1989fa;color:#fff;font-weight:400";
     }

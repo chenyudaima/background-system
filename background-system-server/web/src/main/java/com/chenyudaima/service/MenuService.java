@@ -8,7 +8,7 @@ import com.chenyudaima.model.SysMenu;
  * @date 2023/2/27
  */
 public interface MenuService {
-    Result<?> query(SysMenu sysMenu, int page, int pageSize);
+    Result<?> query();
 
     Result<?> add(SysMenu sysMenu);
 
@@ -17,4 +17,7 @@ public interface MenuService {
     Result<?> deleteByIdBatch(String[] ids);
 
     Result<?> deleteById(String id);
+
+    Result<?> drag(String draggingSysMenuId, String dropSysMenuId);
+
 }

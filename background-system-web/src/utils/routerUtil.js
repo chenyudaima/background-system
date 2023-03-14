@@ -24,12 +24,13 @@ function routerHandler(menuList) {
     }
 
     //如果大于0说明有子菜单
-    if (menu.children == null) {
-      menu.children = []
+    if (menu.subMenu == null) {
+      menu.subMenu = []
     }
-    
-    if (menu.children.length > 0) {
-      array = [...array, ...routerHandler(menu.children)]
+
+    // children
+    if (menu.subMenu.length > 0) {
+      array = [...array, ...routerHandler(menu.subMenu)]
     }
   })
 

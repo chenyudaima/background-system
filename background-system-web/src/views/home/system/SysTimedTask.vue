@@ -7,21 +7,25 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="任务类名">
-          <el-input v-model="querySysTimedTask.className" @keydown.enter.native="query" />
+          <el-input v-model="querySysTimedTask.className" placeholder="请输入内容" size="small"
+            @keydown.enter.native="query" />
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-input v-model="querySysTimedTask.status" @keydown.enter.native="query" />
+          <el-radio-group v-model="querySysTimedTask.status"  size="small">
+            <el-radio-button label="0">停止</el-radio-button>
+            <el-radio-button label="1">运行</el-radio-button>
+          </el-radio-group>
         </el-form-item>
 
         <el-form-item>
-          <el-button @click="query" type="primary">查询</el-button>
+          <el-button @click="query" type="primary" size="small">查询</el-button>
         </el-form-item>
         <br />
 
-        <el-button @click="add" type="primary">增加</el-button>
-        <el-button @click="remove" type="danger">删除</el-button>
-        <el-button @click="exportExcel" type="primary">导出</el-button>
+        <el-button @click="add" type="primary" size="small">增加</el-button>
+        <el-button @click="remove" type="danger" size="small">删除</el-button>
+        <el-button @click="exportExcel" type="primary" size="small">导出</el-button>
 
       </el-form>
 
@@ -56,7 +60,7 @@
             </div>
             <div v-else
               style="color: #00EE00; background-color: #C1FFC1; border-color: #00EE00;border-style: solid; border-width: 1px">
-              已启动
+              运行
             </div>
 
           </template>
@@ -105,11 +109,11 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="状态">
-          <el-input v-model="sysTimedTaskLog.status" @keydown.enter.native="queryLog" />
+          <el-input size="small" v-model="sysTimedTaskLog.status" @keydown.enter.native="queryLog" />
         </el-form-item>
 
         <el-form-item>
-          <el-button @click="queryLog" type="primary">查询</el-button>
+          <el-button @click="queryLog" type="primary" size="small">查询</el-button>
         </el-form-item>
         <br />
       </el-form>
@@ -184,7 +188,7 @@
         </el-form-item>
 
         <el-form-item label="描述" prop="description">
-          <el-input v-model="sysTimedTask.description"></el-input>
+          <el-input type="textarea" v-model="sysTimedTask.description" autosize></el-input>
         </el-form-item>
 
 
@@ -297,6 +301,11 @@ export default {
       }
 
       http.get("/home/system/sysTimedTask", { params: param }).then(resp => {
+        if(resp.code == 500) {
+          this.$message.error(resp.message)
+          return;
+        }
+
         if (resp.code != 200) {
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
           return;
@@ -465,9 +474,9 @@ export default {
     },
     run(sysTimedTask) {
       http.post("/home/system/sysTimedTask/run", sysTimedTask).then(resp => {
-        if(resp.code == 200) {
+        if (resp.code == 200) {
           this.$message.success("执行成功")
-        }else {
+        } else {
           this.$message.error(resp.message)
         }
       })

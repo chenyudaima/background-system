@@ -9,11 +9,9 @@ import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.util.SignUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
@@ -63,7 +61,7 @@ public class SignInterceptor extends Interceptor {
         params.put(HttpParam.ACCESS_KEY, request.getHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION));
 
         //验签
-        if(!SignUtil.jointVerify(signature, params)) {
+        if(!SignUtil.verify(signature, params)) {
             throw new SignException("非法篡改参数");
         }
 

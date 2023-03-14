@@ -7,7 +7,6 @@ import java.util.List;
 
 
 public interface SysMenuMapper {
-    List<SysMenu> select(SysMenu sysMenu, int page, int pageSize);
 
     long selectCount(SysMenu sysMenu);
 
@@ -30,6 +29,7 @@ public interface SysMenuMapper {
 
     List<SysMenuVo> selectAll();
 
+    int drag(String draggingSysMenuId, String dropSysMenuId);
 
 }
 

@@ -10,6 +10,7 @@ import '@/assets/style/index.css'
 // Vue.prototype.$common = common; 
 //使用 this.$common.formatDate(date);
 
+//导入ElementUi
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)

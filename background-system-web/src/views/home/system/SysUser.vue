@@ -6,25 +6,28 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="姓名">
-          <el-input v-model="queryUser.name" @keydown.enter.native="query" />
+          <el-input v-model="queryUser.name" @keydown.enter.native="query" size="small" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item label="用户名">
-          <el-input v-model="queryUser.account" @keydown.enter.native="query" />
+          <el-input v-model="queryUser.account" @keydown.enter.native="query" size="small" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-input v-model="queryUser.status" @keydown.enter.native="query" />
+          <el-radio-group v-model="queryUser.status"  size="small">
+            <el-radio-button label="0">冻结</el-radio-button>
+            <el-radio-button label="1">正常</el-radio-button>
+          </el-radio-group>
         </el-form-item>
 
         <el-form-item>
-          <el-button @click="query" type="primary">查询</el-button>
+          <el-button @click="query" type="primary" size="small">查询</el-button>
         </el-form-item>
         <br />
 
-        <el-button @click="add" type="primary">增加</el-button>
-        <el-button @click="remove" type="danger">删除</el-button>
-        <el-button @click="exportExcel" type="primary">导出</el-button>
+        <el-button @click="add" type="primary" size="small">增加</el-button>
+        <el-button @click="remove" type="danger" size="small">删除</el-button>
+        <el-button @click="exportExcel" type="primary" size="small">导出</el-button>
 
       </el-form>
 
@@ -231,6 +234,11 @@ export default {
       }
 
       http.get("/home/system/user", { params: param }).then(resp => {
+        if(resp.code == 500) {
+          this.$message.error(resp.message)
+          return;
+        }
+
         if (resp.code != 200) {
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
           return;
