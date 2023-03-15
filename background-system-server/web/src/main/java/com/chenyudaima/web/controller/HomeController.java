@@ -29,7 +29,7 @@ public class HomeController {
     /**
      * 查询导航栏
      */
-    @GetMapping("/menu")
+    @GetMapping("/sysMenu")
     public Result<?> navigation() {
         return homeService.menu();
     }

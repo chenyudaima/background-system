@@ -10,7 +10,7 @@
       <el-form ref="loginFormRef" class="login_box">
 
         <el-form-item>
-          <h2>后台系统</h2>
+          <h2>质检系统</h2>
         </el-form-item>
 
         <el-form-item prop="usercode">

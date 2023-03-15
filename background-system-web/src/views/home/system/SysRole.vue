@@ -7,7 +7,7 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="角色名称">
-          <el-input v-model="queryRole.name" @keydown.enter.native="query" size="small" />
+          <el-input v-model="queryRole.name" @keydown.enter.native="query" size="small" placeholder="请输入内容" />
         </el-form-item>
 
         <el-form-item>
@@ -82,7 +82,7 @@
 
         <el-form-item label="角色权限" prop="description">
           <el-tree :props="{ children: 'subMenu' }" ref="tree" :data="menuList" show-checkbox node-key="id">
-            <span class = "custom-tree-node" slot-scope = " { data }">
+            <span class="custom-tree-node" slot-scope=" { data }">
               <i :class="data.icon"></i>
               &nbsp;
               <span>{{ data.name }}</span>
@@ -154,19 +154,19 @@ export default {
   },
 
   created() {
-
-    //判断是否有路径参数，没有则手动添加
-    if (JSON.stringify(this.$route.query) == '{}') {
-      this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-    } else {
-      this.query()
-    }
+    this.query()
   },
 
   methods: {
 
     //查询
     query() {
+      //判断是否有路径参数，没有则手动添加
+      if (JSON.stringify(this.$route.query) == '{}') {
+        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+        return;
+      }
+
       //从路径参数获取
       let query = this.$route.query
       let param = {
@@ -179,8 +179,8 @@ export default {
         this.queryRole[key] = null
       }
 
-      http.get("/home/system/role", { params: param }).then(resp => {
-        if(resp.code == 500) {
+      http.get("/home/system/sysRole", { params: param }).then(resp => {
+        if (resp.code == 500) {
           this.$message.error(resp.message)
           return;
         }
@@ -220,9 +220,9 @@ export default {
       }
 
       if (ids.length == 1) {
-        await http.delete("/home/system/role/" + ids[0])
+        await http.delete("/home/system/sysRole/" + ids[0])
       } else {
-        await http.delete("/home/system/role/", { data: { ids: ids } })
+        await http.delete("/home/system/sysRole/", { data: { ids: ids } })
       }
 
       this.query()
@@ -236,7 +236,7 @@ export default {
 
       //判断状态 1增加，2修改
       if (this.dialogStatus == 1) {
-        http.post("/home/system/role", role).then(resp => {
+        http.post("/home/system/sysRole", role).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -248,7 +248,7 @@ export default {
       }
 
       if (this.dialogStatus == 2) {
-        http.patch("/home/system/role", role).then(resp => {
+        http.patch("/home/system/sysRole", role).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -323,7 +323,7 @@ export default {
 
     //导出excel
     exportExcel() {
-      http.get("/home/system/role/exportExcel").then(resp => {
+      http.get("/home/system/sysRole/exportExcel").then(resp => {
         let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
 
         const url = window.URL.createObjectURL(

@@ -20,7 +20,7 @@ import java.util.Map;
  * @author 沉鱼代码
  * @date 2023/2/19
  */
-@RequestMapping("/home/system/user")
+@RequestMapping("/home/system/sysUser")
 @RestController
 @RequiredArgsConstructor
 public class SysUserController {

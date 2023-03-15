@@ -12,7 +12,7 @@
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-radio-group v-model="querySysTimedTask.status"  size="small">
+          <el-radio-group v-model="querySysTimedTask.status" size="small">
             <el-radio-button label="0">停止</el-radio-button>
             <el-radio-button label="1">运行</el-radio-button>
           </el-radio-group>
@@ -109,7 +109,10 @@
       <el-form :inline="true" @submit.native.prevent>
 
         <el-form-item label="状态">
-          <el-input size="small" v-model="sysTimedTaskLog.status" @keydown.enter.native="queryLog" />
+          <el-radio-group v-model="sysTimedTaskLog.executeStatus" size="small">
+            <el-radio-button label="0">异常</el-radio-button>
+            <el-radio-button label="1">正常</el-radio-button>
+          </el-radio-group>
         </el-form-item>
 
         <el-form-item>
@@ -117,6 +120,7 @@
         </el-form-item>
         <br />
       </el-form>
+
 
       <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
         :data="sysTimedTaskLogList" border ref="checkedTable" :header-cell-style="headerCellStyle">
@@ -205,8 +209,8 @@
 
   </el-container>
 </template>
-<script>
 
+<script>
 import http from '@/utils/http.js'
 
 export default {
@@ -275,19 +279,19 @@ export default {
   },
 
   created() {
-
-    //判断是否有路径参数，没有则手动添加
-    if (JSON.stringify(this.$route.query) == '{}') {
-      this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-    } else {
-      this.query()
-    }
+    this.query()
   },
 
   methods: {
 
     //查询
     query() {
+      //判断是否有路径参数，没有则手动添加
+      if (JSON.stringify(this.$route.query) == '{}') {
+        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+        return;
+      }
+
       //从路径参数获取
       let query = this.$route.query
       let param = {
@@ -301,7 +305,7 @@ export default {
       }
 
       http.get("/home/system/sysTimedTask", { params: param }).then(resp => {
-        if(resp.code == 500) {
+        if (resp.code == 500) {
           this.$message.error(resp.message)
           return;
         }

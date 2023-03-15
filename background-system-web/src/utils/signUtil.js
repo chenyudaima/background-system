@@ -1,5 +1,6 @@
 import md5 from 'js-md5'
 import qs from 'qs'
+import uuidUtil from '@/utils/uuidUtil.js';
 
 //对需要请求的参数进行签名
 function signature(config) {
@@ -17,7 +18,7 @@ function signature(config) {
   let accessKey = config.headers.Authorization
   
   //唯一标识
-  let nonce = `${config.method}#${url}#${timestamp}#${Math.random()}`
+  let nonce = uuidUtil.getUUID()
 
   if (config.method == "get") {
 

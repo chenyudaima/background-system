@@ -17,7 +17,4 @@ public interface MenuService {
     Result<?> deleteByIdBatch(String[] ids);
 
     Result<?> deleteById(String id);
-
-    Result<?> drag(String draggingSysMenuId, String dropSysMenuId);
-
 }

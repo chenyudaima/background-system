@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface SysMenuMapper {
 
-    long selectCount(SysMenu sysMenu);
-
     /**
      * 根据用户id查询所有菜单
      * @param id
@@ -28,9 +26,6 @@ public interface SysMenuMapper {
     int deleteByIdBatch(String[] ids);
 
     List<SysMenuVo> selectAll();
-
-    int drag(String draggingSysMenuId, String dropSysMenuId);
-
 }
 
 

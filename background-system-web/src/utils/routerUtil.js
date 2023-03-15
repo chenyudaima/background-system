@@ -3,34 +3,28 @@ import router from '@/router/index.js'
 
 //加载路由
 function loadRouter() {
-  http.get("/home/menu").then(resp => {
+  http.get("/home/sysMenu").then(resp => {
     routerHandler(resp.data).forEach(x => {
       router.addRoute("home", x)
     })
-    
+
   })
 }
 
 //解析菜单生成路由表
-function routerHandler(menuList) {
+function routerHandler(sysMenuList) {
   let array = []
-  menuList.forEach(menu => {
-    if (menu.routerComponent && menu.routerPath) {
+  sysMenuList.forEach(sysMenu => {
+    if (sysMenu.type == 1) {
       array.push({
-        path: menu.routerPath,
-        name: menu.name,
-        component: () => import(`@/views${menu.routerComponent}`)
+        path: sysMenu.routerPath,
+        name: sysMenu.name,
+        component: () => import(`@/views${sysMenu.routerComponent}`)
       })
     }
 
-    //如果大于0说明有子菜单
-    if (menu.subMenu == null) {
-      menu.subMenu = []
-    }
-
-    // children
-    if (menu.subMenu.length > 0) {
-      array = [...array, ...routerHandler(menu.subMenu)]
+    if (sysMenu.type == 0 && sysMenu.subMenu != null && sysMenu.subMenu.length > 0) {
+      array = [...array, ...routerHandler(sysMenu.subMenu)]
     }
   })
 
@@ -38,7 +32,7 @@ function routerHandler(menuList) {
 }
 
 export default
-{
-  loadRouter,routerHandler
-}
+  {
+    loadRouter, routerHandler
+  }
 

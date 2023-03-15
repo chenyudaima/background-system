@@ -17,7 +17,7 @@ import java.util.Map;
  * @date 2023/2/19
  */
 @RestController
-@RequestMapping("/home/system/role")
+@RequestMapping("/home/system/sysRole")
 @RequiredArgsConstructor
 public class SysRoleController {
     private final RoleService roleService;

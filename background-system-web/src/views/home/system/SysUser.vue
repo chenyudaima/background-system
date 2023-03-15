@@ -208,18 +208,19 @@ export default {
   },
 
   created() {
-    //判断是否有路径参数，没有则手动添加
-    if (JSON.stringify(this.$route.query) == '{}') {
-      this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-    } else {
-      this.query()
-    }
+    this.query()
   },
 
   methods: {
 
     //查询
     query() {
+      //判断是否有路径参数，没有则手动添加
+      if (JSON.stringify(this.$route.query) == '{}') {
+        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+        return;
+      }
+
       //从路径参数获取
       let query = this.$route.query
 
@@ -233,7 +234,7 @@ export default {
         this.queryUser[key] = null
       }
 
-      http.get("/home/system/user", { params: param }).then(resp => {
+      http.get("/home/system/sysUser", { params: param }).then(resp => {
         if(resp.code == 500) {
           this.$message.error(resp.message)
           return;
@@ -277,9 +278,9 @@ export default {
       }
 
       if (ids.length == 1) {
-        await http.delete("/home/system/user/" + ids[0])
+        await http.delete("/home/system/sysUser/" + ids[0])
       } else {
-        await http.delete("/home/system/user/", { data: { ids: ids } })
+        await http.delete("/home/system/sysUser/", { data: { ids: ids } })
       }
 
       this.query()
@@ -292,7 +293,7 @@ export default {
 
       //判断状态 1增加，2修改
       if (this.dialogStatus == 1) {
-        http.post("/home/system/user", sysUser).then(resp => {
+        http.post("/home/system/sysUser", sysUser).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -304,7 +305,7 @@ export default {
       }
 
       if (this.dialogStatus == 2) {
-        http.patch("/home/system/user", sysUser).then(resp => {
+        http.patch("/home/system/sysUser", sysUser).then(resp => {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
@@ -364,7 +365,7 @@ export default {
     },
 
     exportExcel() {
-      http.get("/home/system/user/exportExcel").then(resp => {
+      http.get("/home/system/sysUser/exportExcel").then(resp => {
         let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
 
         const url = window.URL.createObjectURL(

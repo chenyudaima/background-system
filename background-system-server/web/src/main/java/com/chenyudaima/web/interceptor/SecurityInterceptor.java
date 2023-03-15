@@ -5,6 +5,7 @@ import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
 import com.chenyudaima.exception.SecurityException;
+import com.chenyudaima.mapper.SysMenuMapper;
 import com.chenyudaima.properties.JwtProperties;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
@@ -14,7 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -28,6 +31,8 @@ public class SecurityInterceptor extends Interceptor {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
     private final JwtProperties jwtProperties;
+
+    private final SysMenuMapper sysMenuMapper;
 
     @Override
     public String[] getAddPathPatterns() {
@@ -89,7 +94,7 @@ public class SecurityInterceptor extends Interceptor {
         Map<String, String> clientInfoMap1 = new HashMap<>();
         clientInfoMap1.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
 
-        //参数不同说明是被别人登录，或者当前的是非法用户，显示请重新登录
+        //参数不同说明当前的是非法用户，显示请重新登录
         clientInfoMap.forEach((k,v) -> {
             String value = clientInfoMap1.get(k);
             if(value == null || !value.equals(v)) {
@@ -97,12 +102,22 @@ public class SecurityInterceptor extends Interceptor {
             }
         });
 
+        //重置redis中的token过期时间
+        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+
         //请求的控制器路径
         String path = request.getServletPath().substring(WebMvcConfig.PATH.length());
 
+        //先判断用户是否拥有访问这个页面的权限
 
-        //重置redis中的token过期时间
-        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+        //用户能访问的路径
+        List<String> list = new ArrayList<>();
+        if(!list.contains(path)) {
+            throw new SecurityException("没有权限访问");
+        }
+
+        //用户拥有的权限
+
 
         //把解析出来的数据放到请求中，内部有用户id，用户名
         request.setAttribute(RequestAttribute.CLAIMS, claims);

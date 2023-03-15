@@ -7,7 +7,7 @@
 
     <sql id="Base_Column_List">
         id,`name`,parent_id,
-        router_path,router_component,icon,`description`,`order`
+        router_path,router_component,icon,type,`description`,`order`
     </sql>
 
     <insert id="insert">
@@ -18,6 +18,7 @@
             <if test="routerPath != null"> router_path, </if>
             <if test="routerComponent != null"> router_component, </if>
             <if test="icon != null"> icon, </if>
+            <if test="type != null"> type, </if>
             <if test="order != null"> `order`, </if>
             <if test="description != null"> `description`, </if>
         </trim>
@@ -28,6 +29,7 @@
             <if test="routerPath != null"> #{routerPath}, </if>
             <if test="routerComponent != null"> #{routerComponent}, </if>
             <if test="icon != null"> #{icon}, </if>
+            <if test="type != null"> #{type}, </if>
             <if test="order != null"> #{order}, </if>
             <if test="description != null"> #{description}, </if>
         </trim>
@@ -41,14 +43,11 @@
             <if test="routerPath != null">router_path=#{routerPath},</if>
             <if test="routerComponent != null">router_component=#{routerComponent},</if>
             <if test="icon != null">icon=#{icon},</if>
+            <if test="type != null">type=#{type},</if>
             <if test="order != null">`order`=#{order},</if>
             <if test="description != null">`description`=#{description},</if>
         </set>
         where id=#{id}
-    </update>
-
-    <update id="drag">
-        update sys_menu set parent_id = #{dropSysMenuId} where id = #{draggingSysMenuId}
     </update>
 
     <delete id="deleteById">
@@ -66,23 +65,13 @@
         SELECT
             <include refid="Base_Column_List"/>
         FROM sys_menu
-        where id in (select menu_id
+        where type != 2 and id in (select menu_id
                      from sys_role_menu
                      where role_id in (select role_id
                                        from sys_user_role
                                        where user_id = #{id}))
         order by `order` desc
 
-    </select>
-
-
-    <select id="selectCount" resultType="java.lang.Long">
-        select count(*) from sys_menu
-        <where>
-            <if test="name != null and name != ''">and name=#{name}</if>
-            <if test="routerPath != null and routerPath != ''">and router_path=#{routerPath}</if>
-            <if test="routerComponent != null and routerComponent != ''">and router_component=#{routerComponent}</if>
-        </where>
     </select>
 
     <select id="selectAll" resultType="com.chenyudaima.vo.SysMenuVo">

@@ -4,8 +4,8 @@
     <!--头部  -->
     <el-header>
       <div style="display: flex;align-items: center;">
-        <img src="../../public/img/home_icon.jpg" alt="" width="50" height="50">
-        <span style="margin-left: 20px;">数据核对系统</span>
+        <img src="/image/home/home_icon.jpg" alt="" width="50" height="50">
+        <span style="margin-left: 20px;">质检系统</span>
       </div>
       <div>
 
@@ -44,8 +44,8 @@
           <template v-for="item in menuList">
 
             <!--判断一级菜单里面是否有二级菜单 -->
-            <template v-if="item.subMenu.length != 0">
-              <el-submenu :index="item.id.toString()" :key="item.id">
+            <template v-if="item.type == 0 && item.subMenu != null && item.subMenu.length != 0">
+              <el-submenu :index="item.id" :key="item.id">
 
                 <!--一级菜单 -->
                 <template slot="title">
@@ -55,7 +55,7 @@
 
                 <template v-for="subItem in item.subMenu">
                   <!--判断是否有三级菜单 -->
-                  <el-submenu v-if="subItem.subMenu.length != 0" :index="subItem.id.toString()" :key="subItem.id">
+                  <el-submenu v-if="subItem.type == 0 && subItem.subMenu != null && subItem.subMenu.length != 0" :index="subItem.id" :key="subItem.id">
 
                     <!-- 二级菜单 -->
                     <template slot="title">
@@ -150,7 +150,7 @@ export default {
 
     //加载菜单栏和对应路由
     async loadMenu() {
-      await http.get("/home/menu").then(resp => {
+      await http.get("/home/sysMenu").then(resp => {
         this.menuList = resp.data
         routerUtil.routerHandler(resp.data).forEach(router => {
           this.$router.addRoute("home", router)

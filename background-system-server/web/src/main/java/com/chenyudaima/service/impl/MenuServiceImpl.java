@@ -90,8 +90,4 @@ public class MenuServiceImpl implements MenuService {
         return Result.success();
     }
 
-    @Override
-    public Result<?> drag(String draggingSysMenuId, String dropSysMenuId) {
-        return Result.success(sysMenuMapper.drag(draggingSysMenuId, dropSysMenuId));
-    }
 }

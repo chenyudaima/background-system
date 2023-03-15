@@ -46,7 +46,7 @@
         <include refid="Base_Column_List"/>
         from sys_role
         <where>
-            <if test="sysRole.name != null and sysRole.name != ''">name = #{sysRole.name}</if>
+            <if test="sysRole.name != null and sysRole.name != ''">and name = #{sysRole.name}</if>
         </where>
         order by id
         limit ${(page -1) * pageSize},#{pageSize}
@@ -63,7 +63,7 @@
         select count(*)
         from sys_role
         <where>
-            <if test="name != null and name != ''">name = #{name}</if>
+            <if test="name != null and name != ''">and name = #{name}</if>
         </where>
     </select>
 </mapper>
