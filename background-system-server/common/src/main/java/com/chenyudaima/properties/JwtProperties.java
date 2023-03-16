@@ -12,7 +12,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class JwtProperties {
     private String signKey;
 
+    private String issuer;
+
     private int expiration;
+
+    public String getIssuer() {
+        return issuer;
+    }
+
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
+    }
 
     public String getSignKey() {
         return signKey;

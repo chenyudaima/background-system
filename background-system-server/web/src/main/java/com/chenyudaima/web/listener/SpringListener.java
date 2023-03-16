@@ -48,6 +48,13 @@ public class SpringListener implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("Spring容器初始化完成...");
 
+        if(isRunningTest()) {
+            return;
+        }
+
+        //加载需要权限的路径
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
+
         //加载定时任务
         List<SysTimedTask> sysTimedTasks = SpringUtil.getBean(SysTimedTaskMapper.class)
                 .selectAll();
@@ -56,8 +63,19 @@ public class SpringListener implements ApplicationRunner {
                 TaskService.startTimeTask(sysTimedTask);
             }
         }
+    }
 
-        //加载需要权限的路径
-        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
+    /**
+     * 检测是否是单元测试环境
+     * @return true 是   false 否
+     */
+    public static boolean isRunningTest() {
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        for (StackTraceElement e : stackTrace) {
+            if (e.toString().lastIndexOf("junit") > -1) {
+                return true;
+            }
+        }
+        return false;
     }
 }

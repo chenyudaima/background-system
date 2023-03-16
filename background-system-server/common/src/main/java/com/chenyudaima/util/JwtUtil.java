@@ -40,6 +40,9 @@ public class JwtUtil {
                 //签名时间
                 .setIssuedAt(new Date())
 
+                // 签发者
+                .setIssuer(jwtProperties.getIssuer())
+
                 //加密方式和key
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSignKey());
 
