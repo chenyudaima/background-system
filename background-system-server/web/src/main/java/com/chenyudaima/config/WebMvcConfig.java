@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -69,7 +70,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
-        //给有RestController注解的控制器加上PATH前缀
+        //给所有有RestController注解的控制器加上PATH前缀
         configurer.addPathPrefix(PATH, c -> c.isAnnotationPresent(RestController.class));
 
         WebMvcConfigurer.super.configurePathMatch(configurer);

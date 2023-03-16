@@ -78,4 +78,17 @@
         select <include refid="Base_Column_List"/> from sys_menu order by `order` desc
     </select>
 
+    <select id="selectSecurityAll" resultType="java.lang.String">
+        select router_path from sys_menu where router_path is not null and router_path != ''
+    </select>
+
+    <select id="selectRouterPathByUserId" resultType="java.lang.String">
+        select router_path FROM sys_menu
+        where type != 0 and id in (select menu_id
+                                   from sys_role_menu
+                                   where role_id in (select role_id
+                                                     from sys_user_role
+                                                     where user_id = #{id}))
+    </select>
+
 </mapper>

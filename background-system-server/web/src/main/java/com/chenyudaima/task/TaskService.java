@@ -37,13 +37,14 @@ public class TaskService {
     /**
      * 根据任务id启动定时任务
      * @param sysTimedTask 参数
+     * @return ture 启动成功 false 启动失败
      */
-    public static synchronized void startTimeTask(SysTimedTask sysTimedTask) throws ClassNotFoundException, JSONException {
+    public static synchronized boolean startTimeTask(SysTimedTask sysTimedTask) throws ClassNotFoundException, JSONException {
         ScheduledFuture<?> sFuture = map.get(sysTimedTask.getId());
 
         //说明上一条并发线程启动过，防止重复启动
         if(sFuture != null) {
-            return;
+            return false;
         }
 
         TimeTask timeTask = (TimeTask) SpringUtil.getBean(Class.forName(sysTimedTask.getClassName()));
@@ -54,20 +55,27 @@ public class TaskService {
         ScheduledFuture<?> schedule = threadPoolTaskScheduler.schedule(timeTask, new CronTrigger(sysTimedTask.getCron()));
 
         map.put(sysTimedTask.getId(), schedule);
+
+        return true;
     }
 
     /**
      * 根据任务id关闭定时任务
      * @param id 任务id
+     * @return ture 关闭成功 false 关闭失败
      */
-    public static synchronized void stopTimeTask(String id) {
-        Optional.ofNullable(map.get(id)).ifPresent(scheduledFuture -> {
-            //取消定时任务
-            scheduledFuture.cancel(true);
+    public static synchronized boolean stopTimeTask(String id) {
+        ScheduledFuture<?> scheduledFuture = map.get(id);
 
-            //从map中删除掉
-            map.remove(id);
-        });
+        if(scheduledFuture == null) {
+            return false;
+        }
+
+        scheduledFuture.cancel(true);
+
+        map.remove(id);
+
+        return true;
     }
 
 

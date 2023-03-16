@@ -1,4 +1,4 @@
-package com.chenyudaima.exception;
+package com.chenyudaima.exception.security;
 
 /**
  * 权限异常

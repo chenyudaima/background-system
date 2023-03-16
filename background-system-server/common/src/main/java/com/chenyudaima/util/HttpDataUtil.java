@@ -21,7 +21,7 @@ import java.net.URLDecoder;
 import java.util.*;
 
 /**
- * 获取http请求数据工具类
+ * 获取HttpServletRequest请求数据工具类
  *
  * @author 沉鱼代码
  * @date 2023/2/6

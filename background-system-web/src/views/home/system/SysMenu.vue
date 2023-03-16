@@ -12,8 +12,9 @@
       <!-- 菜单权限Tree区域 -->
       <el-aside width="500px">
 
-        <el-tree :default-expanded-keys="defaultExpandedKeys" ref="tree" :draggable="true" @node-drop="nodeDrop" :allow-drop="allowDrop" :data="sysMenuList"
-          show-checkbox node-key="id" :props="{ children: 'subMenu' }" @node-click="sysMenuClick">
+        <el-tree :check-strictly="true" :default-expanded-keys="defaultExpandedKeys" ref="tree" :draggable="true"
+          @node-drop="nodeDrop" :allow-drop="allowDrop" :data="sysMenuList" show-checkbox node-key="id"
+          :props="{ children: 'subMenu' }" @node-click="sysMenuClick">
           <span class="custom-tree-node" slot-scope=" { data }">
             <i :class="data.icon"></i>
             &nbsp;
@@ -131,12 +132,12 @@ export default {
 
     //菜单被点击的回调
     sysMenuClick(sysMenu) {
-      if(this.defaultExpandedKeys.indexOf(sysMenu.id) == -1) {
+      if (this.defaultExpandedKeys.indexOf(sysMenu.id) == -1) {
         this.defaultExpandedKeys.push(sysMenu.id)
-      }else {
+      } else {
         this.defaultExpandedKeys = this.defaultExpandedKeys.filter(id => id != sysMenu.id)
       }
-      
+
       this.sysMenu = sysMenu
     },
 
@@ -257,7 +258,7 @@ export default {
         type: 0,
         description: null
       }
-    }
+    },
 
   }
 }

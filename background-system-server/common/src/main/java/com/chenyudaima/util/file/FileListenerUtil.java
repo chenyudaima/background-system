@@ -8,11 +8,11 @@ import java.io.File;
 import java.io.FileFilter;
 
 /**
- * 当前服务器目录监听工具
+ * 当前服务器文件变化监听工具
  * @author 沉鱼代码
  * @date 2023/1/31
  */
-public class DirectoryMonitorUtil {
+public class FileListenerUtil {
 
 
     /**

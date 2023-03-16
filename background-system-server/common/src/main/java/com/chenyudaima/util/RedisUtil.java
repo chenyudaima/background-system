@@ -41,6 +41,15 @@ public class RedisUtil {
      * 字符串型添加值
      * @param key
      * @param value
+     */
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    /**
+     * 字符串型添加值
+     * @param key
+     * @param value
      * @param timeout 过期时间
      * @param unit 时间单位
      */

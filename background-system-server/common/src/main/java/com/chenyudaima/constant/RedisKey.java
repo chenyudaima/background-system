@@ -21,7 +21,11 @@ public class RedisKey {
      * 储存所有用户的token，使用hash数据类型 内部key是用户名，value是token
      * 不用设置过期，待用户下次上线直接覆盖就行了
      */
-    public static final String TOKEN_ALL = "sys:user:token—all";
+    public static final String TOKEN_ALL = "sys:user:token_all";
 
 
+    /**
+     * 储存需要权限的Controller路径
+     */
+    public static final String SECURITY_PATH = "sys:security:security_path";
 }

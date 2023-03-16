@@ -1,10 +1,12 @@
 package com.chenyudaima.service.impl;
 
+import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.mapper.SysMenuMapper;
 import com.chenyudaima.mapper.SysRoleMenuMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysMenu;
 import com.chenyudaima.service.MenuService;
+import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.vo.SysMenuVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class MenuServiceImpl implements MenuService {
     private final SysMenuMapper sysMenuMapper;
 
     private final SysRoleMenuMapper sysRoleMenuMapper;
+
+    private final RedisUtil redisUtil;
 
     @Override
     public Result<?> query() {
@@ -68,18 +72,22 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public Result<?> add(SysMenu sysMenu) {
         sysMenuMapper.insert(sysMenu);
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
         return Result.success();
     }
 
     @Override
     public Result<?> update(SysMenu sysMenu) {
-        return Result.success(sysMenuMapper.update(sysMenu));
+        sysMenuMapper.update(sysMenu);
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
+        return Result.success();
     }
 
     @Transactional(timeout = 60)
     public Result<?> deleteByIdBatch(String[] ids) {
         sysMenuMapper.deleteByIdBatch(ids);
         sysRoleMenuMapper.deleteByMenuIdBatch(ids);
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
         return Result.success();
     }
 
@@ -87,6 +95,7 @@ public class MenuServiceImpl implements MenuService {
     public Result<?> deleteById(String id) {
         sysMenuMapper.deleteById(id);
         sysRoleMenuMapper.deleteByMenuId(id);
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
         return Result.success();
     }
 

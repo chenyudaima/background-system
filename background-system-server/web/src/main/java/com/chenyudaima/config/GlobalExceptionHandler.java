@@ -1,8 +1,9 @@
 package com.chenyudaima.config;
 
-import com.chenyudaima.exception.RequestHeaderException;
-import com.chenyudaima.exception.SecurityException;
+import com.chenyudaima.exception.request.RequestHeaderException;
+import com.chenyudaima.exception.security.SecurityException;
 import com.chenyudaima.exception.SignException;
+import com.chenyudaima.exception.security.SecurityPathException;
 import com.chenyudaima.model.Result;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -53,6 +54,11 @@ public class GlobalExceptionHandler {
             message = "没有权限访问";
         }
         return new Result<>(403, message,null);
+    }
+
+    @ExceptionHandler(value= SecurityPathException.class)
+    public Result<?> SecurityPathException(HttpServletRequest request, Exception e) {
+        return new Result<>(402, e.getMessage(),null);
     }
 
 

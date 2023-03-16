@@ -16,6 +16,12 @@ public interface SysMenuMapper {
 
     List<SysMenuVo> selectByUserId(String id);
 
+    /**
+     * 根据用户id查询所有路由路径
+     * @param id
+     * @return
+     */
+    List<String> selectRouterPathByUserId(String id);
 
     int insert(SysMenu sysMenu);
 
@@ -26,6 +32,9 @@ public interface SysMenuMapper {
     int deleteByIdBatch(String[] ids);
 
     List<SysMenuVo> selectAll();
+
+    List<String> selectSecurityAll();
+
 }
 
 

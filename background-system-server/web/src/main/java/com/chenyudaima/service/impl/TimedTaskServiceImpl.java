@@ -81,19 +81,14 @@ public class TimedTaskServiceImpl implements TimedTaskService {
         return Result.success();
     }
 
-    @Transactional(timeout = 60)
     public Result<?> add(SysTimedTask sysTimedTask) {
-        sysTimedTaskMapper.insert(sysTimedTask);
-
         try {
-            if(sysTimedTask.getStatus() != 0) {
-                TaskService.startTimeTask(sysTimedTask);
-            }
+            sysTimedTaskMapper.insert(sysTimedTask);
+            TaskService.startTimeTask(sysTimedTask);
+            return Result.success();
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(sysTimedTask.getClassName() + "不存在");
         }
-
-        return Result.success();
     }
 
     @Override

@@ -4,18 +4,17 @@ import com.chenyudaima.config.WebMvcConfig;
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.constant.RequestAttribute;
-import com.chenyudaima.exception.SecurityException;
+import com.chenyudaima.exception.security.SecurityException;
+import com.chenyudaima.exception.security.SecurityPathException;
 import com.chenyudaima.mapper.SysMenuMapper;
 import com.chenyudaima.properties.JwtProperties;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,16 +107,16 @@ public class SecurityInterceptor extends Interceptor {
         //请求的控制器路径
         String path = request.getServletPath().substring(WebMvcConfig.PATH.length());
 
-        //先判断用户是否拥有访问这个页面的权限
+        List<String> securityPaths = redisUtil.get(RedisKey.SECURITY_PATH);
 
-        //用户能访问的路径
-        List<String> list = new ArrayList<>();
-        if(!list.contains(path)) {
-            throw new SecurityException("没有权限访问");
+        //判断该路径是否需要权限
+        if(securityPaths.contains(path)) {
+            //判断用户是否拥有访问该路径的权限
+            List<String> strings = sysMenuMapper.selectRouterPathByUserId(claims.getId());
+            if(!strings.contains(path)) {
+                throw new SecurityPathException("没有权限");
+            }
         }
-
-        //用户拥有的权限
-
 
         //把解析出来的数据放到请求中，内部有用户id，用户名
         request.setAttribute(RequestAttribute.CLAIMS, claims);

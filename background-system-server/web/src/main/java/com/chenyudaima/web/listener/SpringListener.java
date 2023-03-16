@@ -1,9 +1,13 @@
 package com.chenyudaima.web.listener;
 
+import com.chenyudaima.constant.RedisKey;
+import com.chenyudaima.mapper.SysMenuMapper;
 import com.chenyudaima.mapper.SysTimedTaskMapper;
 import com.chenyudaima.model.SysTimedTask;
 import com.chenyudaima.task.TaskService;
+import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.util.SpringUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -21,7 +25,13 @@ import java.util.List;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class SpringListener implements ApplicationRunner {
+
+    private final SysMenuMapper sysMenuMapper;
+
+    private final RedisUtil redisUtil;
+
 
     @PostConstruct
     public void init() {
@@ -38,6 +48,7 @@ public class SpringListener implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("Spring容器初始化完成...");
 
+        //加载定时任务
         List<SysTimedTask> sysTimedTasks = SpringUtil.getBean(SysTimedTaskMapper.class)
                 .selectAll();
         for (SysTimedTask sysTimedTask : sysTimedTasks) {
@@ -45,5 +56,8 @@ public class SpringListener implements ApplicationRunner {
                 TaskService.startTimeTask(sysTimedTask);
             }
         }
+
+        //加载需要权限的路径
+        redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
     }
 }

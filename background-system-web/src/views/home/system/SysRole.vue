@@ -81,7 +81,7 @@
         </el-form-item>
 
         <el-form-item label="角色权限" prop="description">
-          <el-tree :props="{ children: 'subMenu' }" ref="tree" :data="menuList" show-checkbox node-key="id">
+          <el-tree :check-strictly="true" :props="{ children: 'subMenu' }" ref="tree" :data="menuList" show-checkbox node-key="id">
             <span class="custom-tree-node" slot-scope=" { data }">
               <i :class="data.icon"></i>
               &nbsp;
