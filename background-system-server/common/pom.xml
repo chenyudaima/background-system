@@ -15,6 +15,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+
         <!--application.properties配置处理器 使@EnableConfigurationProperties注解生效-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,13 +38,6 @@
             <groupId>org</groupId>
             <artifactId>opencv</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--    <groupId>org</groupId>-->
-        <!--    <artifactId>opencv</artifactId>-->
-        <!--    <version>${opencv.version}</version>-->
-        <!--    <scope>system</scope>-->
-        <!--    <systemPath>${basedir}/lib/opencv-3413.jar</systemPath>-->
-        <!--</dependency>-->
 
         <!--解析xml文件工具-->
         <dependency>

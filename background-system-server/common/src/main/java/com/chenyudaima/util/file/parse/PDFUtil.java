@@ -1,4 +1,4 @@
-package com.chenyudaima.util.file;
+package com.chenyudaima.util.file.parse;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;

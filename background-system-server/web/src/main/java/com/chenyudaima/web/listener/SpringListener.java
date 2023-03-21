@@ -6,6 +6,7 @@ import com.chenyudaima.mapper.SysTimedTaskMapper;
 import com.chenyudaima.model.SysTimedTask;
 import com.chenyudaima.task.TaskService;
 import com.chenyudaima.util.RedisUtil;
+import com.chenyudaima.util.RuntimeUtil;
 import com.chenyudaima.util.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +49,7 @@ public class SpringListener implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         log.info("Spring容器初始化完成...");
 
-        if(isRunningTest()) {
+        if(RuntimeUtil.isRunningTest()) {
             return;
         }
 
@@ -65,17 +66,4 @@ public class SpringListener implements ApplicationRunner {
         }
     }
 
-    /**
-     * 检测是否是单元测试环境
-     * @return true 是   false 否
-     */
-    public static boolean isRunningTest() {
-        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        for (StackTraceElement e : stackTrace) {
-            if (e.toString().lastIndexOf("junit") > -1) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

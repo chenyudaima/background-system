@@ -15,7 +15,6 @@ public class RedisConfig {
 
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        System.out.println(OcrUtil.class);
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(RedisSerializer.string());

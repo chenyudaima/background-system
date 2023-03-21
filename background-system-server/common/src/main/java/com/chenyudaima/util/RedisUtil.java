@@ -1,5 +1,6 @@
 package com.chenyudaima.util;
 
+import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,13 @@ import java.util.concurrent.TimeUnit;
  * 记得对象要实现序列化接口
  */
 @Component
+@RequiredArgsConstructor
 public class RedisUtil {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Autowired
-    private RedissonClient redissonClient;
+    private final RedissonClient redissonClient;
 
     /**
      * 字符串型根据key获取值

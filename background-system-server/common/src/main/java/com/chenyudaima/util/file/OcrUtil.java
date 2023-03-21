@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 图片文字识别工具类
  */
 public class OcrUtil {
-    private static final Logger log = LoggerFactory.getLogger(OcrUtil.class);
     private static final Map<OcrEnum, ITesseract> TESSERACT_MAP = new ConcurrentHashMap<>();
 
     static {

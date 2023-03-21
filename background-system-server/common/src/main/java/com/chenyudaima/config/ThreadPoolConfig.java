@@ -1,5 +1,7 @@
 package com.chenyudaima.config;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,8 +42,8 @@ public class ThreadPoolConfig {
                     private final AtomicInteger mCount = new AtomicInteger(1);
 
                     @Override
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "LocalThreadPool" + mCount.getAndIncrement());
+                    public Thread newThread(Runnable runnable) {
+                        return new Thread(runnable, "LocalThreadPool" + mCount.getAndIncrement());
                     }
                 },
 

@@ -47,10 +47,9 @@ public class ThreadPoolUtil {
     }
 
     /**
-     * 线程池执行任务 （不会抛异常，异常需要从Future获取）
+     * 线程池执行任务 （不带返回值，不会抛异常，异常需要从Future获取）
      * @param runnable 任务
-     * @return 线程执行状态及执行结果
-     * get方法获取线程执行的结果返回，如果线程执行异常，则也会抛异常 (用于判断线程执行是否出现异常)
+     * @return 线程执行状态 （用于判断线程执行是否出现异常）
      */
     public static Future<?> submit(Runnable runnable) {
         return executor.submit(runnable);
