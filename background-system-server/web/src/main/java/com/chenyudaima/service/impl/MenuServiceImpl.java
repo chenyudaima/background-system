@@ -78,9 +78,9 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Result<?> update(SysMenu sysMenu) {
-        sysMenuMapper.update(sysMenu);
+        int count = sysMenuMapper.update(sysMenu);
         redisUtil.set(RedisKey.SECURITY_PATH, sysMenuMapper.selectSecurityAll());
-        return Result.success();
+        return Result.success(count);
     }
 
     @Transactional(timeout = 60)

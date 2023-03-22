@@ -5,13 +5,13 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @TableName sys_timed_task_log
+ * 定时任务日志表
  */
 @Data
 public class SysTimedTaskLog implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private Long id;
+    private String id;
 
     private String timedTaskId;
 

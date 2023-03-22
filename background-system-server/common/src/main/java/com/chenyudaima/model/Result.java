@@ -1,10 +1,13 @@
 package com.chenyudaima.model;
 
 
+import java.io.Serializable;
+
 /**
  * 接口响应结果
  */
-public class Result<T> {
+public class Result<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     private int code;
     private String message;
     private T data;

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyudaima.mapper.SysInterfaceRequestLogMapper">
+
+    <sql id="Base_Column_List">
+        id,user_id,request_time,
+        spend_time,request_url,request_method,
+        request_ip,request_param,response_result,`status`
+    </sql>
+
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.chenyudaima.model.SysInterfaceRequestLog" useGeneratedKeys="true">
+        insert into sys_interface_request_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="requestTime != null">request_time,</if>
+                <if test="spendTime != null">spend_time,</if>
+                <if test="requestUrl != null">request_url,</if>
+                <if test="requestMethod != null">request_method,</if>
+                <if test="requestIp != null">request_ip,</if>
+                <if test="requestParam != null">request_param,</if>
+                <if test="responseResult != null">response_result,</if>
+                <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id},</if>
+                <if test="userId != null">#{userId},</if>
+                <if test="requestTime != null">#{requestTime},</if>
+                <if test="spendTime != null">#{spendTime},</if>
+                <if test="requestUrl != null">#{requestUrl},</if>
+                <if test="requestMethod != null">#{requestMethod},</if>
+                <if test="requestIp != null">#{requestIp},</if>
+                <if test="requestParam != null">#{requestParam},</if>
+                <if test="responseResult != null">#{responseResult},</if>
+                <if test="status != null">#{status},</if>
+        </trim>
+    </insert>
+    <delete id="deleteByDay">
+        delete from sys_interface_request_log
+        where (TO_DAYS(NOW()) - TO_DAYS(request_time)) >= #{day}
+    </delete>
+
+    <select id="select" resultType="com.chenyudaima.model.SysInterfaceRequestLog">
+        select
+        sirl.id,
+        su.name as user_id,
+        sirl.request_time,
+        sirl.spend_time,
+        sirl.request_url,
+        sirl.request_method,
+        sirl.request_ip,
+        sirl.request_param,
+        sirl.response_result,
+        sirl.status
+        from sys_interface_request_log as sirl
+        left join sys_user su on sirl.user_id = su.id
+        <where>
+            <if test="sysInterfaceRequestLog.requestMethod != null and sysInterfaceRequestLog.requestMethod != ''">
+                and sirl.request_method = #{sysInterfaceRequestLog.requestMethod}
+            </if>
+
+            <if test="sysInterfaceRequestLog.status != null">
+                and sirl.status = #{sysInterfaceRequestLog.status}
+            </if>
+        </where>
+        order by sirl.request_time desc
+        limit ${(page - 1) * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from sys_interface_request_log
+        <where>
+            <if test="requestMethod != null and requestMethod != ''">
+                and request_method = #{requestMethod}
+            </if>
+            <if test="status != null">
+                and `status` = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>
