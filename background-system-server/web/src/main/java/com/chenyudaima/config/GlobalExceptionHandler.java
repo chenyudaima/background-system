@@ -5,6 +5,10 @@ import com.chenyudaima.exception.security.SecurityException;
 import com.chenyudaima.exception.SignException;
 import com.chenyudaima.exception.security.SecurityPathException;
 import com.chenyudaima.model.Result;
+import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -17,21 +21,38 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 /**
  * 统一异常处理
  */
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
     @ExceptionHandler(value={
             Throwable.class,
-            Exception.class,
-            AssertionError.class, //使用assert关键字断言出现的异常
+            //Exception.class,
+            //
+            ////使用assert关键字断言出现的异常
+            //AssertionError.class,
     })
     public Result<?> Exception(HttpServletRequest request, Exception e) {
         e.printStackTrace();
+        return new Result<>(500, e.getMessage(), null);
+    }
+
+    /**
+     * sql异常，做日志处理，更方便排查问题
+     * @param request
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value={
+            DataAccessException.class,
+            SQLException.class,
+    })
+    public Result<?> SQLException(HttpServletRequest request, Exception e) {
         return new Result<>(500, e.getMessage(), null);
     }
 
@@ -47,13 +68,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value= SecurityException.class)
     public Result<?> PermissionException(HttpServletRequest request, Exception e) {
-        String message;
-        if(e instanceof SecurityException) {
-            message = e.getMessage();
-        }else {
-            message = "没有权限访问";
-        }
-        return new Result<>(403, message,null);
+        return new Result<>(403, e.getMessage(),null);
     }
 
     @ExceptionHandler(value= SecurityPathException.class)
@@ -62,7 +77,8 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(value= {IllegalArgumentException.class,
+    @ExceptionHandler(value= {
+            IllegalArgumentException.class,
             MethodArgumentTypeMismatchException.class,
 
             SignException.class,
@@ -72,7 +88,8 @@ public class GlobalExceptionHandler {
             BindException.class,
             ValidationException.class,
             MethodArgumentNotValidException.class,
-            ConstraintViolationException.class})
+            ConstraintViolationException.class
+    })
     public Result<?> ValidationException(HttpServletRequest request, Exception e) {
         String message;
         Result<?> result = new Result<>();

@@ -36,11 +36,12 @@
       <!-- 表格 -->
       <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
         :data="sysInterfaceRequestLogList" border ref="checkedTable" :header-cell-style="headerCellStyle">
-        <el-table-column align="center" type="selection">
-        </el-table-column>
+        
+        <!-- <el-table-column align="center" type="selection">
+        </el-table-column> -->
 
-        <el-table-column fixed prop="id" label="id" width="180">
-        </el-table-column>
+        <!-- <el-table-column fixed prop="id" label="id" width="180">
+        </el-table-column> -->
 
         <el-table-column prop="requestUrl" label="请求路径" width="450">
         </el-table-column>
@@ -87,13 +88,6 @@
             {{ new Date(scope.row.requestTime).toLocaleString() }}
           </template>
         </el-table-column>
-
-        <!-- <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button type="text" size="small" @click="show(scope.row)">查看</el-button>
-            <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
-          </template>
-        </el-table-column> -->
       </el-table>
 
     </el-main>
@@ -115,8 +109,8 @@
       </el-pagination>
     </el-footer>
 
-    <el-dialog :visible.sync="dialog" width="40%" custom-class="dialogClass">
-      <el-input type="textarea" v-model="text" :autosize="{ minRows: 1, maxRows: 100 }" />
+    <el-dialog :visible.sync="dialog" width="60%" custom-class="dialogClass">
+      <el-input type="textarea" v-model="text" autosize readonly/>
     </el-dialog>
 
   </el-container>
@@ -179,7 +173,7 @@ export default {
         ...this.querySysInterfaceRequestLog
       }
 
-      for (var key in this.queryRole) {
+      for (var key in this.querySysInterfaceRequestLog) {
         this.querySysInterfaceRequestLog[key] = null
       }
 

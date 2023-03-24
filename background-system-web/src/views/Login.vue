@@ -2,24 +2,23 @@
   <div class="login_div">
 
     <!-- 背景 -->
-    <!-- <img :src="require('/public/img/1.jpg')" style="width: 100%; height: 100%; z-index: -1" /> -->
+    <img :src="'/image/login/login_background.jpg'" style="width: 100%; height: 100%; z-index: -1" />
 
     <div class="login_context">
 
       <!-- 登录表单 -->
-      <el-form ref="loginFormRef" class="login_box">
+      <el-form class="login_box">
 
-        <el-form-item>
+        <el-form-item style="text-align: center">
           <h2>质检系统</h2>
         </el-form-item>
 
-        <el-form-item prop="usercode">
-          <el-input prefix-icon="el-icon-user" v-model="account" placeholder="账号"></el-input>
+        <el-form-item prop="account">
+          <el-input prefix-icon="el-icon-user" v-model="account" placeholder="账号"/>
         </el-form-item>
 
         <el-form-item prop="password">
-          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="password"
-            @keyup.enter.native="login"></el-input>
+          <el-input prefix-icon="el-icon-lock" type="password" placeholder="密码" v-model="password" @keyup.enter.native="login"/>
         </el-form-item>
 
         <el-form-item prop="message">
@@ -50,18 +49,21 @@ export default {
     if (message != null) {
       this.$message.error(message)
     }
+    
+    this.$router.replace({ path: this.$route.path })
 
-    let my = this
+    let vue = this
     document.onkeyup = function (e) {
       //取出按键信息中的按键代码(大部分浏览器通过keyCode属性获取按键代码，但少部分浏览器使用的却是charCode)
       var code = e.charCode || e.keyCode;
       if (code == 13) {
-        my.login()
+        vue.login()
       }
     }
   },
 
   methods: {
+    //登录按钮
     login() {
       this.message = "";
       if (this.account.length == 0) {
@@ -69,7 +71,7 @@ export default {
         return;
       }
 
-      if (this.password == 0) {
+      if (this.password.length == 0) {
         this.message = "请输入密码";
         return;
       }
@@ -92,10 +94,12 @@ export default {
 </script>
 
 <style scoped>
+
 .login_div {
   height: 100%;
   background: rgb(43, 75, 107);
   position: relative;
+  overflow: hidden
 }
 
 .login_context {
@@ -107,7 +111,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   border-radius: 10px;
-  box-shadow: 0 0 5px 2px #ddd;
+  box-shadow: 0 0 1px 2px #000000;
 }
 
 .login_box {

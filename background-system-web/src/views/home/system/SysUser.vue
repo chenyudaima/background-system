@@ -14,7 +14,7 @@
         </el-form-item>
 
         <el-form-item label="状态">
-          <el-radio-group v-model="queryUser.status"  size="small">
+          <el-radio-group v-model="queryUser.status" size="small">
             <el-radio-button label="0">冻结</el-radio-button>
             <el-radio-button label="1">正常</el-radio-button>
           </el-radio-group>
@@ -68,6 +68,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="show(scope.row)">查看</el-button>
             <el-button type="text" size="small" @click="update(scope.row)">编辑</el-button>
+            <el-button type="text" size="small" @click="updatePassword(scope.row)">修改密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -101,12 +102,12 @@
         </el-form-item>
 
         <el-form-item label="用户名" prop="account">
-          <el-input type="text" v-model="sysUser.account" autocomplete="off"></el-input>
+          <el-input type="text" v-model="sysUser.account" autocomplete="off" :disabled="true"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password" v-if="dialogStatus != 3">
+        <!-- <el-form-item label="密码" prop="password" v-if="dialogStatus != 3">
           <el-input type="password" v-model="sysUser.password" autocomplete="off"></el-input>
-        </el-form-item>
+        </el-form-item> -->
 
         <el-form-item label="手机号" prop="phone">
           <el-input v-model.number="sysUser.phone"></el-input>
@@ -145,6 +146,29 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogClose">取 消</el-button>
+      </span>
+    </el-dialog>
+
+    <!-- 修改密码表单 -->
+    <el-dialog title="修改密码" :visible.sync="updatePasswordDialog" width="30%" custom-class="dialogClass">
+
+      <el-form :model="sysUser" label-width="100px" ref="from">
+
+        <el-form-item label="用户名" prop="account">
+          <el-input type="text" v-model="sysUser.account" autocomplete="off" :disabled="true"></el-input>
+        </el-form-item>
+
+        <el-form-item label="新密码" prop="name">
+          <el-input type="password" v-model="sysUser.password" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">提交</el-button>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updatePasswordDialog = false">取 消</el-button>
       </span>
     </el-dialog>
 
@@ -202,7 +226,9 @@ export default {
         name: null,
         account: null,
         status: null
-      }
+      },
+
+      updatePasswordDialog: false
 
     }
   },
@@ -235,7 +261,7 @@ export default {
       }
 
       http.get("/home/system/sysUser", { params: param }).then(resp => {
-        if(resp.code == 500) {
+        if (resp.code == 500) {
           this.$message.error(resp.message)
           return;
         }
@@ -309,6 +335,8 @@ export default {
           if (resp.code == 200) {
             this.query()
             this.dialog = false
+            this.updatePasswordDialog = false
+            this.$message.success("修改成功")
           } else {
             this.$message.error(resp.message)
           }
@@ -384,6 +412,12 @@ export default {
 
     headerCellStyle() {
       return "background-color:#1989fa;color:#fff;font-weight:400";
+    },
+
+    updatePassword(sysUser) {
+      this.dialogStatus = 2
+      this.sysUser = { ...sysUser }
+      this.updatePasswordDialog = true
     }
   }
 

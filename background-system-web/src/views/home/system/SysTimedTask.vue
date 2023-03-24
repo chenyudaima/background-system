@@ -104,7 +104,7 @@
     </el-footer>
 
     <!-- 查看日志 -->
-    <el-dialog title="查看日志" :visible.sync="logDialog" width="50%" custom-class="dialogClass">
+    <el-dialog title="查看日志" :visible.sync="logDialog" width="70%" custom-class="dialogClass">
 
       <el-form :inline="true" @submit.native.prevent>
 
@@ -124,8 +124,9 @@
 
       <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
         :data="sysTimedTaskLogList" border ref="checkedTable" :header-cell-style="headerCellStyle">
-        <el-table-column fixed prop="id" label="id">
-        </el-table-column>
+
+        <!-- <el-table-column fixed prop="id" label="id">
+        </el-table-column> -->
 
         <el-table-column prop="startExecuteTime" label="开始执行时间">
           <template slot-scope="scope">
@@ -168,7 +169,7 @@
     </el-dialog>
 
     <!-- 表单 -->
-    <el-dialog :title="formTitle" :visible.sync="dialog" width="30%" custom-class="dialogClass">
+    <el-dialog :title="formTitle" :visible.sync="dialog" width="40%" custom-class="dialogClass">
 
       <el-form :model="sysTimedTask" label-width="100px" ref="from">
 

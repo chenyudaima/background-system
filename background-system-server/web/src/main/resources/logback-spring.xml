@@ -127,8 +127,12 @@
     </appender>
 
     <!--myibatis sql 日志配置 -->
-    <logger name="com.chenyudaima.mapper" level="DEBUG" />
+    <!--<logger name="com.chenyudaima.mapper" level="DEBUG" />-->
 
+    <!--突破INFO，该包为DEBUG级别-->
+    <logger name="com.chenyudaima.config" level="DEBUG" />
+
+    <!--指定设置为INFO级别-->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="all"/>

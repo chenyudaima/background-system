@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 100%;">
+  <el-container style="height: 100%; overflow:hidden;">
 
     <!--头部  -->
     <el-header>
@@ -8,7 +8,6 @@
         <span style="margin-left: 20px;">质检系统</span>
       </div>
       <div>
-
         <el-dropdown style="padding: 20px" trigger="click">
           <span style="color: #409EFF">
             {{ user.name }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -55,7 +54,8 @@
 
                 <template v-for="subItem in item.subMenu">
                   <!--判断是否有三级菜单 -->
-                  <el-submenu v-if="subItem.type == 0 && subItem.subMenu != null && subItem.subMenu.length != 0" :index="subItem.id" :key="subItem.id">
+                  <el-submenu v-if="subItem.type == 0 && subItem.subMenu != null && subItem.subMenu.length != 0"
+                    :index="subItem.id" :key="subItem.id">
 
                     <!-- 二级菜单 -->
                     <template slot="title">
@@ -97,7 +97,7 @@
       </el-aside>
 
       <!-- 主体 -->
-      <el-main style="background-color: #EAEDF1;">
+      <el-main class="home-main">
         <router-view></router-view>
       </el-main>
 
@@ -166,6 +166,21 @@ export default {
 
 
 <style scoped>
+.home-main:hover {
+  overflow-y: auto;
+  overflow-y: overlay;
+}
+
+.home-main {
+  background-color: #EAEDF1;
+  padding-right: 17px;
+  padding-left: 3px;
+  height: 95vh;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
 .el-menu {
   border-right-width: 0;
 }

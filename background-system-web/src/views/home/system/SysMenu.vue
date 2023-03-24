@@ -12,9 +12,9 @@
       <!-- 菜单权限Tree区域 -->
       <el-aside width="500px">
 
-        <el-tree :check-strictly="true" :default-expanded-keys="defaultExpandedKeys" ref="tree" :draggable="true"
-          @node-drop="nodeDrop" :allow-drop="allowDrop" :data="sysMenuList" show-checkbox node-key="id"
-          :props="{ children: 'subMenu' }" @node-click="sysMenuClick">
+        <el-tree style="background-color: #EAEDF1" :check-strictly="true" :default-expanded-keys="defaultExpandedKeys"
+          ref="tree" :draggable="true" @node-drop="nodeDrop" :allow-drop="allowDrop" :data="sysMenuList" show-checkbox
+          node-key="id" :props="{ children: 'subMenu' }" @node-click="sysMenuClick">
           <span class="custom-tree-node" slot-scope=" { data }">
             <i :class="data.icon"></i>
             &nbsp;
@@ -72,11 +72,11 @@
             </el-radio-group>
           </el-form-item>
 
-          <!-- <el-form-item label="排序" prop="order">
-            <el-input v-model.number="sysMenu.order" :disabled="true">
+          <el-form-item label="排序" prop="order">
+            <el-input v-model.number="sysMenu.order">
               <template slot="prepend">拖拽实现</template>
             </el-input>
-          </el-form-item> -->
+          </el-form-item>
 
           <el-form-item label="描述" prop="description">
             <el-input v-model="sysMenu.description"></el-input>
@@ -190,7 +190,7 @@ export default {
     allowDrop(draggingNode, dropNode, type) {
 
       //如果拖动的是菜单或者页面，只能放菜单下面
-      if ((draggingNode.data.type == 0 || draggingNode.data.type == 1) && dropNode.data.type != 0) {
+      if ((draggingNode.data.type == 0 || draggingNode.data.type == 1) && dropNode.data.type != 0 && type == "inner") {
         return false;
       }
 
@@ -202,7 +202,12 @@ export default {
       return true
     },
 
-    //拖拽菜单成功时回调函数 before inner
+    /**
+     * 拖拽菜单成功时回调函数 
+     * draggingNode 被拖拽的节点
+     * dropNode 投放的节点
+     * type 投放类型 inner精准投放，before投放在前，after投放在后
+     * */
     nodeDrop(draggingNode, dropNode, type, event) {
       if (type == "inner") {
         draggingNode.data.parentId = dropNode.data.id
@@ -219,6 +224,8 @@ export default {
       http.patch("/home/system/sysMenu", param).then(resp => {
         if (!(resp.data > 0)) {
           this.$message.error("修改失败")
+        } else {
+          this.$message.success("修改成功")
         }
         this.query()
       })
@@ -264,4 +271,15 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.el-tree-node__content {
+  padding-left: 15px !important;
+  height: 56px;
+}
+
+.el-tree-node__children {
+  .el-tree-node__content {
+    padding-left: 30px !important;
+  }
+}
+</style>
