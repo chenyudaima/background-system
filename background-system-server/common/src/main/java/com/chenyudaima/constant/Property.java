@@ -18,4 +18,9 @@ public class Property {
      */
 
     public static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
+
+    /**
+     * 当前程序工作目录
+     */
+    public static final String USER_DIR = "user.dir";
 }

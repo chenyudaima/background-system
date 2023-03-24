@@ -102,12 +102,12 @@
         </el-form-item>
 
         <el-form-item label="用户名" prop="account">
-          <el-input type="text" v-model="sysUser.account" autocomplete="off" :disabled="true"></el-input>
+          <el-input type="text" v-model="sysUser.account" autocomplete="off" :disabled="dialogStatus != 1"></el-input>
         </el-form-item>
 
-        <!-- <el-form-item label="密码" prop="password" v-if="dialogStatus != 3">
+        <el-form-item label="密码" prop="password" v-if="dialogStatus == 1">
           <el-input type="password" v-model="sysUser.password" autocomplete="off"></el-input>
-        </el-form-item> -->
+        </el-form-item>
 
         <el-form-item label="手机号" prop="phone">
           <el-input v-model.number="sysUser.phone"></el-input>
@@ -182,7 +182,28 @@ export default {
   watch: {
     //路径变化执行查询
     $route(route) {
-      this.query()
+      let query = this.$route.query
+      //判断是否有路径参数，没有则手动添加
+      if (JSON.stringify(query) == '{}') {
+        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+        return;
+      }
+
+      http.get("/home/system/sysUser", { params: query }).then(resp => {
+        if (resp.code != 200) {
+          this.$message.error(resp.message)
+          this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+          return;
+        }
+
+        this.total = resp.data.total
+        this.roleList = resp.data.roleList
+        this.userList = resp.data.userList
+        if (this.userList.length == 0 && query.page > 1) {
+          this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
+          return;
+        }
+      })
     }
   },
 
@@ -241,47 +262,34 @@ export default {
 
     //查询
     query() {
-      //判断是否有路径参数，没有则手动添加
-      if (JSON.stringify(this.$route.query) == '{}') {
-        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-        return;
-      }
-
       //从路径参数获取
       let query = this.$route.query
 
-      let param = {
-        page: query.page,
-        pageSize: query.pageSize,
-        ...this.queryUser
-      }
+      let param = { ...query }
 
+      //清空查询输入
+      let input = false;
       for (var key in this.queryUser) {
-        this.queryUser[key] = null
+        if (this.queryUser[key] != null) {
+          input = true;
+          param[key] = this.queryUser[key]
+          this.queryUser[key] = null
+        }
       }
 
-      http.get("/home/system/sysUser", { params: param }).then(resp => {
-        if (resp.code == 500) {
-          this.$message.error(resp.message)
-          return;
-        }
-
-        if (resp.code != 200) {
+      if (input) {
+        //说明用户有输入
+        this.$router.replace({ path: this.$route.path, query: param })
+      } else {
+        //说明用户没有输入
+        if (JSON.stringify(query) == "{}") {
+          //说明直接点击的查询，相当于重置
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-          return;
+        } else {
+          //有可能是重复点击查询，也有可能是刷新页面
+          this.$router.replace({ path: this.$route.path, query: {} })
         }
-
-        this.total = resp.data.total
-        this.roleList = resp.data.roleList
-
-        if (resp.data.userList.length == 0 && query.page > 1) {
-          this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
-          return;
-        }
-
-        this.userList = resp.data.userList
-      })
-
+      }
     },
 
     //每页条数变化执行（修改路径参数）

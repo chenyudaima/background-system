@@ -6,9 +6,9 @@ import com.chenyudaima.exception.SignException;
 import com.chenyudaima.exception.security.SecurityPathException;
 import com.chenyudaima.model.Result;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -30,6 +30,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(value={
             Throwable.class,
             //Exception.class,
@@ -53,6 +55,7 @@ public class GlobalExceptionHandler {
             SQLException.class,
     })
     public Result<?> SQLException(HttpServletRequest request, Exception e) {
+        log.error("SQL异常:\n{}", e.toString());
         return new Result<>(500, e.getMessage(), null);
     }
 

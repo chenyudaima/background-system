@@ -29,10 +29,15 @@ public class DeleteSystemLogTimeTask extends TimeTask {
     private final SysInterfaceRequestLogMapper sysInterfaceRequestLogMapper;
 
     String run(Map<String, String> paramMap) throws Exception {
-        //删除定时任务n天前的日志
-        sysTimedTaskLogMapper.deleteByDay(Integer.parseInt(paramMap.get("sys_timed_task_log_the_other_day")));
+        //删除定时任务日志
+        sysTimedTaskLogMapper.deleteByDay(
+                Integer.parseInt(paramMap.get("sys_timed_task_log_the_other_day"))
+        );
 
-        sysInterfaceRequestLogMapper.deleteByDay(Integer.parseInt(paramMap.get("sys_interface_request_log_the_other_day")));
+        //删除接口请求日志
+        sysInterfaceRequestLogMapper.deleteByDay(
+                Integer.parseInt(paramMap.get("sys_interface_request_log_the_other_day"))
+        );
 
         return null;
     }

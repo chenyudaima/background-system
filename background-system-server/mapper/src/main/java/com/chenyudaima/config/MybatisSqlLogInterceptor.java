@@ -1,6 +1,7 @@
 package com.chenyudaima.config;
 
 
+import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -12,29 +13,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
-
+import java.util.*;
 
 /**
- *
- @Intercepts(value = {
- @Signature(type = Executor.class,
- method = "update",
- args = {MappedStatement.class, Object.class}),
- @Signature(type = Executor.class,
- method = "query",
- args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class,
- CacheKey.class, BoundSql.class}),
- @Signature(type = Executor.class,
- method = "query",
- args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
- */
-
-/**
- * 拦截执行的Sql进行日志处理
+ * 用于监控Sql执行时间作为日志
+ * 不能捕获Sql执行异常
  */
 
 @Component
@@ -58,10 +41,10 @@ public class MybatisSqlLogInterceptor implements Interceptor {
         //先拦截到RoutingStatementHandler，里面有个StatementHandler类型的delegate变量，其实现类是BaseStatementHandler，然后就到BaseStatementHandler的成员变量mappedStatement
         MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
 
-        //com.uv.dao.UserMapper.insertUser
+        //com.chenyudaima.mapper.UserMapper.insertUser
         String id = mappedStatement.getId();
 
-        //sql语句类型 SELECT、DELETE、INSERT、UPDATE
+        //SELECT、DELETE、INSERT、UPDATE
         String sqlType = mappedStatement.getSqlCommandType().name();
 
         BoundSql boundSql = statementHandler.getBoundSql();
@@ -70,27 +53,15 @@ public class MybatisSqlLogInterceptor implements Interceptor {
         String sql = boundSql.getSql();
 
         //参数
-        String param = null;
+        //Map map = (MapperMethod.ParamMap) boundSql.getParameterObject();
 
+        long time = System.currentTimeMillis();
 
-        if(null != boundSql.getParameterObject()) {
+        Object proceed = invocation.proceed();
 
-            System.out.println(boundSql.getParameterObject().toString());
+        log.debug("\nSQL执行日志\nclassName: {}\ntype: {}\nsql: {}\ntime: {}毫秒", id, sqlType, sql, System.currentTimeMillis() - time);
 
-        }
-
-        try {
-            long time = System.currentTimeMillis();
-
-            //执行之后的数据
-            Object proceed = invocation.proceed();
-            log.debug("\nclassName: {}\ntype: {}\nsql: {}\ntime: {}毫秒",id, sqlType, sql, System.currentTimeMillis() - time);
-
-            return proceed;
-        }catch (Exception e) {
-            log.debug("\nclassName: {}\ntype: {}\nsql: {}\nerror: {}",id, sqlType, sql, e);
-            throw e;
-        }
+        return proceed;
     }
 
     /**
@@ -109,11 +80,8 @@ public class MybatisSqlLogInterceptor implements Interceptor {
         } else {
             return target;
         }
-
     }
 
     @Override
-    public void setProperties(Properties properties) {
-
-    }
+    public void setProperties(Properties properties) {}
 }

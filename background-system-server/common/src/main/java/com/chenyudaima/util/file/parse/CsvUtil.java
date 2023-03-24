@@ -8,7 +8,7 @@ import java.util.Scanner;
 /**
  * csv文件操作工具类
  */
-public class CSVUtil {
+public class CsvUtil {
 
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
@@ -24,7 +24,7 @@ public class CSVUtil {
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
                 //每一行的数据
-                lists.add(CSVUtil.parseLine(scanner.nextLine()));
+                lists.add(CsvUtil.parseLine(scanner.nextLine()));
             }
 
             return lists;

@@ -8,7 +8,7 @@ import java.io.File;
 /**
  * pdf文件操作工具类
  */
-public class PDFUtil {
+public class PdfUtil {
     /**
      * 读取pdf文件总页数
      */

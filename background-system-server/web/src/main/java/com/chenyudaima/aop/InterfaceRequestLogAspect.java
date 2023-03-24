@@ -39,13 +39,20 @@ public class InterfaceRequestLogAspect {
     private final Snowflake snowflake;
 
     /**
-     * 代理所有控制器，如果只需要单个控制器的日志，可以使用自定义注解
+     * 代理的控制器，如果只需要单个控制器的日志，可以使用自定义注解
      */
     @Pointcut(value = "execution(public * com.chenyudaima.web.controller..*.*(..))")
-    public void pointcut() {
+    public void include() {
     }
 
-    @Around("pointcut()")
+    /**
+     * 排除测试控制器
+     */
+    @Pointcut(value = "execution(public * com.chenyudaima.web.controller.TestController.*(..))")
+    public void exclude() {
+    }
+
+    @Around("include() && !exclude()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         long time = System.currentTimeMillis();
 

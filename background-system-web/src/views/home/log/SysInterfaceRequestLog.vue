@@ -15,7 +15,7 @@
             <el-option key="PUT" label="PUT" value="PUT" />
           </el-select>
         </el-form-item>
-        
+
         <el-form-item label="状态">
           <el-radio-group v-model="querySysInterfaceRequestLog.status" size="small">
             <el-radio-button label="0">异常</el-radio-button>
@@ -36,7 +36,7 @@
       <!-- 表格 -->
       <el-table :cell-style="{ 'text-align': 'center' }" style="width: 100%;height: @rowheight*10 !important;"
         :data="sysInterfaceRequestLogList" border ref="checkedTable" :header-cell-style="headerCellStyle">
-        
+
         <!-- <el-table-column align="center" type="selection">
         </el-table-column> -->
 
@@ -110,7 +110,7 @@
     </el-footer>
 
     <el-dialog :visible.sync="dialog" width="60%" custom-class="dialogClass">
-      <el-input type="textarea" v-model="text" autosize readonly/>
+      <el-input type="textarea" v-model="text" autosize readonly />
     </el-dialog>
 
   </el-container>
@@ -123,7 +123,30 @@ export default {
   watch: {
     //路径变化执行查询
     $route(route) {
-      this.query()
+      //获取路径参数
+      let query = this.$route.query
+
+      //判断是否有路径参数，没有则手动添加
+      if (JSON.stringify(query) == '{}') {
+        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+        return;
+      }
+
+      http.get("/home/log/sysInterfaceRequestLog", { params: query }).then(resp => {
+        if (resp.code != 200) {
+          this.$message.error(resp.message)
+          this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
+          return;
+        }
+
+        this.total = resp.data.total
+        this.sysInterfaceRequestLogList = resp.data.sysInterfaceRequestLogList
+
+        if (this.sysInterfaceRequestLogList.length == 0 && query.page > 1) {
+          this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
+          return;
+        }
+      })
     }
   },
 
@@ -159,42 +182,35 @@ export default {
 
     //查询
     query() {
-      //判断是否有路径参数，没有则手动添加
-      if (JSON.stringify(this.$route.query) == '{}') {
-        this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-        return;
-      }
-
       //从路径参数获取
       let query = this.$route.query
-      let param = {
-        page: query.page,
-        pageSize: query.pageSize,
-        ...this.querySysInterfaceRequestLog
-      }
 
+      //请求参数
+      let param = { ...query }
+
+      //清空查询输入
+      let input = false;
       for (var key in this.querySysInterfaceRequestLog) {
-        this.querySysInterfaceRequestLog[key] = null
+        if (this.querySysInterfaceRequestLog[key] != null) {
+          input = true;
+          param[key] = this.querySysInterfaceRequestLog[key]
+          this.querySysInterfaceRequestLog[key] = null
+        }
       }
 
-      http.get("/home/log/sysInterfaceRequestLog", { params: param }).then(resp => {
-        if (resp.code == 500) {
-          this.$message.error(resp.message)
-          return;
-        }
-
-        if (resp.code != 200) {
+      if (input) {
+        //说明用户有输入
+        this.$router.replace({ path: this.$route.path, query: param })
+      } else {
+        //说明用户没有输入
+        if (JSON.stringify(query) == "{}") {
+          //说明直接点击的查询，相当于重置
           this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
-          return;
+        }else {
+          //有可能是重复点击查询，也有可能是刷新页面
+          this.$router.replace({ path: this.$route.path, query: {} })
         }
-
-        this.total = resp.data.total
-        this.sysInterfaceRequestLogList = resp.data.sysInterfaceRequestLogList
-        if (resp.data.sysInterfaceRequestLogList.length == 0 && query.page > 1) {
-          this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
-          return;
-        }
-      })
+      }
     },
 
     //每页条数变化执行（修改路径参数）
