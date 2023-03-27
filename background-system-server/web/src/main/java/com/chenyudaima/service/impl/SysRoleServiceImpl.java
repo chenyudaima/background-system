@@ -6,17 +6,14 @@ import com.chenyudaima.mapper.SysRoleMapper;
 import com.chenyudaima.mapper.SysRoleMenuMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysRole;
-import com.chenyudaima.model.SysUser;
-import com.chenyudaima.service.RoleService;
+import com.chenyudaima.service.SysRoleService;
 import com.chenyudaima.vo.SysMenuVo;
 import com.chenyudaima.vo.SysRoleVo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author 沉鱼代码
@@ -24,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class RoleServiceImpl implements RoleService {
+public class SysRoleServiceImpl implements SysRoleService {
 
     private final SysRoleMapper sysRoleMapper;
 

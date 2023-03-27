@@ -8,11 +8,7 @@
 
         <el-form-item label="请求方法">
           <el-select size="small" v-model="querySysInterfaceRequestLog.requestMethod" placeholder="请选择">
-            <el-option key="GET" label="GET" value="GET" />
-            <el-option key="POST" label="POST" value="POST" />
-            <el-option key="DELETE" label="DELETE" value="DELETE" />
-            <el-option key="PATCH" label="PATCH" value="PATCH" />
-            <el-option key="PUT" label="PUT" value="PUT" />
+            <el-option v-for="(requestMethod) in requestMethodList" :label="requestMethod.name" :value="requestMethod.value"  :key="requestMethod.id" />
           </el-select>
         </el-form-item>
 
@@ -118,7 +114,7 @@
 <script>
 
 import http from '@/utils/http.js'
-
+import dcitUtil from '@/utils/dictUtil.js'
 export default {
   watch: {
     //路径变化执行查询
@@ -152,6 +148,7 @@ export default {
 
   data() {
     return {
+      requestMethodList: [],
       //每页条数选择
       pageSizes: [5, 10],
 
@@ -175,6 +172,10 @@ export default {
   },
 
   created() {
+    dcitUtil.getDictData("837372738753527809").then(requestMethodList => {
+      this.requestMethodList = requestMethodList
+    })
+
     this.query()
   },
 

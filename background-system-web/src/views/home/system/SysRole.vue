@@ -17,8 +17,6 @@
 
         <el-button @click="add" type="primary" size="small">增加</el-button>
         <el-button @click="remove" type="danger" size="small">删除</el-button>
-        <el-button @click="exportExcel" type="primary" size="small">导出</el-button>
-
       </el-form>
 
     </el-header>
@@ -336,25 +334,6 @@ export default {
     dialogClose() {
       this.dialog = false
       this.dialogStatus = 0
-    },
-
-    //导出excel
-    exportExcel() {
-      http.get("/home/system/sysRole/exportExcel").then(resp => {
-        let fileName = resp.headers['content-disposition'].split(';')[1].split('filename=')[1]
-
-        const url = window.URL.createObjectURL(
-          new Blob(['\uFEFF' + resp.data], {
-            type: 'text/plain;charset=utf-8',
-          })
-        )
-
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', fileName)
-        document.body.appendChild(link)
-        link.click()
-      })
     },
 
     //表头样式

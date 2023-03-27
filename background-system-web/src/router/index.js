@@ -34,7 +34,9 @@ const router = new VueRouter({
   routes
 })
 
+//加载路由的次数
 let count = 0;
+
 //路由跳转前
 router.beforeEach((to, from, next) => {
   //如果未匹配到路由则跳转到首页 (也可以跳转到404页面)
@@ -44,7 +46,6 @@ router.beforeEach((to, from, next) => {
       //先加载路由
       routerUtil.loadRouter()
       count ++
-      
       if(count > 3) {
         router.push("/")
       }else {

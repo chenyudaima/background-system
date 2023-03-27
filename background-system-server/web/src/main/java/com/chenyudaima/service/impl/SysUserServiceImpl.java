@@ -6,7 +6,7 @@ import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.mapper.SysUserRoleMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
-import com.chenyudaima.service.UserService;
+import com.chenyudaima.service.SysUserService;
 import com.chenyudaima.vo.SysUserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.HashMap;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class SysUserServiceImpl implements SysUserService {
 
     private final SysUserMapper sysUserMapper;
 

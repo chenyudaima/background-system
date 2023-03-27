@@ -5,7 +5,7 @@ import com.chenyudaima.mapper.SysMenuMapper;
 import com.chenyudaima.mapper.SysRoleMenuMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysMenu;
-import com.chenyudaima.service.MenuService;
+import com.chenyudaima.service.SysMenuService;
 import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.vo.SysMenuVo;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class MenuServiceImpl implements MenuService {
+public class SysMenuServiceImpl implements SysMenuService {
 
     private final SysMenuMapper sysMenuMapper;
 

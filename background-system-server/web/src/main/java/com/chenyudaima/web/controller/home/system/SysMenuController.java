@@ -2,7 +2,7 @@ package com.chenyudaima.web.controller.home.system;
 
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysMenu;
-import com.chenyudaima.service.MenuService;
+import com.chenyudaima.service.SysMenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,31 +19,31 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class SysMenuController {
-    private final MenuService menuService;
+    private final SysMenuService sysMenuService;
 
     @GetMapping
     public Result<?> query() {
-        return menuService.query();
+        return sysMenuService.query();
     }
 
     @PostMapping
     public Result<?> add(@RequestBody SysMenu sysMenu) {
-        return menuService.add(sysMenu);
+        return sysMenuService.add(sysMenu);
     }
 
     @PatchMapping
     public Result<?> update(@RequestBody SysMenu sysMenu) {
-        return menuService.update(sysMenu);
+        return sysMenuService.update(sysMenu);
     }
 
     @DeleteMapping("/{id}")
     public Result<?> deleteById(@PathVariable("id") String id) {
-        return menuService.deleteById(id);
+        return sysMenuService.deleteById(id);
     }
 
     @DeleteMapping
     public Result<?> deleteByIdBatch(@RequestBody Map<String, Object> map) {
         List<String> ids = (ArrayList<String>) map.get("ids");
-        return menuService.deleteByIdBatch(ids.toArray(new String[ids.size()]));
+        return sysMenuService.deleteByIdBatch(ids.toArray(new String[ids.size()]));
     }
 }

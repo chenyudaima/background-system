@@ -8,7 +8,7 @@ import com.chenyudaima.vo.SysUserVo;
  * @author 沉鱼代码
  * @date 2023/2/19
  */
-public interface UserService {
+public interface SysUserService {
     Result<?> query(SysUser sysUser, int page, int pageSize);
 
     Result<?> deleteByIdBatch(String... ids);

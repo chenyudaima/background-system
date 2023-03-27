@@ -1,6 +1,6 @@
 import md5 from 'js-md5'
 import qs from 'qs'
-import uuidUtil from '@/utils/uuidUtil.js';
+import uuidUtil from '/public/js/uuidUtil.js';
 
 //对需要请求的参数进行签名
 function signature(config) {

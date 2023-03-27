@@ -7,7 +7,7 @@ import com.chenyudaima.model.SysMenu;
  * @author 沉鱼代码
  * @date 2023/2/27
  */
-public interface MenuService {
+public interface SysMenuService {
     Result<?> query();
 
     Result<?> add(SysMenu sysMenu);

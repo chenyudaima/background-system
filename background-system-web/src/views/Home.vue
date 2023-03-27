@@ -175,7 +175,7 @@ export default {
   background-color: #EAEDF1;
   padding-right: 17px;
   padding-left: 3px;
-  height: 95vh;
+  height: 93vh;
   width: 100%;
   overflow-y: hidden;
   overflow-x: hidden;

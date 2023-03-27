@@ -8,7 +8,7 @@ import com.chenyudaima.vo.SysRoleVo;
  * @author 沉鱼代码
  * @date 2023/2/23
  */
-public interface RoleService {
+public interface SysRoleService {
     Result<?> query(SysRole sysRole, int page, int pageSize);
 
     Result<?> update(SysRoleVo sysRole);
