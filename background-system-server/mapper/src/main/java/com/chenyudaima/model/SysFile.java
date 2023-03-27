@@ -2,13 +2,16 @@ package com.chenyudaima.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 文件表
  * @author 沉鱼代码
  * @date 2023/3/24
  */
 @Data
-public class SysFile {
+public class SysFile implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 文件id

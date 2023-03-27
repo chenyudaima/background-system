@@ -35,14 +35,14 @@ public class SecurityInterceptor extends Interceptor {
 
     @Override
     public String[] getAddPathPatterns() {
-        return new String[]{
+        return new String[] {
                 "/**"
         };
     }
 
     @Override
     public String[] getExcludePathPatterns() {
-        return new String[]{
+        return new String[] {
                 "/login/**",
                 "/test/**"
         };
@@ -62,7 +62,6 @@ public class SecurityInterceptor extends Interceptor {
         if(authorization == null) {
             throw new SecurityException("未登录");
         }
-
 
         //redis中的token
         String token = RedisKey.TOKEN + authorization;

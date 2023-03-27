@@ -28,7 +28,7 @@ public class FileInterceptor extends Interceptor {
 
     @Override
     public String[] getAddPathPatterns() {
-        return new String[]{
+        return new String[] {
                 "/**"
         };
     }
@@ -52,7 +52,6 @@ public class FileInterceptor extends Interceptor {
         if(!(request.getMethod().equals(HttpMethod.POST) && request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA))) {
             return true;
         }
-
 
         StandardMultipartHttpServletRequest servletRequest = (StandardMultipartHttpServletRequest) request;
 

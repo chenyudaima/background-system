@@ -8,19 +8,13 @@
 
 
 
-**在该系统开发一个页面有多简单?**
+**在该系统开发一个前后端分离页面有多简单?**
 
 **像数123一样简单**
 
 
 
 ## background-system-server
-
-环境：jdk8 + Maven + Mysql + Redis
-
-
-
-
 
 ### 统一响应格式
 
@@ -32,7 +26,7 @@
 }
 ```
 
-code：响应状态码（严格遵循规范）
+code：响应状态码（严格遵循http状态码规范）
 
 message：服务器附带的一些消息
 
@@ -42,9 +36,11 @@ data：响应的数据
 
 ### 启动
 
-```bash
+搭建环境：jdk1.8 + Maven + Mysql + Redis
+
+导入sql文件
+
 运行WebApplication
-```
 
 
 
@@ -70,3 +66,10 @@ yarn serve
 
 
 
+
+
+
+
+# 架构部署建议
+
+<img src="assets/image-20230327134444849.png" alt="image-20230327134444849" style="zoom: 50%;" />

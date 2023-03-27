@@ -182,8 +182,8 @@
 
   </el-container>
 </template>
-<script>
 
+<script>
 import http from '@/utils/http.js'
 
 export default {
@@ -198,7 +198,7 @@ export default {
         this.$router.replace({ path: this.$route.path, query: { page: 1, pageSize: 10 } })
         return;
       }
-
+      
       http.get("/home/system/sysDict/type", { params: query }).then(resp => {
         if (resp.code != 200) {
           this.$message.error(resp.message)

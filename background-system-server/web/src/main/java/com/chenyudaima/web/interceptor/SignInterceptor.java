@@ -66,9 +66,7 @@ public class SignInterceptor extends Interceptor {
         }
 
         //判断时间戳是否大于当前时间1分钟
-        long timestamp = Long.parseLong(params.get(HttpParam.TIMESTAMP));
-        long currentTimestamp = System.currentTimeMillis() - 60000;
-        if(currentTimestamp > timestamp) {
+        if((System.currentTimeMillis() - 60000) > Long.parseLong(params.get(HttpParam.TIMESTAMP))) {
             throw new SignException("请求超时，请重新发起请求");
         }
 

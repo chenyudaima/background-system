@@ -53,14 +53,13 @@ public class MybatisSqlLogInterceptor implements Interceptor {
         //sql语句
         String sql = boundSql.getSql();
 
-        //参数
-        //Map map = (MapperMethod.ParamMap) boundSql.getParameterObject();
+        Object parameterObject = boundSql.getParameterObject();
 
         long time = System.currentTimeMillis();
 
         Object proceed = invocation.proceed();
 
-        log.debug("\nSQL执行日志\nclassName: {}\ntype: {}\nsql: {}\ntime: {}毫秒", id, sqlType, sql, System.currentTimeMillis() - time);
+        log.debug("\nSQL执行日志\nclassName: {}\ntype: {}\nsql: {}\n参数: {}\ntime: {}毫秒", id, sqlType, sql, parameterObject, System.currentTimeMillis() - time);
 
         return proceed;
     }
