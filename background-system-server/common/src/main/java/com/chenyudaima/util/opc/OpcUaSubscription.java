@@ -260,13 +260,12 @@ public class OpcUaSubscription {
      * 运行 （全局只需执行一次）（运行一次和多次的效果一样）
      */
     public void run() {
-        if(status) return;
-
         synchronized (this) {
             if(!status) {
+                //修改状态
+                status = true;
+
                 executor.execute(() -> {
-                    //修改状态
-                    status = true;
 
                     //发起连接
                     connect();

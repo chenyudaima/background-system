@@ -3,11 +3,12 @@ import router from '@/router/index.js'
 import signUtil from '@/utils/signUtil.js'
 
 const http = axios.create({
-  //使用代理，后端不需要做跨域处理，会匹配vue.config.js中配置的代理，实际上是匹配的 target/system-api
+  //使用代理，后端不需要做跨域处理，会匹配vue.config.js中配置的代理，实际上是匹配的 target/system_api
   //如果没有匹配到或者这个服务请求不了，则会改为获取前端页面的ip和端口
+  //所以使用这个需要用nginx代理前端页面和后端服务，使他们保持同一个ip和端口
   baseURL: "/system_api",
   
-  // baseURL: "http://localhost:8080/system_api", //全地址表示不使用vue.config.js配置的代理，后端需要做跨域处理
+  // baseURL: "http://192.168.102.128:8080/system_api", //全地址表示不使用vue.config.js配置的代理，后端需要做跨域处理
   timeout: 100000, // 请求超时
   withCredentials: true, // 跨域请求是否需要携带 cookie
 })

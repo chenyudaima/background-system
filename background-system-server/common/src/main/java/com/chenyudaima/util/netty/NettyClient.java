@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 
 /**
+ * Redis底层引用了netty，所以不需要额外引入netty
  * @author 沉鱼代码
  * @date 2023/3/20
  */

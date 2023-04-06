@@ -37,9 +37,11 @@ public class OpencvConfig {
                 OutputStream os = Files.newOutputStream(file.toPath())
             ) {
                 byte[] buffer = new byte[1024];
+
                 while(is.read(buffer) != -1) {
                     os.write(buffer);
                 }
+
                 os.flush();
             }catch (Exception e) {
                 log.error(Resources.OPENCV_JAVA3413_DLL + "移动失败");

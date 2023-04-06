@@ -67,6 +67,7 @@ export default {
         }
       })
     },
+    
     query1(name) {
       this.filePath = name
       this.query()

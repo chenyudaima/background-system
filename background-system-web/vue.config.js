@@ -8,7 +8,7 @@ module.exports = defineConfig({
     proxy: {
       //^表示以/system开头 ，没有这个的话 /xxx/system 也可能会进行代理
       '^/system_api': {
-        target: 'http://localhost:8080',
+        target: 'http://192.168.102.128:8080',
         changeOrigin: true
       }
     },

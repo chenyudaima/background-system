@@ -74,7 +74,6 @@
         <druid-spring-boot-starter.version>1.2.15</druid-spring-boot-starter.version>
         <nacos.version>0.2.12</nacos.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
-        <netty-all.version>4.1.82.Final</netty-all.version>
     </properties>
 
     <!--依赖-->
@@ -103,12 +102,6 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
-
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>${netty-all.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.alibaba</groupId>
