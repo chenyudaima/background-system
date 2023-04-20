@@ -16,7 +16,16 @@ public class DateUtil {
         return format.format(date);
     }
 
+
+    public static String format(Date date, String format) {
+        return new SimpleDateFormat(format).format(date);
+    }
+
     public static Date parse(String date) throws ParseException {
         return format.parse(date);
+    }
+
+    public static Date parse(String date, String format) throws ParseException {
+        return new SimpleDateFormat(format).parse(date);
     }
 }

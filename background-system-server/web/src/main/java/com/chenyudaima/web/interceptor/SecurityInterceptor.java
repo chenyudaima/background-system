@@ -36,15 +36,15 @@ public class SecurityInterceptor extends Interceptor {
     @Override
     public String[] getAddPathPatterns() {
         return new String[] {
-                "/**"
+                //"/**"
         };
     }
 
     @Override
     public String[] getExcludePathPatterns() {
         return new String[] {
-                "/login/**",
-                "/test/**"
+                //"/login/**",
+                //"/test/**"
         };
     }
 
@@ -66,10 +66,15 @@ public class SecurityInterceptor extends Interceptor {
         //redis中的token
         String token = RedisKey.TOKEN + authorization;
 
+
         //查询该token是否过期
         if(!redisUtil.hasKey(token)) {
             throw new SecurityException("账号过期，请重新登录");
         }
+
+        //重置redis中的token过期时间
+        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+
 
         //解析token出来的数据
         Claims claims = jwtUtil.parseToken(authorization);
@@ -99,9 +104,6 @@ public class SecurityInterceptor extends Interceptor {
                 throw new SecurityException("非法身份");
             }
         });
-
-        //重置redis中的token过期时间
-        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
 
         //请求的控制器路径
         String path = request.getServletPath().substring(WebMvcConfig.PATH.length());

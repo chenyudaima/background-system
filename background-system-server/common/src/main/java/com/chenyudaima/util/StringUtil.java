@@ -42,4 +42,58 @@ public class StringUtil {
         return new String(baKeyword, StandardCharsets.UTF_8);
     }
 
+    /**
+     * @param scanCodeResult 真实数据
+     * @param cardOcrResult 识别数据
+     * @return 对比数据 （真实数据，对比不同则变红）
+     */
+    public static String contrast(String scanCodeResult, String cardOcrResult) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        char[] scr = scanCodeResult.toCharArray();
+
+        char[] cor = cardOcrResult.toCharArray();
+
+        //如果字符串长度相等
+        if(scr.length == cor.length) {
+            for (int i = 0; i < scr.length; i++) {
+                if(scr[i] == cor[i]) {
+                    stringBuilder.append(scr[i]);
+                }else {
+                    stringBuilder
+                            .append("<font color='red'>")
+                            .append(scr[i])
+                            .append("</font>");
+                }
+            }
+            return stringBuilder.toString();
+        }
+
+
+        //如果长度不相等，则从不相等的char开始后面所有变红
+        int length;
+        if(scr.length < cor.length) {
+            length = scr.length;
+        }else {
+            length = cor.length;
+        }
+
+        int index = -1;
+        for (int i = 0; i < length; i++) {
+            if(scr[i] != cor[i]) {
+                index = i;
+            }
+        }
+
+        if(index != -1) {
+            stringBuilder.append(scanCodeResult.substring(0, index))
+                    .append("<font color='red'>")
+                    .append(scanCodeResult.substring(index))
+                    .append("</font>");
+        }
+
+        return stringBuilder.toString();
+
+    }
+
 }

@@ -2,12 +2,16 @@ import http from '@/utils/http.js'
 import router from '@/router/index.js'
 
 //加载路由
-function loadRouter() {
-  http.get("/home/sysMenu").then(resp => {
-    routerHandler(resp.data).forEach(x => {
+async function loadRouter() {
+  let resp = await http.get("/home/sysMenu")
+  routerHandler(resp.data).forEach(x => {
+    if(x.path.indexOf("home") != -1) {
+      //包含home的页面
       router.addRoute("home", x)
-    })
-
+    }else {
+      //单页面
+      router.addRoute(x)
+    }
   })
 }
 

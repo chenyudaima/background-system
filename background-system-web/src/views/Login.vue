@@ -10,7 +10,7 @@
       <el-form class="login_box">
 
         <el-form-item style="text-align: center">
-          <h2>质检系统</h2>
+          <h2>合格证质检系统</h2>
         </el-form-item>
 
         <el-form-item prop="account">

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chenyudaima.mapper.CertificateCheckLogMapper">
+
+
+    <sql id="Base_Column_List">
+        id,vin,certificate_data,nameplate_ocr_data,
+        frontier_marking_ocr_data,nameplate_check_data,frontier_marking_check_data,
+        nameplate_base64,frontier_marking_base64,status,
+        type,create_time
+    </sql>
+
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.chenyudaima.model.CertificateCheckLog" useGeneratedKeys="true">
+        insert into certificate_check_log
+        ( id,vin,certificate_data,nameplate_ocr_data
+        ,frontier_marking_ocr_data,nameplate_check_data,frontier_marking_check_data
+        ,nameplate_base64,frontier_marking_base64,status
+        ,type,create_time)
+        values (#{id,jdbcType=BIGINT},#{vin,jdbcType=VARCHAR},#{certificateData,jdbcType=VARCHAR},#{nameplateOcrData,jdbcType=VARCHAR}
+        ,#{frontierMarkingOcrData,jdbcType=VARCHAR},#{nameplateCheckData,jdbcType=VARCHAR},#{frontierMarkingCheckData,jdbcType=VARCHAR}
+        ,#{nameplateBase64,jdbcType=VARCHAR},#{frontierMarkingBase64,jdbcType=VARCHAR},#{status,jdbcType=TINYINT}
+        ,#{type,jdbcType=TINYINT},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <delete id="deleteByDay">
+        delete from certificate_check_log
+        where (TO_DAYS(NOW()) - TO_DAYS(create_time)) >= #{day}
+    </delete>
+
+    <select id="select" resultType="com.chenyudaima.model.CertificateCheckLog">
+        select id,
+               vin,
+               status,
+               type,
+               create_time
+               from certificate_check_log
+        <where>
+            <if test="certificateCheckLog.vin != null and certificateCheckLog.vin != ''">and vin like concat('%', #{certificateCheckLog.vin}, '%')</if>
+            <if test="certificateCheckLog.status != null and certificateCheckLog.status != ''">and status = #{certificateCheckLog.status}</if>
+            <if test="certificateCheckLog.createTime != null">and create_time >= #{certificateCheckLog.createTime}</if>
+        </where>
+        limit ${(page - 1) * pageSize},#{pageSize}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from certificate_check_log
+        <where>
+            <if test="certificateCheckLog.vin != null and certificateCheckLog.vin != ''">and vin like concat('%', #{certificateCheckLog.vin}, '%')</if>
+            <if test="certificateCheckLog.status != null and certificateCheckLog.status != ''">and status = #{certificateCheckLog.status}</if>
+            <if test="certificateCheckLog.createTime != null">and create_time >= #{certificateCheckLog.createTime}</if>
+        </where>
+    </select>
+
+    <select id="selectById" resultType="com.chenyudaima.model.CertificateCheckLog">
+        select <include refid="Base_Column_List"/> from certificate_check_log where id = #{id}
+    </select>
+
+</mapper>

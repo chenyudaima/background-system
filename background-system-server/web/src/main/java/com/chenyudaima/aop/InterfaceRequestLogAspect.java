@@ -67,7 +67,12 @@ public class InterfaceRequestLogAspect {
 
         TreeMap<String, String> params = HttpDataUtil.getParams(request);
         if(params.size() > 0) {
-            sysInterfaceRequestLog.setRequestParam(JSON.toJSONString(params, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue));
+            String param = JSON.toJSONString(params, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
+            if(param.length() > 1024) {
+                param = param.substring(0, 1024);
+            }
+
+            sysInterfaceRequestLog.setRequestParam(param);
         }
 
         sysInterfaceRequestLog.setId(String.valueOf(snowflake.nextId()));

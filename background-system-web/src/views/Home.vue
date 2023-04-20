@@ -4,8 +4,8 @@
     <!--头部  -->
     <el-header>
       <div style="display: flex;align-items: center;">
-        <img src="/image/home/home_icon.jpg" alt="" width="50" height="50">
-        <span style="margin-left: 20px;">质检系统</span>
+        <img src="/image/home/app.png" alt="" width="50" height="50">
+        <span style="margin-left: 20px;">合格证质检系统</span>
       </div>
       <div>
         <el-dropdown style="padding: 20px" trigger="click">
@@ -153,7 +153,12 @@ export default {
       await http.get("/home/sysMenu").then(resp => {
         this.menuList = resp.data
         routerUtil.routerHandler(resp.data).forEach(router => {
-          this.$router.addRoute("home", router)
+          if (router.path.indexOf("home") != -1) {
+            this.$router.addRoute("home", router)
+          } else {
+            this.$router.addRoute(router)
+          }
+
         })
       })
 
