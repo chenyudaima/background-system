@@ -1,6 +1,5 @@
 package com.chenyudaima.task;
 
-import com.chenyudaima.mapper.CertificateCheckLogMapper;
 import com.chenyudaima.mapper.SysInterfaceRequestLogMapper;
 import com.chenyudaima.mapper.SysTimedTaskLogMapper;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +28,6 @@ public class DeleteSystemLogTimeTask extends TimeTask {
 
     private final SysInterfaceRequestLogMapper sysInterfaceRequestLogMapper;
 
-    private final CertificateCheckLogMapper certificateCheckLogMapper;
-
     String run(Map<String, String> paramMap) throws Exception {
         //删除定时任务日志
         sysTimedTaskLogMapper.deleteByDay(
@@ -40,11 +37,6 @@ public class DeleteSystemLogTimeTask extends TimeTask {
         //删除接口请求日志
         sysInterfaceRequestLogMapper.deleteByDay(
                 Integer.parseInt(paramMap.get("sys_interface_request_log_the_other_day"))
-        );
-
-        //删除合格证核对日志
-        certificateCheckLogMapper.deleteByDay(
-                Integer.parseInt(paramMap.get("certificate_check_log_the_other_day"))
         );
 
         return null;

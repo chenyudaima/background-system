@@ -9,7 +9,6 @@ logs
 .vscode
 node_modules
 dist
-background-system-web/yarn.lock
 yarn.lock
 
 

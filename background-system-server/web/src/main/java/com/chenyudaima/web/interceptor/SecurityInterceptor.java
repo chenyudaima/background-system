@@ -36,15 +36,15 @@ public class SecurityInterceptor extends Interceptor {
     @Override
     public String[] getAddPathPatterns() {
         return new String[] {
-                //"/**"
+                "/**"
         };
     }
 
     @Override
     public String[] getExcludePathPatterns() {
         return new String[] {
-                //"/login/**",
-                //"/test/**"
+                "/login/**",
+                "/test/**"
         };
     }
 
