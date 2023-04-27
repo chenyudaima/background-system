@@ -14,29 +14,40 @@ import java.io.FileFilter;
  */
 public class FileListenerUtil {
 
+    /**
+     * 监听目录变化
+     */
+    public static void monitor(String path, FileFilter fileFilter, long time, FileAlterationListener... listener) {
+        monitor(new File(path), fileFilter, time, listener);
+    }
+
 
     /**
-     * @param path 监听路径 例如 D:/dev
+     * @param file 监听目录路径 例如 D:/dev
      * @param fileFilter 文件监听过滤器 file -> return file.getName().toLowerCase().endsWith(".pdf")
-     * @param listener 文件变化监听器
      * @param time 监听轮询间隔  TimeUnit.SECONDS.toMillis(1)
+     * @param listener 文件变化监听器
      */
-    public void monitor(String path, FileFilter fileFilter, FileAlterationListener listener, long time) {
+    public static void monitor(File file, FileFilter fileFilter, long time, FileAlterationListener... listener) {
+        if(!file.exists() || !file.isDirectory() || listener == null || listener.length == 0) {
+            return;
+        }
 
-        FileAlterationObserver observer = new FileAlterationObserver(new File(path),fileFilter);
+        FileAlterationObserver observer = new FileAlterationObserver(file, fileFilter);
 
-        //添加监听
-        observer.addListener(listener);
+        for (FileAlterationListener fileAlterationListener : listener) {
+            //添加监听
+            observer.addListener(fileAlterationListener);
+        }
 
         //文件变化监听器
         FileAlterationMonitor monitor = new FileAlterationMonitor(time, observer);
 
         try {
-
             //开启监听
             monitor.start();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

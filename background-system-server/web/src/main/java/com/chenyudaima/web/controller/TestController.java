@@ -46,14 +46,14 @@ public class TestController {
         if(file.isDirectory()) {
             return Result.success(file.listFiles());
         }else {
-            BufferedReader br = new BufferedReader(new FileReader(path));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while((line = br.readLine()) != null) {
-                stringBuilder.append(line);
+            try(BufferedReader br = new BufferedReader(new FileReader(path))) {
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+                while((line = br.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                return Result.success(stringBuilder.toString());
             }
-            br.close();
-            return Result.success(stringBuilder.toString());
         }
 
     }

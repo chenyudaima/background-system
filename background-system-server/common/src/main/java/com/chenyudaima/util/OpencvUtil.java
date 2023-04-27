@@ -1,4 +1,4 @@
-package com.chenyudaima.util.file;
+package com.chenyudaima.util;
 
 import com.chenyudaima.config.OpencvConfig;
 import org.opencv.core.*;
@@ -19,8 +19,14 @@ public class OpencvUtil {
 
     private static final Logger log = LoggerFactory.getLogger(OpencvUtil.class);
 
+    /**
+     * 当前处理后的图片
+     */
     private final Mat mat;
 
+    /**
+     * 图片
+     */
     private final File file;
 
     static {

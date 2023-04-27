@@ -1,6 +1,5 @@
 package com.chenyudaima.config;
 
-import com.chenyudaima.util.file.OcrUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

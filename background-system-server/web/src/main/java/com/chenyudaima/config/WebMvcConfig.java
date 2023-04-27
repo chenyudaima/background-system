@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * web配置
+ * web mvc配置
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {

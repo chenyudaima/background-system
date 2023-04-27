@@ -1,6 +1,10 @@
 package com.chenyudaima.util.file.parse;
 
+import com.chenyudaima.constant.CharSet;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,23 +17,30 @@ public class CsvUtil {
     private static final char DEFAULT_SEPARATOR = ',';
     private static final char DEFAULT_QUOTE = '"';
 
+    /**
+     * 解析CSV文件
+     */
+    public static List<List<String>> parse(File file) {
+        return parse(file, CharSet.UTF8);
+    }
 
     /**
      * 获取csv文件整页数据
      */
-    public static List<List<String>> parse(File file) {
+    public static List<List<String>> parse(File file, String charsetName) {
         //整页数据
         List<List<String>> lists = new ArrayList<>();
 
-        try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(Files.newInputStream(file.toPath()), charsetName)) {
             while (scanner.hasNext()) {
                 //每一行的数据
-                lists.add(CsvUtil.parseLine(scanner.nextLine()));
-            }
+                List<String> list = CsvUtil.parseLine(scanner.nextLine());
 
+                lists.add(list);
+            }
             return lists;
         } catch (Exception e) {
-            return null;
+            return lists;
         }
     }
 

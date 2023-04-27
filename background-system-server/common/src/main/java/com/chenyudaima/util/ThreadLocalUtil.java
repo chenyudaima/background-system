@@ -9,6 +9,10 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  *
  * request.setAttribute()内部有一个ThreadLocal，每一个ThreadLocal互不影响
  *
+ * 归还线程之前记得清除`ThreadLocalMap`，要不然再取出该线程的时候，`ThreadLocal`变量还会存在。这就不仅仅是内存泄露的问题了，整个业务逻辑都可能会出错。
+ *
+ * 当`ThreadLocal` 对象的引用（强引用）被回收了，`ThreadLocalMap`本身依然还持有`ThreadLocal`的强引用，如果没有手动删除这个key ,则`ThreadLocal`不会被回收，所以只要当前线程不消亡，`ThreadLocalMap`引用的那些对象就不会被回收， 可以认为这导致`Entry`内存泄漏。
+ *
  * 在父子线程参数传递中，InheritableThreadLocal 只能针对 new Thread()这种方式建立的线程,对于线程池创建的线程,线程是池化以后反复使用的,这个时候父子线程间的值传递已经没有意义了
  * 所以使用阿里开源的TransmittableThreadLocal
  *

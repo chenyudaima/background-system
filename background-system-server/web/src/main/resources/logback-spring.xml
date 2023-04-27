@@ -18,6 +18,10 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) [%green(%logger{50}:%L)] >>> %cyan(%msg) %n</pattern>
             <charset>UTF-8</charset>
         </encoder>
+        <!--控制台只打印INFO及以上级别的控制-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
     </appender>
 
     <!-- 日志文件输出 all -->
@@ -51,6 +55,7 @@
             <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
+
         <!-- 只打印DEBUG日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
@@ -74,7 +79,6 @@
             <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 只打印DEBUG日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
@@ -97,7 +101,6 @@
             <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 只打印DEBUG日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
@@ -120,7 +123,6 @@
             <pattern>${PATTERN}</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <!-- 只打印DEBUG日志 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -131,11 +133,11 @@
     <!--myibatis sql 日志配置 -->
     <!--<logger name="com.chenyudaima.mapper" level="DEBUG" />-->
 
-    <!--突破INFO，该包为DEBUG级别-->
-    <logger name="com.chenyudaima.config" level="DEBUG" />
+    <!--单独设置为DEBUG级别-->
+    <!--<logger name="com.chenyudaima.config" level="DEBUG" />-->
 
     <!--指定设置为INFO级别-->
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="all"/>
         <appender-ref ref="debug"/>

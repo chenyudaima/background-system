@@ -10,7 +10,7 @@ const http = axios.create({
   
   // baseURL: "http://192.168.102.128:8080/system_api", //全地址表示不使用vue.config.js配置的代理，后端需要做跨域处理
   timeout: 100000, // 请求超时
-  withCredentials: true, // 跨域请求是否需要携带 cookie
+  withCredentials: true // 跨域请求是否需要携带 cookie
 })
 
 //和axios的create中的baseURL一样

@@ -2,7 +2,6 @@ package com.chenyudaima.config;
 
 import com.chenyudaima.constant.Property;
 import com.chenyudaima.constant.Resources;
-import com.chenyudaima.util.file.OpencvUtil;
 import org.opencv.core.Core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,11 +1,9 @@
-package com.chenyudaima.util.file;
+package com.chenyudaima.util;
 
 import com.chenyudaima.config.OcrConfig;
 import com.chenyudaima.enumeration.OcrEnum;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,4 +35,5 @@ public class OcrUtil {
             return null;
         }
     }
+
 }

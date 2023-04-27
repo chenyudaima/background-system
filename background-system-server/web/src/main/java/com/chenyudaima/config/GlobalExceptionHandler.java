@@ -32,13 +32,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(value={
-            Throwable.class,
-            //Exception.class,
-            //
-            ////使用assert关键字断言出现的异常
-            //AssertionError.class,
-    })
+    @ExceptionHandler(value={Throwable.class})
     public Result<?> Exception(HttpServletRequest request, Exception e) {
         e.printStackTrace();
         return new Result<>(500, e.getMessage(), null);
@@ -52,7 +46,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value={
             DataAccessException.class,
-            SQLException.class,
+            SQLException.class
     })
     public Result<?> SQLException(HttpServletRequest request, Exception e) {
         log.error("SQL异常:\n{}", e.toString());

@@ -1,6 +1,8 @@
 package com.chenyudaima.util.file;
 
 import com.chenyudaima.constant.Property;
+import org.apache.commons.codec.digest.DigestUtils;
+
 
 import java.io.*;
 import java.nio.channels.FileChannel;
@@ -11,6 +13,14 @@ import java.util.function.Consumer;
  * 文件操作工具类
  */
 public class FileUtil {
+
+    /**
+     * 计算文件md5
+     */
+    public static String computeMD5(File file) throws IOException {
+        return DigestUtils.md5Hex(Files.newInputStream(file.toPath()));
+
+    }
 
     /**
      * 根据文件名和字节创建临时文件
