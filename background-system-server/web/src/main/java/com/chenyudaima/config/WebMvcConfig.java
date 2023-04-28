@@ -3,23 +3,27 @@ package com.chenyudaima.config;
 
 import com.chenyudaima.util.SpringUtil;
 import com.chenyudaima.web.interceptor.Interceptor;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import org.springframework.web.filter.CorsFilter;
 
 /**
- * web mvc配置
+ * web controller配置
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
 
     /**
      * 给Controller加上前缀 （当作项目部署路径）
@@ -67,6 +71,26 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         WebMvcConfigurer.super.configurePathMatch(configurer);
     }
+
+    ///**
+    // * 配置跨域
+    // */
+    //@Override
+    //public void addCorsMappings(CorsRegistry registry) {
+    //    registry.addMapping("/**")
+    //            //放行哪些原始域
+    //            .allowedOrigins("http://192.168.0.49:3000")
+    //            //是否发送Cookie信息
+    //            .allowCredentials(true)
+    //            //放行哪些原始域(请求方式)
+    //            .allowedMethods("GET","POST", "PUT", "DELETE")
+    //            //放行哪些原始域(头部信息)
+    //            .allowedHeaders("*")
+    //            .maxAge(3600)
+    //            //暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）
+    //            .exposedHeaders("Authorization", "signature");
+    //    WebMvcConfigurer.super.addCorsMappings(registry);
+    //}
 
 
     private String[] processingPath(String[] paths) {

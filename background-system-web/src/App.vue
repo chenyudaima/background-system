@@ -14,7 +14,7 @@ export default {
   },
   created() {
     //统计在线人数
-    this.ws = new WebSocket(`ws://localhost:8080/ws`)
+    this.ws = new WebSocket("ws://localhost:8080/ws")
   }
 };
 </script>

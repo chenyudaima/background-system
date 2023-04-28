@@ -10,7 +10,6 @@ import com.chenyudaima.service.LoginService;
 import com.chenyudaima.util.JwtUtil;
 import com.chenyudaima.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +52,7 @@ public class LoginServiceImpl implements LoginService {
 
         //给token绑定客户端信息
         Map<String, String> clientInfoMap = new HashMap<>();
-        clientInfoMap.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
+        clientInfoMap.put(HttpHeader.K_REQUEST_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
 
         //设置1小时过期时间
         redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, jwtProperties.getExpiration(), TimeUnit.MINUTES);

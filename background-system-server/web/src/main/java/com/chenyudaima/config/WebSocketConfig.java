@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 
 /**
- * web socket长连接配置
+ * web socket配置
  * @author 沉鱼代码
  * @date 2023/4/27
  */
@@ -13,7 +13,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 public class WebSocketConfig {
 
     @Bean
-    public ServerEndpointExporter serverEndpointExporter () {
+    public ServerEndpointExporter serverEndpointExporter() {
         return new ServerEndpointExporter();
     }
 }

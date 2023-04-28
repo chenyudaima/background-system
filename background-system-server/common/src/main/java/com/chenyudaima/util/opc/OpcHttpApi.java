@@ -60,7 +60,7 @@ public class OpcHttpApi {
         }
 
         //添加权限请求头
-        headerMap.put(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION, "Basic " + new Base64().encodeToString((userName + ":" + password).getBytes()));
+        headerMap.put(HttpHeader.K_REQUEST_AUTHORIZATION, "Basic " + new Base64().encodeToString((userName + ":" + password).getBytes()));
 
     }
 

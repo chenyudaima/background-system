@@ -48,7 +48,7 @@ public class SignInterceptor extends Interceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //获取参数签名
-        String signature = request.getHeader(HttpHeader.K_REQUEST_HEADER_SIGNATURE);
+        String signature = request.getHeader(HttpHeader.K_REQUEST_SIGNATURE);
 
         if(signature == null) {
             throw new SignException("没有参数签名");
@@ -58,7 +58,7 @@ public class SignInterceptor extends Interceptor {
         TreeMap<String, String> params = HttpDataUtil.getParams(request);
 
         //参与加密的accessKey
-        params.put(HttpParam.ACCESS_KEY, request.getHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION));
+        params.put(HttpParam.ACCESS_KEY, request.getHeader(HttpHeader.K_REQUEST_AUTHORIZATION));
 
         //验签
         if(!SignUtil.verify(signature, params)) {

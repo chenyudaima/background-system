@@ -10,7 +10,7 @@ public class HttpHeader {
     /**
      * key 请求头 content-type
      */
-    public static final String K_REQUEST_HEADER_CONTENT_TYPE = "content-type";
+    public static final String K_REQUEST_CONTENT_TYPE = "Content-Type";
 
     public static final String V_CONTENT_TYPE_TEXT_XML = "text/xml";
 
@@ -30,9 +30,6 @@ public class HttpHeader {
      */
     public static final String V_CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
 
-    /**
-     *
-     */
     public static final String V_CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
 
@@ -40,20 +37,53 @@ public class HttpHeader {
     /**
      * key 请求头 Authorization 在本系统中是授权的Token
      */
-    public static final String K_REQUEST_HEADER_AUTHORIZATION = "Authorization";
-
-    /**
-     * 自定义请求头 参数签名
-     */
-    public static final String K_REQUEST_HEADER_SIGNATURE = "Signature";
-
-    public static final String K_REQUEST_HEADER_USER_AGENT = "User-Agent";
-
-
+    public static final String K_REQUEST_AUTHORIZATION = "Authorization";
 
 
     /**
-     * key 响应头 content-disposition
+     * key 请求头 参数签名
      */
-    public static final String K_RESPONSE_HEADER_CONTENT_DISPOSITION = "content-disposition";
+    public static final String K_REQUEST_SIGNATURE = "Signature";
+
+    /**
+     * key 请求头 客户端信息
+     */
+    public static final String K_REQUEST_USER_AGENT = "User-Agent";
+
+    /**
+     * key 请求头 客户端访问源的地址
+     */
+    public static final String K_REQUEST_ORIGIN = "Origin";
+
+
+
+    /**
+     * key 响应头 下载的时候是从该头部获取文件名
+     */
+    public static final String K_RESPONSE_CONTENT_DISPOSITION = "Content-Disposition";
+
+    /**
+     * key 响应头 用于跨域，允许请求的源地址跨域,不能用*,不能写多个，只能写一个精确匹配
+     */
+    public static final String K_RESPONSE_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+
+    /**
+     * key 响应头 用于跨域,值为true的情况下将响应暴露给前端的js代码,比如js可以获取cookie
+     */
+    public static final String K_RESPONSE_ACCESS_CONTROL_ALLOW_CREDENTIALS = "Access-Control-Allow-Credentials";
+
+    /**
+     * key 响应头 用于跨域,允许的请求头 不能用*
+     */
+    public static final String K_RESPONSE_ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
+
+    /**
+     * key 响应头 用于跨域,允许的请求方法 可以用*
+     */
+    public static final String K_RESPONSE_ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
+
+    /**
+     * key 响应头 用于跨域,预检请求的返回结果（Access-Control-Allow-Methods和Access-Control-Allow-Headers提供的信息）可以被缓存多久
+     */
+    public static final String K_RESPONSE_ACCESS_CONTROL_MAX_AGE = "Access-Control-Max-Age";
 }

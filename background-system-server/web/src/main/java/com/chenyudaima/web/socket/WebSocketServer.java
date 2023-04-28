@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
- * web socket接口
+ * web socket 统计在线人数接口
  * 每次浏览器刷新，session会发生变化
  */
 @Slf4j
@@ -50,7 +50,6 @@ public class WebSocketServer {
 
     /**
      * 收到客户端消息后调用的方法
-     *
      * @param session 当前客户端session
      * @param message 客户端发送过来的消息
      */

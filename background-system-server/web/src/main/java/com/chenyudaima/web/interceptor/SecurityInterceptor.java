@@ -57,7 +57,7 @@ public class SecurityInterceptor extends Interceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //请求头没有token说明没有登录
-        String authorization = request.getHeader(HttpHeader.K_REQUEST_HEADER_AUTHORIZATION);
+        String authorization = request.getHeader(HttpHeader.K_REQUEST_AUTHORIZATION);
 
         if(authorization == null) {
             throw new SecurityException("未登录");
@@ -95,7 +95,7 @@ public class SecurityInterceptor extends Interceptor {
 
         //对比当前请求的客户端是否相同
         Map<String, String> clientInfoMap1 = new HashMap<>();
-        clientInfoMap1.put(HttpHeader.K_REQUEST_HEADER_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_HEADER_USER_AGENT));
+        clientInfoMap1.put(HttpHeader.K_REQUEST_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
 
         //参数不同说明当前的是非法用户，显示请重新登录
         clientInfoMap.forEach((k,v) -> {

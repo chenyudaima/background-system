@@ -48,9 +48,10 @@ export default {
     let message = this.$route.query.message
     if (message != null) {
       this.$message.error(message)
+      this.$router.replace({ path: this.$route.path })
     }
     
-    this.$router.replace({ path: this.$route.path })
+    
 
     let vue = this
     document.onkeyup = function (e) {

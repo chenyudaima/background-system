@@ -30,32 +30,7 @@ public class TestController {
 
     @GetMapping
     public Result<?> query(String filePath) throws Exception {
-        if(logPath == null) {
-            logPath = System.getProperty(Property.USER_DIR) + "/logs";
-        }
-
-        String path;
-        if(filePath == null) {
-            path = logPath;
-        }else {
-            path = logPath + "/" + filePath;
-        }
-
-        File file = new File(path);
-
-        if(file.isDirectory()) {
-            return Result.success(file.listFiles());
-        }else {
-            try(BufferedReader br = new BufferedReader(new FileReader(path))) {
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while((line = br.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                return Result.success(stringBuilder.toString());
-            }
-        }
-
+        return Result.success("nihao");
     }
 
 
