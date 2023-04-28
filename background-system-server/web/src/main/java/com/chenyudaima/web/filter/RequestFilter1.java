@@ -46,13 +46,13 @@ public class RequestFilter1 implements Filter {
 
         servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
 
-        servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_ALLOW_HEADERS, "signature,authorization");
+        servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_ALLOW_HEADERS, "signature,authorization,content-type");
 
-        servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_ALLOW_METHODS, "*");
+        servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_ALLOW_METHODS, "POST,GET,DELETE,PUT,PATCH,ORIGINS");
 
         servletResponse.setHeader(HttpHeader.K_RESPONSE_ACCESS_CONTROL_MAX_AGE, "3600");
 
-        //预检请求需要快速返回
+        //预检请求快速返回
         if(servletRequest.getMethod().equals(HttpMethod.OPTIONS)) {
             return;
         }

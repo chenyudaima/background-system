@@ -1,5 +1,7 @@
 package com.chenyudaima.web.interceptor;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.chenyudaima.config.WebMvcConfig;
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
@@ -72,38 +74,42 @@ public class SecurityInterceptor extends Interceptor {
             throw new SecurityException("账号过期，请重新登录");
         }
 
-        //重置redis中的token过期时间
-        redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
-
-
         //解析token出来的数据
         Claims claims = jwtUtil.parseToken(authorization);
 
-        //查询token是否在这，如果不在就显示请重新登录，如果改变就显示被挤下线
-        String token1 = redisUtil.hash_get(RedisKey.TOKEN_ALL, claims.getId());
-
-        if(token1 == null) {
+        //查询token是否在这，如果不在说明没登录，如果改变就显示被挤下线
+        String token1 = null;
+        try {
+            token1 = redisUtil.hash_get(RedisKey.TOKEN_ALL, claims.getId());
+        }catch (Exception e) {
             throw new SecurityException("账号异常，请重新登录");
         }
 
-        if(!token.equals(token1)) {
+        if (token1 == null) {
+            throw new SecurityException("账号异常，请重新登录");
+        }
+
+        if (!token.equals(token1)) {
             throw new SecurityException("账号在另一方已登录");
         }
 
-        //获取redis中token绑定的客户端
-        Map<String, String> clientInfoMap = redisUtil.get(token);
-
         //对比当前请求的客户端是否相同
-        Map<String, String> clientInfoMap1 = new HashMap<>();
-        clientInfoMap1.put(HttpHeader.K_REQUEST_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
+
+        //获取redis中token绑定的客户端
+        UserAgent userAgent1 = redisUtil.get(token);
 
         //参数不同说明当前的是非法用户，显示请重新登录
-        clientInfoMap.forEach((k,v) -> {
-            String value = clientInfoMap1.get(k);
-            if(value == null || !value.equals(v)) {
-                throw new SecurityException("非法身份");
-            }
-        });
+
+        //判断window还是Android或者其他客户端
+        if(userAgent1.getPlatform() != null && !userAgent1.getPlatform().getName().equals(userAgent.getPlatform().getName())) {
+            throw new SecurityException("非法身份，请重新登录");
+        }
+
+        //判断浏览器名称
+        if(userAgent1.getBrowser() != null && !userAgent1.getBrowser().getName().equals(userAgent.getBrowser().getName())) {
+            throw new SecurityException("非法身份，请重新登录");
+        }
 
         //请求的控制器路径
         String path = request.getServletPath().substring(WebMvcConfig.PATH.length());
@@ -121,6 +127,11 @@ public class SecurityInterceptor extends Interceptor {
 
         //把解析出来的数据放到请求中，内部有用户id，用户名
         request.setAttribute(RequestAttribute.CLAIMS, claims);
+
+        //重置redis中的token过期时间
+        if(jwtProperties.getExpiration() > 0) {
+            redisUtil.expire(token, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+        }
 
         return true;
     }

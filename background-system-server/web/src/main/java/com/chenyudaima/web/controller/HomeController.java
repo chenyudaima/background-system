@@ -39,5 +39,5 @@ public class HomeController {
 
 
 
-    //冻结的时候把redis中的key清除，然后用户就会提示重新登录，登录之后就会显示冻结
+
 }

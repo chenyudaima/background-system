@@ -137,6 +137,12 @@
         </el-table-column>
 
         <el-table-column prop="executeResult" label="执行结果">
+          <!-- <template slot-scope="scope">
+            <el-input
+              :value="scope.row.executeResult"
+              type="textarea" />
+            
+          </template> -->
         </el-table-column>
 
         <el-table-column prop="elapsedTime" label="执行时间（毫秒）">

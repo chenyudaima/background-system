@@ -1,12 +1,14 @@
 package com.chenyudaima.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.mapper.SysRoleMapper;
 import com.chenyudaima.mapper.SysUserMapper;
 import com.chenyudaima.mapper.SysUserRoleMapper;
 import com.chenyudaima.model.Result;
 import com.chenyudaima.model.SysUser;
 import com.chenyudaima.service.SysUserService;
+import com.chenyudaima.util.RedisUtil;
 import com.chenyudaima.vo.SysUserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class SysUserServiceImpl implements SysUserService {
     private final SysUserRoleMapper sysUserRoleMapper;
 
     private final SysRoleMapper sysRoleMapper;
+
+    private final RedisUtil redisUtil;
 
     @Override
     public Result<?> query(SysUser sysUser, int page, int pageSize) {
@@ -57,6 +61,13 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser user = new SysUser();
 
         BeanUtil.copyProperties(sysUser, user);
+
+        //冻结的时候把redis中的key清除，然后用户就会提示重新登录，登录之后就会显示冻结
+        if(sysUser.getStatus() != null && sysUser.getStatus() == 0) {
+            String token = redisUtil.hash_get(RedisKey.TOKEN_ALL, user.getId());
+            redisUtil.delete(token);
+            redisUtil.hash_delete(RedisKey.TOKEN_ALL, user.getId());
+        }
 
         sysUserMapper.update(user);
 

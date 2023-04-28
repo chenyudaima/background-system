@@ -1,5 +1,7 @@
 package com.chenyudaima.service.impl;
 
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.RedisKey;
 import com.chenyudaima.mapper.SysUserMapper;
@@ -45,19 +47,24 @@ public class LoginServiceImpl implements LoginService {
         }
 
         //使用用户名和id创建token
-        String token =  jwtUtil.createToken(sysUser.getId(), sysUser.getName());
+        String jwtUtilToken = jwtUtil.createToken(sysUser.getId(), sysUser.getName());
+        String token = RedisKey.TOKEN + jwtUtilToken;
 
         //如果在TOKEN_ALL内部key存在则直接覆盖（挤下线）
-        redisUtil.hash_put(RedisKey.TOKEN_ALL, sysUser.getId(), RedisKey.TOKEN + token);
+        redisUtil.hash_put(RedisKey.TOKEN_ALL, sysUser.getId(), token);
 
-        //给token绑定客户端信息
-        Map<String, String> clientInfoMap = new HashMap<>();
-        clientInfoMap.put(HttpHeader.K_REQUEST_USER_AGENT, request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
+        //获取客户端信息，给token绑定
+        UserAgent userAgent = UserAgentUtil.parse(request.getHeader(HttpHeader.K_REQUEST_USER_AGENT));
 
-        //设置1小时过期时间
-        redisUtil.set(RedisKey.TOKEN + token, clientInfoMap, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+        if(jwtProperties.getExpiration() <= 0) {
+            //不设置过期时间 除非被挤下，不然不下线
+            redisUtil.set(token, userAgent);
+        }else {
+            //设置过期时间
+            redisUtil.set(token, userAgent, jwtProperties.getExpiration(), TimeUnit.MINUTES);
+        }
 
-        return Result.success(token);
+        return Result.success(jwtUtilToken);
     }
 
 }
