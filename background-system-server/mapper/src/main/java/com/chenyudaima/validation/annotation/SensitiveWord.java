@@ -1,7 +1,6 @@
-package com.chenyudaima.check.annotation;
+package com.chenyudaima.validation.annotation;
 
 
-import com.chenyudaima.check.validation.SensitiveWordValidation;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
@@ -38,7 +37,7 @@ public @interface SensitiveWord {
     /**
      * 校验不通过时的报错信息
      */
-    String message() default "非法昵称!";
+    String message() default "";
 
     /**
      * 将validator进行分类，不同的类group中会执行不同的validator操作

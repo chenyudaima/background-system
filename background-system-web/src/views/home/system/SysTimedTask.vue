@@ -244,7 +244,6 @@ export default {
           this.$router.replace({ path: this.$route.path, query: { ...query, page: query.page - 1, } })
           return;
         }
-
       })
     }
   },

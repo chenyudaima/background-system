@@ -1,6 +1,5 @@
-package com.chenyudaima.check.validation;
+package com.chenyudaima.validation.annotation;
 
-import com.chenyudaima.check.annotation.SensitiveWord;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 

@@ -2,6 +2,7 @@ package com.chenyudaima.web.interceptor;
 
 import com.chenyudaima.constant.HttpHeader;
 import com.chenyudaima.constant.HttpMethod;
+import com.chenyudaima.exception.request.RequestHeaderException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,7 +37,7 @@ public class FileInterceptor extends Interceptor {
     @Override
     public String[] getExcludePathPatterns() {
         return new String[] {
-                "/test/**"
+                //"/test/**"
         };
     }
 
@@ -49,12 +50,16 @@ public class FileInterceptor extends Interceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         //不是文件上传，直接跳过
-        if(!(request.getMethod().equals(HttpMethod.POST) && request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA))) {
+        //if(!(request.getMethod().equals(HttpMethod.POST) && request.getContentType().contains(HttpHeader.V_CONTENT_TYPE_MULTIPART_FORM_DATA))) {
+        //    return true;
+        //}
+        if(!(request instanceof StandardMultipartHttpServletRequest)) {
             return true;
         }
 
         StandardMultipartHttpServletRequest servletRequest = (StandardMultipartHttpServletRequest) request;
 
+        //检测所有文件
         for (MultipartFile file : servletRequest.getFileMap().values()) {
 
             //获取文件全名
@@ -70,9 +75,13 @@ public class FileInterceptor extends Interceptor {
             //截取点后面的后缀名
             String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
 
+            if(fileType.isEmpty()) {
+                throw new RuntimeException("非法文件");
+            }
+
             //匹配后缀名是否在白名单之内
             if(!whitelist.contains(fileType)) {
-                throw new RuntimeException("非法文件");
+                throw new RuntimeException("文件不在白名单之内");
             }
 
             //文件头检测
@@ -84,8 +93,7 @@ public class FileInterceptor extends Interceptor {
 
             //文件加载检测
 
-            //修改为本系统给的文件名
-
+            //修改为本系统给的文件名，在控制器做处理比较好，因为有时候需要文件名
 
         }
 

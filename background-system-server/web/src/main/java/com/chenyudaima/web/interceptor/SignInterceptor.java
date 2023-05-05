@@ -72,7 +72,9 @@ public class SignInterceptor extends Interceptor {
 
         //防重放
         String nonce = params.get(HttpParam.NONCE);
-        assert nonce != null;
+        if(nonce == null) {
+            throw new Exception("防重放参数nonce不存在");
+        }
 
 
         if(redisUtil.hasKey(RedisKey.NONCE + nonce)) {

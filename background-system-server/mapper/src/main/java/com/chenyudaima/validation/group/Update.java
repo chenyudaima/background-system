@@ -1,4 +1,4 @@
-package com.chenyudaima.check.group;
+package com.chenyudaima.validation.group;
 
 import javax.validation.groups.Default;
 
@@ -6,5 +6,5 @@ import javax.validation.groups.Default;
  * @author 沉鱼代码
  * @date 2023/2/2
  */
-public interface Delete extends Default {
+public interface Update extends Default {
 }

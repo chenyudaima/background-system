@@ -1,6 +1,7 @@
 import axios from 'axios'
 import router from '@/router/index.js'
 import signUtil from '@/utils/signUtil.js'
+import CalculateFileMD5 from '@/utils/CalculateFileMD5.js'
 
 const http = axios.create({
   //使用代理，后端不需要做跨域处理，会匹配vue.config.js中配置的代理，实际上是匹配的 target/system_api
@@ -9,22 +10,47 @@ const http = axios.create({
   // baseURL: "/system_api",
 
   //全地址表示不使用vue.config.js配置的代理，后端需要做跨域处理
-  baseURL: "http://192.168.0.49:8080/system_api", 
-
+  baseURL: "http://localhost:8080/system_api",
 
   timeout: 100000, // 请求超时
   withCredentials: true // 跨域请求是否需要携带 cookie
 })
-http.defaults.crossDomain = false
+
 //和axios的create中的baseURL一样
 // http.defaults.baseURL = '/system_api'
 
+/**
+ * 普通上传
+ * @param {String} url 
+ * @param {FormData} formData 
+ * @returns 
+ */
+http.upload = async (url, formData) => {
+  return await http.post(url, formData)
+}
+
+/**
+ * 分片上传
+ * @param {String} url 
+ * @param {FormData} formData
+ */
+http.sectionUpload = async (url, formData) => {
+  for (var kv of formData.entries()) {
+    //判断是否是文件，文件不参与参数加密
+    if (kv[1] instanceof File) {
+      kv[2]
+    }
+  }
+  //wait http.post(url, formData)
+}
+
+
 //请求拦截
 http.interceptors.request.use(config => {
-  
+
   //设置权限请求头
   config.headers.Authorization = localStorage.getItem("token");
-  
+
   //添加签名参数及参数加密请求头
   signUtil.signature(config)
 
@@ -34,12 +60,11 @@ http.interceptors.request.use(config => {
   Promise.reject(error);
 })
 
-
 //响应拦截
 http.interceptors.response.use(
   (res) => {
     //判断响应的是文件还是json对象
-    if(!(res.data instanceof Object)) {
+    if (!(res.data instanceof Object)) {
       return res;
     }
 
@@ -56,7 +81,7 @@ http.interceptors.response.use(
 
   //请求异常（网络异常）的回调函数
   (error) => {
-    router.push({ path: "/login", query: { "message" : error.message } })
+    router.push({ path: "/login", query: { "message": error.message } })
     return Promise.reject(error);
   }
 );

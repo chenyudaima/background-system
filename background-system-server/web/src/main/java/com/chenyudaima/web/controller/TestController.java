@@ -25,13 +25,11 @@ import java.io.FileReader;
 @RequiredArgsConstructor
 public class TestController {
 
-
     private String logPath;
 
-    @GetMapping
-    public Result<?> query(String filePath) throws Exception {
-        return Result.success("nihao");
+    @PostMapping
+    public Result<?> query(MultipartFile file) throws Exception {
+        return Result.success(file.getOriginalFilename() + "校验成功");
     }
-
 
 }

@@ -84,4 +84,5 @@ public class MybatisSqlLogInterceptor implements Interceptor {
 
     @Override
     public void setProperties(Properties properties) {}
+
 }

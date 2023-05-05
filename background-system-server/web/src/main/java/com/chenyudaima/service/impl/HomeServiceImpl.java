@@ -41,7 +41,7 @@ public class HomeServiceImpl implements HomeService {
 
     @Override
     public Result<?> logout(String token) {
-        Claims claims = (Claims)request.getAttribute(RequestAttribute.CLAIMS);
+        Claims claims = (Claims) request.getAttribute(RequestAttribute.CLAIMS);
         redisUtil.hash_delete(RedisKey.TOKEN_ALL, claims.getId());
         redisUtil.delete(RedisKey.TOKEN + token);
         return Result.success();
