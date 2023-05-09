@@ -29,6 +29,7 @@ public class RequestFilter1 implements Filter {
     static {
         // 后面不用带/
         ALLOW_ORIGINS.add("http://localhost:3000");
+        ALLOW_ORIGINS.add("http://localhost");
     }
 
     @Override

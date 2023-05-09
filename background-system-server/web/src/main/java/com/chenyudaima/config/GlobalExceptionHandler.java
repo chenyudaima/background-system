@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value={Throwable.class})
     public Result<?> Exception(HttpServletRequest request, Exception e) {
-        e.printStackTrace();
+        log.error("程序异常:\n {}", e.toString());
         return new Result<>(500, e.getMessage(), null);
     }
 
@@ -55,21 +55,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value= HttpRequestMethodNotSupportedException.class)
     public Result<?> HttpRequestMethodNotSupportedException(HttpServletRequest request, Exception e) {
+        log.error("请求方法不支持:\n {}", e.toString());
         return new Result<>(405, "请求方法不支持", null);
     }
 
     @ExceptionHandler(value=NoHandlerFoundException.class)
     public Result<?> NoHandlerFoundException(HttpServletRequest request, Exception e) {
+        log.error("没有找到访问资源:\n {}", e.toString());
         return new Result<>(404, "没有找到访问资源", null);
     }
 
     @ExceptionHandler(value= SecurityException.class)
     public Result<?> PermissionException(HttpServletRequest request, Exception e) {
+        log.error("403权限异常:\n {}", e.toString());
         return new Result<>(403, e.getMessage(),null);
     }
 
     @ExceptionHandler(value= SecurityPathException.class)
     public Result<?> SecurityPathException(HttpServletRequest request, Exception e) {
+        log.error("402权限路径异常:\n {}", e.toString());
         return new Result<>(402, e.getMessage(),null);
     }
 
@@ -88,6 +92,7 @@ public class GlobalExceptionHandler {
             ConstraintViolationException.class
     })
     public Result<?> ValidationException(HttpServletRequest request, Exception e) {
+        log.error("参数校验异常:\n {}", e.toString());
         String message;
         Result<?> result = new Result<>();
         result.setCode(401);
@@ -125,6 +130,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = {RequestHeaderException.class})
     public Result<?> RequestHeaderException(HttpServletRequest request, Exception e) {
+        log.error("请求头异常:\n {}", e.toString());
         return new Result<>(400, "错误的请求头", null);
     }
 

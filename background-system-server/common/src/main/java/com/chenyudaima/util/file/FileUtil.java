@@ -7,12 +7,133 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
  * 文件操作工具类
  */
 public class FileUtil {
+    /**
+     * 文件类型头部
+     */
+    private final static HashMap<String, String> FILE_TYPE_MAP = new HashMap<>();
+
+    static {
+        FILE_TYPE_MAP.put("ffd8ffe000104a464946", "jpg");
+        FILE_TYPE_MAP.put("89504e470d0a1a0a0000", "png");
+        FILE_TYPE_MAP.put("47494638396126026f01", "gif");
+        FILE_TYPE_MAP.put("49492a00227105008037", "tif");
+        FILE_TYPE_MAP.put("424d228c010000000000", "bmp");
+        FILE_TYPE_MAP.put("424d8240090000000000", "bmp");
+        FILE_TYPE_MAP.put("424d8e1b030000000000", "bmp");
+        FILE_TYPE_MAP.put("41433130313500000000", "dwg");
+        FILE_TYPE_MAP.put("3c21444f435459504520", "html");
+        FILE_TYPE_MAP.put("3c21646f637479706520", "htm");
+        FILE_TYPE_MAP.put("48544d4c207b0d0a0942", "css");
+        FILE_TYPE_MAP.put("696b2e71623d696b2e71", "js");
+        FILE_TYPE_MAP.put("7b5c727466315c616e73", "rtf");
+        FILE_TYPE_MAP.put("38425053000100000000", "psd");
+        FILE_TYPE_MAP.put("46726f6d3a203d3f6762", "eml");
+        FILE_TYPE_MAP.put("d0cf11e0a1b11ae10000", "doc");
+        FILE_TYPE_MAP.put("5374616E64617264204A", "mdb");
+        FILE_TYPE_MAP.put("252150532D41646F6265", "ps");
+        FILE_TYPE_MAP.put("255044462d312e350d0a", "pdf");
+        FILE_TYPE_MAP.put("2e524d46000000120001", "rmvb");
+        FILE_TYPE_MAP.put("464c5601050000000900", "flv");
+        FILE_TYPE_MAP.put("00000020667479706d70", "mp4");
+        FILE_TYPE_MAP.put("49443303000000002176", "mp3");
+        FILE_TYPE_MAP.put("000001ba210001000180", "mpg");
+        FILE_TYPE_MAP.put("3026b2758e66cf11a6d9", "wmv");
+        FILE_TYPE_MAP.put("52494646e27807005741", "wav");
+        FILE_TYPE_MAP.put("52494646d07d60074156", "avi");
+        FILE_TYPE_MAP.put("4d546864000000060001", "mid");
+        FILE_TYPE_MAP.put("504b0304140000000800", "zip");
+        FILE_TYPE_MAP.put("526172211a0700cf9073", "rar");
+        FILE_TYPE_MAP.put("235468697320636f6e66", "ini");
+        FILE_TYPE_MAP.put("504b03040a0000000000", "jar");
+        FILE_TYPE_MAP.put("4d5a9000030000000400", "exe");
+        FILE_TYPE_MAP.put("3c25402070616765206c", "jsp");
+        FILE_TYPE_MAP.put("4d616e69666573742d56", "mf");
+        FILE_TYPE_MAP.put("3c3f786d6c2076657273", "xml");
+        FILE_TYPE_MAP.put("494e5345525420494e54", "sql");
+        FILE_TYPE_MAP.put("7061636b616765207765", "java");
+        FILE_TYPE_MAP.put("406563686f206f66660d", "bat");
+        FILE_TYPE_MAP.put("1f8b0800000000000000", "gz");
+        FILE_TYPE_MAP.put("6c6f67346a2e726f6f74", "properties");
+        FILE_TYPE_MAP.put("cafebabe0000002e0041", "class");
+        FILE_TYPE_MAP.put("49545346030000006000", "chm");
+        FILE_TYPE_MAP.put("04000000010000001300", "mxp");
+        FILE_TYPE_MAP.put("504b0304140006000800", "docx");
+        FILE_TYPE_MAP.put("6431303a637265617465", "torrent");
+        FILE_TYPE_MAP.put("6D6F6F76", "mov");
+        FILE_TYPE_MAP.put("FF575043", "wpd");
+        FILE_TYPE_MAP.put("CFAD12FEC5FD746F", "dbx");
+        FILE_TYPE_MAP.put("2142444E", "pst");
+        FILE_TYPE_MAP.put("AC9EBD8F", "qdf");
+        FILE_TYPE_MAP.put("E3828596", "pwl");
+        FILE_TYPE_MAP.put("2E7261FD", "ram");
+    }
+
+    public static String getFileTypeByMagicNumber(File file) throws Exception {
+        return getFileTypeByMagicNumber(Files.newInputStream(file.toPath()));
+    }
+
+    /**
+     * 注意：
+     * 1.有些重要的文件，没有固定的文件头
+     * TXT 没固定文件头定义
+     * TMP 没固定文件头定义
+     * INI 没固定文件头定义
+     * BIN 没固定文件头定义
+     * DBF 没固定文件头定义
+     * C 没没固定文件头定义
+     * CPP 没固定文件头定义
+     * H 没固定文件头定义
+     * BAT 没固定文件头定义
+     * 2.不同的文件有相同的文件头
+     * 4D5A90 EXE
+     * 4D5A90 dll
+     * 4D5A90 OCX
+     * 4D5A90 OLB
+     * 4D5A90 IMM
+     * 4D5A90 IME
+     * 根据文件流中的文件头获取文件的类型
+     * @param inputStream
+     * @return png  dpf mov
+     */
+    public static String getFileTypeByMagicNumber(InputStream inputStream) throws Exception {
+        byte[] bytes = new byte[3];
+        try {
+            // 获取文件头前三位魔数的二进制
+            inputStream.read(bytes, 0, bytes.length);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < bytes.length; i++) {
+                int v = bytes[i] & 0xFF;
+                String hv = Integer.toHexString(v);
+                if (hv.length() < 2) {
+                    stringBuilder.append(0);
+                }
+                stringBuilder.append(hv);
+            }
+
+            String code = stringBuilder.toString();
+
+            for (Map.Entry<String, String> item : FILE_TYPE_MAP.entrySet()) {
+                if (item.getKey().contains(code)) {
+                    return item.getValue();
+                }
+            }
+
+            return null;
+
+        }finally {
+            inputStream.close();
+        }
+    }
+
 
     /**
      * 计算文件md5
@@ -27,7 +148,6 @@ public class FileUtil {
      */
     public static File createFile(String fileName, byte[] bytes) {
         File file = new File(System.getProperty(Property.JAVA_IO_TMPDIR) + fileName);
-
         try(OutputStream os = Files.newOutputStream(file.toPath())) {
             os.write(bytes);
             os.flush();
@@ -57,7 +177,9 @@ public class FileUtil {
         File destFile = new File(dest);
 
         //如果目录不存在则创建
-        if(!destFile.exists()) destFile.mkdirs();
+        if(!destFile.exists()) {
+            destFile.mkdirs();
+        }
 
         dest = destFile.getPath()  + "/" + source.getName();
         destFile = new File(dest);

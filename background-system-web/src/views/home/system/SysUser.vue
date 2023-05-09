@@ -174,7 +174,6 @@
   </el-container>
 </template>
 <script>
-
 import http from '@/utils/http.js'
 
 export default {

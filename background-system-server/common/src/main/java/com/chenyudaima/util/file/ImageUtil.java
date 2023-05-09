@@ -48,7 +48,7 @@ public class ImageUtil {
     /**
      * base64字符串转图片
      */
-    public static File base64TranImage(String base64, File file ) {
+    public static File base64TranImage(String base64, File file) {
         Base64.Decoder decoder = Base64.getDecoder();
         if(base64.contains("data:")) {
             base64 = base64.substring(base64.indexOf(",") + 1);

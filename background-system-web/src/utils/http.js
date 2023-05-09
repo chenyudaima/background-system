@@ -32,16 +32,28 @@ http.upload = async (url, formData) => {
 /**
  * 分片上传
  * @param {String} url 
- * @param {FormData} formData
+ * @param {File} file
  */
-http.sectionUpload = async (url, formData) => {
-  for (var kv of formData.entries()) {
-    //判断是否是文件，文件不参与参数加密
-    if (kv[1] instanceof File) {
-      kv[2]
-    }
-  }
+http.sectionUpload = async (url, file) => {
+  CalculateFileMD5(file).then(guid => {
+    http.get(url + "/resume", {params: {guid: guid}}).then(resp => {
+      if(resp.data == -2) {
+        return;
+      }
+
+      if(resp.data == -1) {
+
+      }
+
+    })
+  })
+  
   //wait http.post(url, formData)
+}
+
+
+http.sectionUpload = async (url, file, chunk) => {
+
 }
 
 

@@ -38,4 +38,5 @@ public class ResponseConfig implements ResponseBodyAdvice<Object> {
 
         return Result.success(body);
     }
+
 }
