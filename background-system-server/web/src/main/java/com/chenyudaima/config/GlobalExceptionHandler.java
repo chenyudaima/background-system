@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(value={Throwable.class})
+    @ExceptionHandler(value = {Throwable.class})
     public Result<?> Exception(HttpServletRequest request, Exception e) {
         log.error("程序异常:\n {}", e.toString());
         return new Result<>(500, e.getMessage(), null);

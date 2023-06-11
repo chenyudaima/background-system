@@ -23,4 +23,9 @@ public class Property {
      * 当前程序工作目录
      */
     public static final String USER_DIR = "user.dir";
+
+    /**
+     * window还是linux
+     */
+    public static final String OS_NAME = "os.name";
 }

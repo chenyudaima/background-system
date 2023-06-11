@@ -63,6 +63,7 @@ public class FileUploadController {
      */
     @PostMapping("/upload")
     public void upload(String guid, MultipartFile file) throws IOException {
+
         //检查是否有文件上传
         if(file.isEmpty()) return;
 
@@ -114,6 +115,7 @@ public class FileUploadController {
      */
     @PostMapping("/merge")
     public Result<?> mergeFile(String guid, String expName) {
+        
         //分片的文件的存放路径
         File parentFileDir = new File(fileBurstPath + guid);
 

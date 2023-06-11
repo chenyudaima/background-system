@@ -2,6 +2,7 @@ package com.chenyudaima.config;
 
 import com.chenyudaima.constant.Property;
 import com.chenyudaima.constant.Resources;
+import com.chenyudaima.util.RuntimeUtil;
 import org.opencv.core.Core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,36 +18,9 @@ import java.nio.file.Files;
  * @date 2023/1/29
  */
 public class OpencvConfig {
-
-    private static final Logger log = LoggerFactory.getLogger(OpencvConfig.class);
-
     /**
      * dll动态库位置
      */
-    private static final String DLL_PATH = System.getProperty(Property.JAVA_HOME) + "/bin/" + Resources.OPENCV_JAVA3413_DLL;
+    public static final String DLL_PATH = "D:\\repository\\background-system\\background-system-server\\common\\lib\\opencv\\opencv_java3413.dll";
 
-    /**
-     * 加载动态库 Linux环境需要更换Linux的动态库
-     */
-    public static void init() {
-        File file = new File(OpencvConfig.DLL_PATH);
-
-        if(!file.exists()) {
-            try(InputStream is = OpencvConfig.class.getResourceAsStream("/" + Resources.OPENCV + "/" + Resources.OPENCV_JAVA3413_DLL);
-                OutputStream os = Files.newOutputStream(file.toPath())
-            ) {
-                byte[] buffer = new byte[1024];
-
-                while(is.read(buffer) != -1) {
-                    os.write(buffer);
-                }
-
-                os.flush();
-            }catch (Exception e) {
-                log.error(Resources.OPENCV_JAVA3413_DLL + "移动失败");
-            }
-        }
-
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
 }

@@ -16,6 +16,32 @@
     <dependencies>
 
         <dependency>
+            <groupId>org.bidib.jbidib.org.qbang.rxtx</groupId>
+            <artifactId>rxtxcomm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv-platform</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jna</groupId>
+            <artifactId>jna</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.jna</groupId>
+            <artifactId>examples</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
@@ -70,16 +96,17 @@
         </dependency>
 
         <!--tessdata OCR文字识别Api-->
-        <dependency>
-            <groupId>net.sourceforge.tess4j</groupId>
-            <artifactId>tess4j</artifactId>
-        </dependency>
+        <!--<dependency>-->
+        <!--    <groupId>net.sourceforge.tess4j</groupId>-->
+        <!--    <artifactId>tess4j</artifactId>-->
+        <!--</dependency>-->
 
         <!--redis操作-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
@@ -147,13 +174,14 @@
             <!--</plugin>-->
 
 
-            <!--将指定jar放到maven仓库-->
+            <!--将多个jar包放到maven仓库-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
                 <version>${maven-install-plugin.version}</version>
                 <executions>
                     <execution>
+                        <id>insert-jar1</id>
                         <phase>clean</phase>
                         <goals>
                             <goal>install-file</goal>
@@ -166,7 +194,38 @@
                             <file>${basedir}/lib/opencv-3413.jar</file>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>insert-jar2</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>com.sun.jna</groupId>
+                            <artifactId>examples</artifactId>
+                            <version>${com.sun.jna.version}</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/examples.jar</file>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>insert-jar3</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>com.sun.jna</groupId>
+                            <artifactId>jna</artifactId>
+                            <version>${com.sun.jna.version}</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/jna.jar</file>
+                        </configuration>
+                    </execution>
                 </executions>
+
             </plugin>
 
         </plugins>

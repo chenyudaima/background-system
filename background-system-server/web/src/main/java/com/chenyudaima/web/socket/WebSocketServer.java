@@ -1,5 +1,6 @@
 package com.chenyudaima.web.socket;
 
+import com.chenyudaima.model.Result;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,7 +24,7 @@ public class WebSocketServer {
     /**
      * 统计在线人数
      */
-    private static final AtomicInteger OnlineCount = new AtomicInteger(0);
+    public static final AtomicInteger OnlineCount = new AtomicInteger(0);
 
     /**
      * 存放客户端对应的Session对象
@@ -50,6 +52,7 @@ public class WebSocketServer {
 
     /**
      * 收到客户端消息后调用的方法
+     *
      * @param session 当前客户端session
      * @param message 客户端发送过来的消息
      */
@@ -65,6 +68,19 @@ public class WebSocketServer {
     public void onError(Session session, Throwable error) {
         log.error("发生错误: {}，Session ID: {}", error.getMessage(), session.getId());
         error.printStackTrace();
+    }
+
+    /**
+     * 指定Session发送消息
+     */
+    public static void sendByteBuffer(ByteBuffer byteBuffer) {
+        try {
+            for (Session session : SessionSet) {
+                session.getBasicRemote().sendBinary(byteBuffer);
+            }
+        } catch (Exception e) {
+            log.error("发送消息出错: {}", e.getMessage());
+        }
     }
 
     /**

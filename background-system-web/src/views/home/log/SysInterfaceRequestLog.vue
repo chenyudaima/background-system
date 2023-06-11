@@ -77,6 +77,9 @@
         </el-table-column>
 
         <el-table-column prop="userId" label="请求用户" width="150">
+          <template slot-scope="scope">
+            {{ scope.row.userId == null ? "未登录" : scope.row.userId }}
+          </template>
         </el-table-column>
 
         <el-table-column fixed="right" prop="requestTime" label="请求时间" width="150">

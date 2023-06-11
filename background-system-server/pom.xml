@@ -74,6 +74,9 @@
         <druid-spring-boot-starter.version>1.2.15</druid-spring-boot-starter.version>
         <nacos.version>0.2.12</nacos.version>
         <transmittable-thread-local.version>2.12.1</transmittable-thread-local.version>
+        <jsoup.version>1.14.3</jsoup.version>
+        <com.sun.jna.version>3.0.9</com.sun.jna.version>
+        <rxtxcomm.version>2.2</rxtxcomm.version>
     </properties>
 
     <!--依赖-->
@@ -102,6 +105,30 @@
     <!--依赖版本管理-->
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.bidib.jbidib.org.qbang.rxtx</groupId>
+                <artifactId>rxtxcomm</artifactId>
+                <version>${rxtxcomm.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jna</groupId>
+                <artifactId>jna</artifactId>
+                <version>${com.sun.jna.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.jna</groupId>
+                <artifactId>examples</artifactId>
+                <version>${com.sun.jna.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.alibaba</groupId>

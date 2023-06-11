@@ -20,6 +20,11 @@ public class OpcNode {
     private String nodeName;
 
     /**
+     * 当前节点路径
+     */
+    private String nodePath;
+
+    /**
      * 节点描述
      */
     private String nodeDescription;
@@ -28,11 +33,6 @@ public class OpcNode {
      * 节点参数
      */
     private Map<String,Object> parameters;
-
-    /**
-     * 当前节点路径
-     */
-    private String nodePath;
 
     /**
      * 父节点
@@ -44,10 +44,6 @@ public class OpcNode {
      */
     private List<OpcNode> childNodes;
 
-    /**
-     * 当前节点值
-     */
-    private String value;
 
     /**
      * 节点回调方法
@@ -55,23 +51,23 @@ public class OpcNode {
     private BiConsumer<OpcNode, DataValue> biConsumer;
 
     /**
-     * 当前节点锁
-     */
-    private final ReentrantLock reentrantLock = new ReentrantLock();
-
-    /**
-     * 订阅的节点
+     * Ua监控
      */
     private UaMonitoredItem uaMonitoredItem;
 
-    /**
-     * 用于过滤重复节点值
-     */
-    private DataValue dataValue;
+    ///**
+    // * 当前节点锁
+    // */
+    //private final ReentrantLock reentrantLock = new ReentrantLock();
 
-    public ReentrantLock getReentrantLock() {
-        return reentrantLock;
-    }
+
+
+    ///**
+    // * 用于过滤重复节点值
+    // */
+    //private DataValue dataValue;
+
+
 
     public UaMonitoredItem getUaMonitoredItem() {
         return uaMonitoredItem;
@@ -79,14 +75,6 @@ public class OpcNode {
 
     public void setUaMonitoredItem(UaMonitoredItem uaMonitoredItem) {
         this.uaMonitoredItem = uaMonitoredItem;
-    }
-
-    public DataValue getDataValue() {
-        return dataValue;
-    }
-
-    public void setDataValue(DataValue dataValue) {
-        this.dataValue = dataValue;
     }
 
     public BiConsumer<OpcNode, DataValue> getBiConsumer() {
@@ -145,11 +133,4 @@ public class OpcNode {
         this.childNodes = childNodes;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
 }

@@ -216,28 +216,28 @@ public class OpcUaSubscription {
                         //重置心跳
                         heartbeat = 0;
 
-                        //排除Bad或者null的节点值
-                        if(dataValue.getValue().isNull() || dataValue.getStatusCode().isBad()) {
-                            return;
-                        }
-
-                        //对节点上锁 (没抢到的进入等待状态)
-                        node.getReentrantLock().lock();
-
-                        try {
-                            if (node.getDataValue() != null) {
-                                //判断节点值是否发生改变 没有发生改变则不执行
-                                if(node.getDataValue().getValue().getValue().toString().equals(dataValue.getValue().getValue().toString())) {
-                                    return;
-                                }
-                            }
-
-                            //发生改变
-                            node.setDataValue(dataValue);
-
-                        }finally {
-                            node.getReentrantLock().unlock();
-                        }
+                        ////排除Bad或者null的节点值
+                        //if(dataValue.getValue().isNull() || dataValue.getStatusCode().isBad()) {
+                        //    return;
+                        //}
+                        //
+                        ////对节点上锁 (没抢到的进入等待状态)
+                        //node.getReentrantLock().lock();
+                        //
+                        //try {
+                        //    if (node.getDataValue() != null) {
+                        //        //判断节点值是否发生改变 没有发生改变则不执行
+                        //        if(node.getDataValue().getValue().getValue().toString().equals(dataValue.getValue().getValue().toString())) {
+                        //            return;
+                        //        }
+                        //    }
+                        //
+                        //    //发生改变
+                        //    node.setDataValue(dataValue);
+                        //
+                        //}finally {
+                        //    node.getReentrantLock().unlock();
+                        //}
 
                         //执行回调函数
                         node.getBiConsumer().accept(node, dataValue);
@@ -261,32 +261,34 @@ public class OpcUaSubscription {
      */
     public void run() {
         synchronized (this) {
-            if(!status) {
-                //修改状态
-                status = true;
-
-                executor.execute(() -> {
-
-                    //发起连接
-                    connect();
-
-                    //开启心跳线程
-                    heartbeat();
-
-                    //订阅节点
-                    nodeMap.forEach((supplier, biConsumer) -> {
-                        Collection<OpcNode> opcNodes = supplier.get();
-                        for (OpcNode node : opcNodes) {
-                            executor.execute(() -> {
-                                node.setBiConsumer(biConsumer);
-                                subscription(node);
-                            });
-
-                        }
-                    });
-
-                });
+            if(status) {
+                return;
             }
+
+            //修改状态
+            status = true;
+
+            executor.execute(() -> {
+
+                //发起连接
+                connect();
+
+                //开启心跳线程
+                heartbeat();
+
+                //订阅节点
+                nodeMap.forEach((supplier, biConsumer) -> {
+                    Collection<OpcNode> opcNodes = supplier.get();
+                    for (OpcNode node : opcNodes) {
+                        executor.execute(() -> {
+                            node.setBiConsumer(biConsumer);
+                            subscription(node);
+                        });
+
+                    }
+                });
+
+            });
         }
 
     }

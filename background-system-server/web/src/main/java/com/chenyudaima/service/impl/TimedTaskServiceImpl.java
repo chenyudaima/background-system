@@ -75,9 +75,11 @@ public class TimedTaskServiceImpl implements TimedTaskService {
     public Result<?> deleteByIdBatch(String[] ids) {
         sysTimedTaskMapper.deleteByIdBatch(ids);
         sysTimedTaskLogMapper.deleteBySysTimedTaskIds(ids);
+
         for (String id : ids) {
             TaskService.stopTimeTask(id);
         }
+
         return Result.success();
     }
 

@@ -8,6 +8,10 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
@@ -32,7 +36,7 @@ public class NettyClient {
     /**
      * 连接通道的处理器
      */
-    private ChannelInboundHandlerAdapter[] channelInboundHandlerAdapter;
+    private final ChannelInboundHandlerAdapter[] channelInboundHandlerAdapter;
 
 
     /**
@@ -77,15 +81,18 @@ public class NettyClient {
             //添加连接监听
             channelFuture = bootstrap.connect().addListener((ChannelFuture futureListener) -> {
                 final EventLoop eventLoop = futureListener.channel().eventLoop();
+
+
                 if (!futureListener.isSuccess()) {
                     log.error("与服务端:" + ip + ":" + port + "连接失败! 10秒后重试!");
                     eventLoop.schedule(() -> connect(eventLoop), 10, TimeUnit.SECONDS);
                 } else {
                     log.info("与服务端:" + ip + ":" + port + "连接!");
                 }
+
             });
 
-            ////连接服务端 对通道关闭进行监听（阻塞）
+            //连接服务端 对通道关闭进行监听（阻塞）
             channelFuture.channel().closeFuture().sync();
 
         }catch (Exception e) {

@@ -18,6 +18,10 @@ async function loadRouter() {
 //解析菜单生成路由表
 function routerHandler(sysMenuList) {
   let array = []
+  if(sysMenuList == null) {
+    return array
+  }
+
   sysMenuList.forEach(sysMenu => {
     if (sysMenu.type == 1) {
       array.push({

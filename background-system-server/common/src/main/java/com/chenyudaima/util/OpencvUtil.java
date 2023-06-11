@@ -30,7 +30,9 @@ public class OpencvUtil {
     private final File file;
 
     static {
-        OpencvConfig.init();
+        if(RuntimeUtil.isWindow()) {
+            System.load(OpencvConfig.DLL_PATH);
+        }
     }
 
     /**

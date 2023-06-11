@@ -125,7 +125,7 @@ public class OpcHttpApi {
      * @param group 标记组名称
      * @return 所有标记
      */
-    public List<OpcNode> select(String channel, String equipment , String group) throws Exception {
+    public List<OpcNode> select(String channel, String equipment, String group) throws Exception {
         List<OpcNode> opcNodes = new ArrayList<>();
         for (HashMap hashMap : JSON.parseArray(HttpClientUtil.get(url + encode(channel) + "/devices/" + encode(equipment) + "/tag_groups/" + encode(group) + "/tags",null, headerMap), HashMap.class)) {
             OpcNode opcNode = new OpcNode();

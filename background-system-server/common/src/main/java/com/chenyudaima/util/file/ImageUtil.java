@@ -1,10 +1,11 @@
 package com.chenyudaima.util.file;
 
-
-
-
 import com.chenyudaima.constant.FileType;
 import com.chenyudaima.constant.Property;
+import org.bytedeco.javacpp.opencv_core;
+import org.bytedeco.javacpp.opencv_imgcodecs;
+import org.bytedeco.javacpp.opencv_imgproc;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,6 +20,33 @@ import java.util.UUID;
  * 图片操作工具
  */
 public class ImageUtil {
+
+    /**
+     * 检测图片清晰度
+     * @param file 图片
+     * @return 17以上算清晰 超过30是小图片
+     */
+    public static double sharpness(File file) throws Exception {
+        opencv_core.Mat srcImage = opencv_imgcodecs.imread(file.getCanonicalPath());
+
+        opencv_core.Mat dstImage = new opencv_core.Mat();
+        //转化为灰度图
+        opencv_imgproc.cvtColor(srcImage, dstImage, opencv_imgproc.COLOR_BGR2GRAY);
+
+        opencv_core.Mat laplacianDstImage = new opencv_core.Mat();
+
+        //阈值太低会导致正常图片被误断为模糊图片，阈值太高会导致模糊图片被误判为正常图片
+        opencv_imgproc.Laplacian(dstImage, laplacianDstImage, opencv_core.CV_64F);
+
+        //矩阵标准差
+        opencv_core.Mat stddev = new opencv_core.Mat();
+
+        //求矩阵的均值与标准差
+        opencv_core.meanStdDev(laplacianDstImage, new opencv_core.Mat(), stddev);
+
+        return stddev.createIndexer().getDouble();
+    }
+    
 
     /**
      * 图片转base64字符串

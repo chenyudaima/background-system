@@ -1,6 +1,7 @@
 package com.chenyudaima.util;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -250,46 +251,25 @@ public class StringUtil {
 
         char[] scr = scanCodeResult.toCharArray();
 
-        char[] cor = cardOcrResult.toCharArray();
+        char[] ocr = cardOcrResult.toCharArray();
 
-        //如果字符串长度相等
-        if(scr.length == cor.length) {
-            for (int i = 0; i < scr.length; i++) {
-                if(scr[i] == cor[i]) {
-                    stringBuilder.append(scr[i]);
-                }else {
-                    stringBuilder
-                            .append("<font color='red'>")
-                            .append(scr[i])
-                            .append("</font>");
-                }
-            }
-            return stringBuilder.toString();
+
+        if(scr.length < ocr.length) {
+            ocr = Arrays.copyOfRange(ocr, 0, ocr.length - (ocr.length - scr.length));
+        }else if (scr.length > ocr.length) {
+            ocr = Arrays.copyOf(ocr, scr.length);
         }
 
-
-        //如果长度不相等，则从不相等的char开始后面所有变红
-        int length;
-        if(scr.length < cor.length) {
-            length = scr.length;
-        }else {
-            length = cor.length;
-        }
-
-        int index = -1;
-        for (int i = 0; i < length; i++) {
-            if(scr[i] != cor[i]) {
-                index = i;
+        for (int i = 0; i < scr.length; i++) {
+            if(scr[i] == ocr[i]) {
+                stringBuilder.append(scr[i]);
+            }else {
+                stringBuilder
+                        .append("<font color='red'>")
+                        .append(scr[i])
+                        .append("</font>");
             }
         }
-
-        if(index != -1) {
-            stringBuilder.append(scanCodeResult.substring(0, index))
-                    .append("<font color='red'>")
-                    .append(scanCodeResult.substring(index))
-                    .append("</font>");
-        }
-
         return stringBuilder.toString();
 
     }

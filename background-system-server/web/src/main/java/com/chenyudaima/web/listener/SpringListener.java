@@ -60,6 +60,7 @@ public class SpringListener implements ApplicationRunner {
         //加载定时任务
         List<SysTimedTask> sysTimedTasks = SpringUtil.getBean(SysTimedTaskMapper.class)
                 .selectAll();
+
         for (SysTimedTask sysTimedTask : sysTimedTasks) {
             if(sysTimedTask.getStatus() != 0) {
                 TaskService.startTimeTask(sysTimedTask);

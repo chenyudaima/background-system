@@ -74,6 +74,7 @@ public class FileInterceptor extends Interceptor {
 
             //获取文件全名
             String fileName = file.getOriginalFilename();
+
             assert fileName != null;
 
             //去除没有后缀名的文件
